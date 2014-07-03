@@ -48,7 +48,9 @@ namespace GausianFilter
 			{
 				for (int j = 2; j < img.Height - 2; j++)
 				{
-					int smoothValue = 0;
+					int smoothValueR = 0;
+					int smoothValueG = 0;
+					int smoothValueB = 0;
 					int divisor = 0;
 
 					//i = i coordinate of the pixel
@@ -65,9 +67,13 @@ namespace GausianFilter
 								int newI = i + x;
 								int newJ = j + y;
 
-								int c = (img.GetPixel(newI, newJ).ToArgb()) * filter[x + 2, y + 2];	//to accomodate for x & y starting at -2 and filter indices only starting at [0,0]
+								int r = (img.GetPixel(newI, newJ).R) * filter[x + 2, y + 2];	//to accomodate for x & y starting at -2 and filter indices only starting at [0,0]
+								int g = (img.GetPixel(newI, newJ).G) * filter[x + 2, y + 2];
+								int b = (img.GetPixel(newI, newJ).B) * filter[x + 2, y + 2];
 
-								smoothValue += c;
+								smoothValueR += r;
+								smoothValueG += g;
+								smoothValueB += b;
 								divisor += filter[x + 2, y + 2];
 							}
 							catch
@@ -78,9 +84,11 @@ namespace GausianFilter
 						}
 					}
 
-					int smoothedColor = smoothValue/divisor;
+					int smoothedColorR = smoothValueR / divisor;
+					int smoothedColorG = smoothValueG / divisor;
+					int smoothedColorB = smoothValueB / divisor;
 
-					Color newPixel = Color.FromArgb(smoothedColor);
+					Color newPixel = Color.FromArgb(smoothedColorR, smoothedColorG, smoothedColorB);
 					gaus.SetPixel(i, j, newPixel);
 				}
 			}
