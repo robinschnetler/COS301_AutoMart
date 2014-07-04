@@ -14,6 +14,7 @@ namespace EdgeDetection
         {
             while (true)
             {
+		String[] pictures = Directory.GetFiles("cars/", "*.jpg", SearchOption.TopDirectoryOnly);
                 Console.WriteLine("Enter Threshold Value: ");
                 String thresh = Console.ReadLine();
                 Console.WriteLine("Use Diagonal? (Default = True) ");
@@ -22,7 +23,11 @@ namespace EdgeDetection
                 if (input.ToUpper() != "N")
                     diag = true;
                 Grid grid = new Grid(Convert.ToInt32(thresh), diag);
-                grid.run("image.jpg");
+		for (int i = 0; i < pictures.Length; i++)
+		{
+			grid.run(pictures[i], i);
+		}
+                
                 Console.WriteLine("Quit? (default = No)");
                 if (Console.ReadLine().ToUpper() == "Y")
                     break;
@@ -42,12 +47,12 @@ namespace EdgeDetection
             threshold = th;
         }
 
-        public void run(string filename)
+        public void run(string filename, int val)
         {
             Bitmap img = new Bitmap(filename);
             Bitmap edgedImg = new Bitmap(img.Width, img.Height);
             makeEdge(img, edgedImg);
-            edgedImg.Save("edged" + threshold + diagonal + ".jpg");
+            edgedImg.Save("edged/edged" + threshold + diagonal + val + ".jpg");
         }
 
         public void makeEdge(Bitmap img, Bitmap edge)

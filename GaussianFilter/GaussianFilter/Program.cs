@@ -15,19 +15,23 @@ namespace GausianFilter
 			GausianFilter gf = new GausianFilter();
 			Console.WriteLine("Press Enter to Start:");
 			Console.ReadKey();
-			gf.run("image.jpg");
+			String[] pictures = Directory.GetFiles("cars/", "*.jpg", SearchOption.TopDirectoryOnly);
+			gf.run(pictures);
 			Console.WriteLine("Done");
 		}
 	}
 
 	class GausianFilter
 	{
-		public void run(string filename)
+		public void run(string[] filenames)
 		{
-			Bitmap img = new Bitmap(filename);
-			Bitmap gausImg = new Bitmap(img.Width, img.Height);
-			smooth(img, gausImg);
-			gausImg.Save("Gausian" +  ".jpg");
+			for (int i = 0; i < filenames.Length; i++)
+			{
+				Bitmap img = new Bitmap(filenames[i]);
+				Bitmap gausImg = new Bitmap(img.Width, img.Height);
+				smooth(img, gausImg);
+				gausImg.Save("gaus/Gausian" + i + ".jpg");
+			}
 		}
 
 		public void smooth(Bitmap img, Bitmap gaus)
