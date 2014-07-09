@@ -26,7 +26,8 @@ namespace Dot_Slash
 			Console.WriteLine("Changing images to greyscale");
 			imageProcessor.makeGreyscale();
 			Console.WriteLine("Done greyscaling");
-			
+
+			//added this
 		}
 	}
 
