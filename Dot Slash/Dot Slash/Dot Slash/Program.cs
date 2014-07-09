@@ -13,21 +13,64 @@ namespace Dot_Slash
 	{
 		static void Main(string[] args)
 		{
-			ImageProcessor profiler = new ImageProcessor("images/");
+			ImageProcessor imageProcessor = new ImageProcessor("images/");
 			//Console.WriteLine("Applying Gauusian Filter");
 			//profiler.applyGaussian();
 			//Console.WriteLine("Done Gaussian Filter");
-			Console.WriteLine("Applying Edge Detector");
-			profiler.detectEdges();
-			Console.WriteLine("Done Edge Detection");
+			//Console.WriteLine("Applying Edge Detector");
+			//profiler.detectEdges();
+			//Console.WriteLine("Done Edge Detection");
+			//Console.WriteLine("Changing images to greyscale");
+			//imageProcessor.makeGreyscale();
+			//Console.WriteLine("Done greyscaling");
 		}
 	}
 
 	class Tools
 	{
-		public int[,] generateIntegralImage()
+		public int[,] generateIntegralImage(String filename)
 		{
+			//We are getting in an image and returning the Summed Area Table (A 2x2 matrix of integers)
+			//See http://computersciencesource.wordpress.com/2010/09/03/computer-vision-the-integral-image/
+			Bitmap img = new Bitmap(filename);
+			Console.WriteLine("Pixel value at [0,0] = " + img.GetPixel(0,0).R);
+			int width = img.Width;
+			int height = img.Height;
 
+			int[,] SummedAreaTable = new int[width, height];
+
+			//Initialize first value in the Summed Area Table as the top, right most value of the image
+
+			//SummedAreaTable[0, 0] = img.GetPixel(0, 0).R;
+
+			//Loop through every pixel in the image, row by row
+			for (int y = 0; y < height; y++)
+			{
+				for (int x = 0; x < width; x++)
+				{
+					//s(x,y) = i(x,y) + s(x-1, y) + s(x, y-1) - s(x-1, y-1)
+					int value = 0;	//This value is s(x,y), the value in the Summed Area Table at co-ordinates x & y
+
+					value += img.GetPixel(x, y).R;	//Since the image is greyscale, we can add any of the RGB components as they are all equal
+
+					if (x - 1 >= 0)	//s(x-1, y) is in range in the Summed Area Table (otherwise the value to add is 0)
+					{
+						value += SummedAreaTable[x - 1, y];
+					}
+
+					if (y - 1 >= 0) //Similar to the above step
+					{
+						value += SummedAreaTable[x, y - 1];
+					}
+
+					if (x - 1 >= 0 && y - 1 >= 0) //Again, just checking ranges
+					{
+						value -= SummedAreaTable[x - 1, y - 1];
+					}
+					SummedAreaTable[x,y] = value;
+				}
+			}
+			return SummedAreaTable;
 		}
 	}
 
@@ -82,15 +125,15 @@ namespace Dot_Slash
 		public virtual void execute()
 		{
 			String[] pictures = Directory.GetFiles(imagePath, "*.jpg", SearchOption.TopDirectoryOnly);
-			bool isExists = System.IO.Directory.Exists("edged/");
+			bool isExists = System.IO.Directory.Exists("Edged/");
 			if (!isExists)
-				System.IO.Directory.CreateDirectory("edged/");
+				System.IO.Directory.CreateDirectory("Edged/");
 			for (int i = 0; i < pictures.Length; i++)
 			{
 				Bitmap img = new Bitmap(pictures[i]);
 				Bitmap edgedImg = new Bitmap(img.Width, img.Height);
 				makeEdge(img, edgedImg);
-				edgedImg.Save("edged/Edged_" + new FileInfo(pictures[i]).Name);	
+				edgedImg.Save("Edged/Edged_" + new FileInfo(pictures[i]).Name);	
 			}
 		}
 
@@ -179,9 +222,9 @@ namespace Dot_Slash
 
 		public virtual void execute()
 		{
-			bool isExists = System.IO.Directory.Exists("gaussian/");
+			bool isExists = System.IO.Directory.Exists("Gaussian/");
 			if (!isExists)
-				System.IO.Directory.CreateDirectory("gaussian/");
+				System.IO.Directory.CreateDirectory("Gaussian/");
 			String[] pictures = Directory.GetFiles(imagePath, "*.jpg", SearchOption.TopDirectoryOnly);
 			
 			for (int i = 0; i < pictures.Length; i++)
@@ -190,7 +233,7 @@ namespace Dot_Slash
 				Bitmap img = new Bitmap(pictures[i]);
 				Bitmap gaus = new Bitmap(img.Width, img.Height);
 				smooth(img, gaus);
-				gaus.Save("gaussian/Filtered_" + new FileInfo(pictures[i]).Name);
+				gaus.Save("Gaussian/Filtered_" + new FileInfo(pictures[i]).Name);
 			}
 		}
 
@@ -266,14 +309,55 @@ namespace Dot_Slash
 
 	class Greyscaler : Strategy
 	{
+		String imagePath;
 		public Greyscaler(String _imagePath)
 		{
-		
+			imagePath = _imagePath;
 		}
 
 		public virtual void execute()
 		{
-			
+			bool isExists = System.IO.Directory.Exists("Greyscale/");
+			if (!isExists)
+				System.IO.Directory.CreateDirectory("Greyscale/");
+			String[] pictures = Directory.GetFiles(imagePath, "*.jpg", SearchOption.TopDirectoryOnly);
+
+			for (int i = 0; i < pictures.Length; i++)
+			{
+				Console.WriteLine(pictures[i]);
+				Bitmap img = new Bitmap(pictures[i]);
+				Bitmap grey = new Bitmap(img.Width, img.Height);
+				makeGreyScale(img, grey);
+				grey.Save("Greyscale/greyscaled_" + new FileInfo(pictures[i]).Name);
+			}
+		}
+
+		private Bitmap makeGreyScale(Bitmap originalImage, Bitmap img)
+		{
+			//Bitmap img = new Bitmap(originalImage.Width, originalImage.Height, System.Drawing.Imaging.PixelFormat.Format16bppGrayScale);
+			//Bitmap img = new Bitmap(originalImage.Width, originalImage.Height, originalImage.PixelFormat);
+			//Loop through every pixel in the image, row by row
+			for (int y = 0; y < originalImage.Height; y++)
+			{
+				for (int x = 0; x < originalImage.Width; x++)
+				{
+					//See http://www.johndcook.com/blog/2009/08/24/algorithms-convert-color-grayscale/
+					//Using the Luminosity method, the formula for luminosity is 0.21 R + 0.72 G + 0.07 B
+
+					Color pixel = originalImage.GetPixel(x,y);
+					double greyValue = (pixel.R * 0.21) + (pixel.G * 0.72) + (pixel.B * 0.07);
+					Color newPixel = Color.FromArgb(255, (Int16) greyValue, (Int16) greyValue, (Int16) greyValue);
+					//greyScaleImg.SetPixel(x, y, newPixel);
+					img.SetPixel(x, y, newPixel);
+				}
+			}
+
+			//Bitmap clone = new Bitmap(img.Width, img.Height, System.Drawing.Imaging.PixelFormat.Format16bppGrayScale);
+			//using (Graphics gr = Graphics.FromImage(clone))
+			//{
+			//	gr.DrawImage(img, new Rectangle(0, 0, clone.Width, clone.Height));
+			//}
+			return img;
 		}
 	} 
 }
