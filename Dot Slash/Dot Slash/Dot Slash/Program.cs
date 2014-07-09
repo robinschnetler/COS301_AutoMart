@@ -13,16 +13,20 @@ namespace Dot_Slash
 	{
 		static void Main(string[] args)
 		{
-			ImageProcessor imageProcessor = new ImageProcessor("images/");
-			//Console.WriteLine("Applying Gauusian Filter");
-			//profiler.applyGaussian();
-			//Console.WriteLine("Done Gaussian Filter");
+			ImageProcessor imageProcessor = new ImageProcessor();
+			Console.WriteLine("resizing");
+			imageProcessor.resize();
+			Console.WriteLine("Done resizing");
+			Console.WriteLine("Applying Gauusian Filter");
+			imageProcessor.applyGaussian();
+			Console.WriteLine("Done Gaussian Filter");
 			//Console.WriteLine("Applying Edge Detector");
 			//profiler.detectEdges();
 			//Console.WriteLine("Done Edge Detection");
-			//Console.WriteLine("Changing images to greyscale");
-			//imageProcessor.makeGreyscale();
-			//Console.WriteLine("Done greyscaling");
+			Console.WriteLine("Changing images to greyscale");
+			imageProcessor.makeGreyscale();
+			Console.WriteLine("Done greyscaling");
+			
 		}
 	}
 
@@ -79,14 +83,14 @@ namespace Dot_Slash
 		String imagePath; 
 		Strategy strategy;
 
-		public ImageProcessor(String imgPath)
+		public ImageProcessor()
 		{
-			imagePath = imgPath;
+			imagePath = "images/";
 		}
 
 		public void makeGreyscale()
 		{
-			strategy = new Greyscaler(imagePath);
+			strategy = new Greyscaler("Gaussian/");
 			strategy.execute();
 			strategy = null;
 		}
@@ -100,7 +104,14 @@ namespace Dot_Slash
 
 		public void applyGaussian()
 		{
-			strategy = new GaussianFilter(imagePath);
+			strategy = new GaussianFilter("Resized/");
+			strategy.execute();
+			strategy = null;
+		}
+
+		public void resize()
+		{
+			strategy = new ImageResizer(imagePath);
 			strategy.execute();
 			strategy = null;
 		}
@@ -110,6 +121,30 @@ namespace Dot_Slash
 	interface Strategy
 	{
 		void execute();
+	}
+
+	class ImageResizer: Strategy
+	{
+		private Size size = new Size(300,200);
+		private string imagePath;
+		public ImageResizer(String _imagePath)
+		{
+			imagePath = _imagePath;
+		}
+
+		public virtual void execute()
+		{
+			String[] pictures = Directory.GetFiles(imagePath, "*.jpg", SearchOption.TopDirectoryOnly);
+			bool isExists = System.IO.Directory.Exists("Resized/");
+			if (!isExists)
+				System.IO.Directory.CreateDirectory("Resized/");
+			for (int i = 0; i < pictures.Length; i++)
+			{
+				Bitmap img = new Bitmap(pictures[i]);
+				Bitmap edgedImg = new Bitmap(img, size);
+				edgedImg.Save("Resized/resized_" + new FileInfo(pictures[i]).Name);
+			}
+		}
 	}
 
 	class EdgeDetector : Strategy
