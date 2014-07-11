@@ -8,25 +8,91 @@ using System.IO;
 
 namespace Dot_Slash
 {
+
+	public static class Global
+	{
+		public const short FRONT_VIEW = 0;
+		public const short BACK_VIEW = 1;
+		public const short SIDE_VIEW = 2;
+		public const short ANGLED_VIEW = 3;
+	}
+
 	//main entry point into the program
 	class Program
 	{
+		static void display()
+		{
+			Console.WriteLine("Image processing options:");
+			Console.WriteLine("1) Resizing to 300 X 200");
+			Console.WriteLine("2) apply gaussian filter");
+			Console.WriteLine("3) edge Detection");
+			Console.WriteLine("4) grey scaling");
+			Console.WriteLine("5) generate integral image");
+			Console.WriteLine("6) Exit");
+		}
 		static void Main(string[] args)
 		{
 			ImageProcessor imageProcessor = new ImageProcessor();
-			Console.WriteLine("resizing");
-			imageProcessor.resize();
-			Console.WriteLine("Done resizing");
-			Console.WriteLine("Applying Gauusian Filter");
-			imageProcessor.applyGaussian();
-			Console.WriteLine("Done Gaussian Filter");
-			//Console.WriteLine("Applying Edge Detector");
-			//profiler.detectEdges();
-			//Console.WriteLine("Done Edge Detection");
-			Console.WriteLine("Changing images to greyscale");
-			imageProcessor.makeGreyscale();
-			Console.WriteLine("Done greyscaling");
-			
+			display();
+			int chosen = Convert.ToInt32(Console.ReadLine());
+			while(chosen != 6)
+			{ 
+				switch(chosen)
+				{ 
+					case 1:
+						{ 
+							Console.WriteLine("resizing");
+							imageProcessor.resize();
+							Console.WriteLine("Done resizing");
+							break;
+						}
+					case 2:
+						{
+							Console.WriteLine("Applying Gauusian Filter");
+							imageProcessor.applyGaussian();
+							Console.WriteLine("Done Gaussian Filter");
+							break;
+						}
+					case 3:
+						{
+							Console.WriteLine("Applying Edge Detector");
+							imageProcessor.detectEdges();
+							Console.WriteLine("Done Edge Detection");
+							break;
+						}
+					case 4:
+						{
+							Console.WriteLine("Changing images to greyscale");
+							imageProcessor.makeGreyscale();
+							Console.WriteLine("Done greyscaling");
+							break;
+						}
+					case 5:
+						{
+							Console.WriteLine("creating integral image(summed are table) for 'integral/grey.jpg'");
+							Tools t = new Tools();
+							int[,] ii = t.generateIntegralImage("integral/grey.jpg");
+							Console.WriteLine("displaying integral image for 'integral/grey.jpg'");
+							Bitmap b = new Bitmap("integral/grey.jpg");
+							for(int i = 0; i<b.Width; i++)
+							{
+								for (int j = 0; j < b.Height; j++)
+								{
+									Console.Write(ii[i, j] + "\t");
+								}
+								Console.WriteLine();
+							}
+							break;
+						}
+					default:
+						{
+							Console.WriteLine("please choose valid option");
+							break;
+						}
+				}
+				display();
+				chosen = Convert.ToInt32(Console.ReadLine());
+			}
 		}
 	}
 
@@ -66,7 +132,7 @@ namespace Dot_Slash
 					{
 						value += SummedAreaTable[x, y - 1];
 					}
-
+					
 					if (x - 1 >= 0 && y - 1 >= 0) //Again, just checking ranges
 					{
 						value -= SummedAreaTable[x - 1, y - 1];
@@ -90,7 +156,7 @@ namespace Dot_Slash
 
 		public void makeGreyscale()
 		{
-			strategy = new Greyscaler("Gaussian/");
+			strategy = new Greyscaler(imagePath);
 			strategy.execute();
 			strategy = null;
 		}
@@ -104,7 +170,7 @@ namespace Dot_Slash
 
 		public void applyGaussian()
 		{
-			strategy = new GaussianFilter("Resized/");
+			strategy = new GaussianFilter(imagePath);
 			strategy.execute();
 			strategy = null;
 		}
@@ -125,7 +191,7 @@ namespace Dot_Slash
 
 	class ImageResizer: Strategy
 	{
-		private Size size = new Size(300,200);
+		private Size size = new Size(320,213);
 		private string imagePath;
 		public ImageResizer(String _imagePath)
 		{
@@ -141,8 +207,9 @@ namespace Dot_Slash
 			for (int i = 0; i < pictures.Length; i++)
 			{
 				Bitmap img = new Bitmap(pictures[i]);
-				Bitmap edgedImg = new Bitmap(img, size);
-				edgedImg.Save("Resized/resized_" + new FileInfo(pictures[i]).Name);
+				Bitmap resized = new Bitmap(img, size);
+				resized.Save("Resized/resized_" + new FileInfo(pictures[i]).Name);
+				Console.WriteLine(imagePath+"->Resized/resized_" + new FileInfo(pictures[i]).Name);
 			}
 		}
 	}
@@ -163,12 +230,16 @@ namespace Dot_Slash
 			bool isExists = System.IO.Directory.Exists("Edged/");
 			if (!isExists)
 				System.IO.Directory.CreateDirectory("Edged/");
+			bool gausExists = System.IO.Directory.Exists("Gaussian/");
+			if (gausExists)
+				imagePath = "Gaussian/";
 			for (int i = 0; i < pictures.Length; i++)
 			{
 				Bitmap img = new Bitmap(pictures[i]);
 				Bitmap edgedImg = new Bitmap(img.Width, img.Height);
 				makeEdge(img, edgedImg);
-				edgedImg.Save("Edged/Edged_" + new FileInfo(pictures[i]).Name);	
+				edgedImg.Save("Edged/Edged_" + new FileInfo(pictures[i]).Name);
+				Console.WriteLine(imagePath+ "-> Edged/Edged_" + new FileInfo(pictures[i]).Name);
 			}
 		}
 
@@ -260,15 +331,17 @@ namespace Dot_Slash
 			bool isExists = System.IO.Directory.Exists("Gaussian/");
 			if (!isExists)
 				System.IO.Directory.CreateDirectory("Gaussian/");
+			bool resizedExists = System.IO.Directory.Exists("Resized/");
+			if (resizedExists)
+				imagePath = "Resized/";
 			String[] pictures = Directory.GetFiles(imagePath, "*.jpg", SearchOption.TopDirectoryOnly);
-			
 			for (int i = 0; i < pictures.Length; i++)
 			{
-				Console.WriteLine(pictures[i]);
 				Bitmap img = new Bitmap(pictures[i]);
 				Bitmap gaus = new Bitmap(img.Width, img.Height);
 				smooth(img, gaus);
 				gaus.Save("Gaussian/Filtered_" + new FileInfo(pictures[i]).Name);
+				Console.WriteLine(imagePath + "-> Gaussian/Filtered_" + new FileInfo(pictures[i]).Name);
 			}
 		}
 
@@ -355,6 +428,9 @@ namespace Dot_Slash
 			bool isExists = System.IO.Directory.Exists("Greyscale/");
 			if (!isExists)
 				System.IO.Directory.CreateDirectory("Greyscale/");
+			bool gausExists = System.IO.Directory.Exists("Gaussian/");
+			if(gausExists)
+				imagePath = "Gaussian/";
 			String[] pictures = Directory.GetFiles(imagePath, "*.jpg", SearchOption.TopDirectoryOnly);
 
 			for (int i = 0; i < pictures.Length; i++)
@@ -364,6 +440,7 @@ namespace Dot_Slash
 				Bitmap grey = new Bitmap(img.Width, img.Height);
 				makeGreyScale(img, grey);
 				grey.Save("Greyscale/greyscaled_" + new FileInfo(pictures[i]).Name);
+				Console.WriteLine(imagePath + "-> Greyscale/greyscaled_" + new FileInfo(pictures[i]).Name);
 			}
 		}
 
