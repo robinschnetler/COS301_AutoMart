@@ -33,6 +33,7 @@ namespace Dot_Slash
 		static void Main(string[] args)
 		{
 			ImageProcessor imageProcessor = new ImageProcessor();
+<<<<<<< HEAD
 			display();
 			int chosen = Convert.ToInt32(Console.ReadLine());
 			while(chosen != 6)
@@ -93,6 +94,22 @@ namespace Dot_Slash
 				display();
 				chosen = Convert.ToInt32(Console.ReadLine());
 			}
+=======
+			Console.WriteLine("resizing");
+			imageProcessor.resize();
+			Console.WriteLine("Done resizing");
+			Console.WriteLine("Applying Gauusian Filter");
+			imageProcessor.applyGaussian();
+			Console.WriteLine("Done Gaussian Filter");
+			//Console.WriteLine("Applying Edge Detector");
+			//profiler.detectEdges();
+			//Console.WriteLine("Done Edge Detection");
+			Console.WriteLine("Changing images to greyscale");
+			imageProcessor.makeGreyscale();
+			Console.WriteLine("Done greyscaling");
+
+			//added this
+>>>>>>> 8b92961f0218b6da0b5dc07f2e35af391d0a9734
 		}
 	}
 
