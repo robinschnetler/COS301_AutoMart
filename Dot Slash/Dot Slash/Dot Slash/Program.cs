@@ -4,6 +4,8 @@ using System.Linq;
 using System.Drawing;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization;
 using System.IO;
 
 namespace Dot_Slash
@@ -28,15 +30,17 @@ namespace Dot_Slash
 			Console.WriteLine("3) edge Detection");
 			Console.WriteLine("4) grey scaling");
 			Console.WriteLine("5) generate integral image");
-			Console.WriteLine("6) Exit");
+			Console.WriteLine("6) crop images");
+			Console.WriteLine("7) Exit");
 		}
+		[STAThread]
 		static void Main(string[] args)
 		{
 			ImageProcessor imageProcessor = new ImageProcessor();
-<<<<<<< HEAD
+			Tools tools = new Tools();
 			display();
 			int chosen = Convert.ToInt32(Console.ReadLine());
-			while(chosen != 6)
+			while(chosen != 7)
 			{ 
 				switch(chosen)
 				{ 
@@ -79,10 +83,15 @@ namespace Dot_Slash
 							{
 								for (int j = 0; j < b.Height; j++)
 								{
-									Console.Write(ii[i, j] + "\t");
+									Console.Write(ii[i, j] + ".");
 								}
 								Console.WriteLine();
 							}
+							break;
+						}
+					case 6:
+						{
+							tools.photoCropper();
 							break;
 						}
 					default:
@@ -94,27 +103,33 @@ namespace Dot_Slash
 				display();
 				chosen = Convert.ToInt32(Console.ReadLine());
 			}
-=======
-			Console.WriteLine("resizing");
-			imageProcessor.resize();
-			Console.WriteLine("Done resizing");
-			Console.WriteLine("Applying Gauusian Filter");
-			imageProcessor.applyGaussian();
-			Console.WriteLine("Done Gaussian Filter");
-			//Console.WriteLine("Applying Edge Detector");
-			//profiler.detectEdges();
-			//Console.WriteLine("Done Edge Detection");
-			Console.WriteLine("Changing images to greyscale");
-			imageProcessor.makeGreyscale();
-			Console.WriteLine("Done greyscaling");
-
-			//added this
->>>>>>> 8b92961f0218b6da0b5dc07f2e35af391d0a9734
 		}
 	}
 
-	class Tools
+	//this is where our openCV shit is going to go
+	class Classifier
 	{
+		
+	}
+
+	public class Tools
+	{
+		public void photoCropper()
+		{
+			FolderBrowserDialog dialog = new FolderBrowserDialog();
+			Console.WriteLine("please select folder with all images of car");
+			Console.WriteLine("Note: sub directories will not be parsed");
+			String path = "";
+			if (dialog.ShowDialog() == DialogResult.OK)
+			{
+				path = dialog.SelectedPath;
+			}
+			String[] files = Directory.GetFiles(path, "*.jpg", SearchOption.TopDirectoryOnly);
+			PictureCropper pc = new PictureCropper(files, 3, 2);
+			pc.Activate();
+			pc.ShowDialog();
+		}
+
 		public int[,] generateIntegralImage(String filename)
 		{
 			//We are getting in an image and returning the Summed Area Table (A 2x2 matrix of integers)
@@ -208,7 +223,7 @@ namespace Dot_Slash
 
 	class ImageResizer: Strategy
 	{
-		private Size size = new Size(320,213);
+		private Size size = new Size(45,30);
 		private string imagePath;
 		public ImageResizer(String _imagePath)
 		{
@@ -236,6 +251,7 @@ namespace Dot_Slash
 		private int threshold = 35;
 		private Boolean diagonal = true;
 		private string imagePath;
+
 		public EdgeDetector(String _imagePath)
 		{
 			imagePath = _imagePath;
