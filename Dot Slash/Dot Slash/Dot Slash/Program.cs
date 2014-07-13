@@ -22,6 +22,9 @@ namespace Dot_Slash
 	//main entry point into the program
 	class Program
 	{
+		/// <summary>
+		/// display function to show program options to user
+		/// </summary>
 		static void display()
 		{
 			Console.WriteLine("Image processing options:");
@@ -31,16 +34,18 @@ namespace Dot_Slash
 			Console.WriteLine("4) grey scaling");
 			Console.WriteLine("5) generate integral image");
 			Console.WriteLine("6) crop images");
-			Console.WriteLine("7) Exit");
+			Console.WriteLine("7) filter images by hand");
+			Console.WriteLine("8) Exit");
 		}
-		[STAThread]
+
+		[STAThread] //allows for main to open dialogs(something to do with threads)
 		static void Main(string[] args)
 		{
 			ImageProcessor imageProcessor = new ImageProcessor();
 			Tools tools = new Tools();
 			display();
 			int chosen = Convert.ToInt32(Console.ReadLine());
-			while(chosen != 7)
+			while(chosen != 8)
 			{ 
 				switch(chosen)
 				{ 
@@ -94,6 +99,11 @@ namespace Dot_Slash
 							tools.photoCropper();
 							break;
 						}
+					case 7:
+						{
+							tools.photoChooser();
+							break;
+						}
 					default:
 						{
 							Console.WriteLine("please choose valid option");
@@ -114,6 +124,9 @@ namespace Dot_Slash
 
 	public class Tools
 	{
+		/// <summary>
+		/// allows for easy cropping of photos. Will be used to crop photos for positive samples to cascading classifier
+		/// </summary>
 		public void photoCropper()
 		{
 			FolderBrowserDialog dialog = new FolderBrowserDialog();
@@ -126,6 +139,22 @@ namespace Dot_Slash
 			}
 			String[] files = Directory.GetFiles(path, "*.jpg", SearchOption.TopDirectoryOnly);
 			PictureCropper pc = new PictureCropper(files, 3, 2);
+			pc.Activate();
+			pc.ShowDialog();
+		}
+
+		public void photoChooser()
+		{
+			FolderBrowserDialog dialog = new FolderBrowserDialog();
+			Console.WriteLine("please select folder with all images");
+			Console.WriteLine("Note: sub directories will not be parsed");
+			String path = "";
+			if (dialog.ShowDialog() == DialogResult.OK)
+			{
+				path = dialog.SelectedPath;
+			}
+			String[] files = Directory.GetFiles(path, "*.jpg", SearchOption.TopDirectoryOnly);
+			photoChooser pc = new photoChooser(files);
 			pc.Activate();
 			pc.ShowDialog();
 		}
@@ -175,7 +204,10 @@ namespace Dot_Slash
 			return SummedAreaTable;
 		}
 	}
-
+	/// <summary>
+	/// Each image processing task must be  encapsulated into a class that inherits from interface Strategy. Based on the mathod called
+	/// in ImageProcessor, the correct strategy object is created and executed.
+	/// </summary>
 	class ImageProcessor
 	{
 		String imagePath; 
