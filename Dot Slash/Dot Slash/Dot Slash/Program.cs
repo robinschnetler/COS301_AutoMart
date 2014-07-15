@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization;
 using System.IO;
+using Emgu.CV;
+using Emgu.CV.Structure;
+using Emgu.CV.UI;
+using Emgu.Util;
 
 namespace Dot_Slash
 {
@@ -255,7 +259,7 @@ namespace Dot_Slash
 
 	class ImageResizer: Strategy
 	{
-		private Size size = new Size(45,30);
+		private Size size = new Size(420,380);
 		private string imagePath;
 		public ImageResizer(String _imagePath)
 		{
@@ -502,39 +506,43 @@ namespace Dot_Slash
 			{
 				Console.WriteLine(pictures[i]);
 				Bitmap img = new Bitmap(pictures[i]);
-				Bitmap grey = new Bitmap(img.Width, img.Height);
-				makeGreyScale(img, grey);
+				//Bitmap grey = new Bitmap(img.Width, img.Height);
+				Image<Gray, Byte> grey;
+				grey = makeGreyScale(img);
 				grey.Save("Greyscale/greyscaled_" + new FileInfo(pictures[i]).Name);
 				Console.WriteLine(imagePath + "-> Greyscale/greyscaled_" + new FileInfo(pictures[i]).Name);
 			}
 		}
 
-		private Bitmap makeGreyScale(Bitmap originalImage, Bitmap img)
+		private Image<Gray, Byte> makeGreyScale(Bitmap originalImage)
 		{
+			Console.WriteLine("original: "+originalImage.PixelFormat);
+			Image<Bgra, Int32> c = new Image<Bgra, Int32>(originalImage);
+			Image<Gray, Byte> img = c.Convert<Gray, Byte>();
+			return img;
 			//Bitmap img = new Bitmap(originalImage.Width, originalImage.Height, System.Drawing.Imaging.PixelFormat.Format16bppGrayScale);
 			//Bitmap img = new Bitmap(originalImage.Width, originalImage.Height, originalImage.PixelFormat);
 			//Loop through every pixel in the image, row by row
-			for (int y = 0; y < originalImage.Height; y++)
-			{
-				for (int x = 0; x < originalImage.Width; x++)
-				{
-					//See http://www.johndcook.com/blog/2009/08/24/algorithms-convert-color-grayscale/
-					//Using the Luminosity method, the formula for luminosity is 0.21 R + 0.72 G + 0.07 B
-
-					Color pixel = originalImage.GetPixel(x,y);
-					double greyValue = (pixel.R * 0.21) + (pixel.G * 0.72) + (pixel.B * 0.07);
-					Color newPixel = Color.FromArgb(255, (Int16) greyValue, (Int16) greyValue, (Int16) greyValue);
-					//greyScaleImg.SetPixel(x, y, newPixel);
-					img.SetPixel(x, y, newPixel);
-				}
-			}
+			//for (int y = 0; y < originalImage.Height; y++)
+			//{
+			//	for (int x = 0; x < originalImage.Width; x++)
+			//	{
+			//		//See http://www.johndcook.com/blog/2009/08/24/algorithms-convert-color-grayscale/
+			//		//Using the Luminosity method, the formula for luminosity is 0.21 R + 0.72 G + 0.07 B
+			//
+			//		Color pixel = originalImage.GetPixel(x,y);
+			//		double greyValue = (pixel.R * 0.21) + (pixel.G * 0.72) + (pixel.B * 0.07);
+			//		Color newPixel = Color.FromArgb(255, (Int16) greyValue, (Int16) greyValue, (Int16) greyValue);
+			//		//greyScaleImg.SetPixel(x, y, newPixel);
+			//		img.SetPixel(x, y, newPixel);
+			//	}
+			//}
 
 			//Bitmap clone = new Bitmap(img.Width, img.Height, System.Drawing.Imaging.PixelFormat.Format16bppGrayScale);
 			//using (Graphics gr = Graphics.FromImage(clone))
 			//{
 			//	gr.DrawImage(img, new Rectangle(0, 0, clone.Width, clone.Height));
 			//}
-			return img;
 		}
 	} 
 }
