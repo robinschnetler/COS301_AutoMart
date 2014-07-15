@@ -49,10 +49,17 @@ namespace Dot_Slash
 				if (e.Y > ry)
 					ry = e.Y;
 				clickCount++;
-				Graphics c = Graphics.FromImage(pictureBox.Image);
+				Graphics g = Graphics.FromImage(pictureBox.Image);
 				Pen pen = new Pen(Color.Red, 2);
-				c.DrawEllipse(pen, e.X, e.Y, 2,2);
-				c.Save();
+				g.DrawEllipse(pen, e.X, e.Y, 2,2);
+				if(clickCount < 4)
+					g.Save();
+				Pen p = new Pen(Color.Yellow, 1);
+				if(clickCount > 3)
+				{
+					g.DrawRectangle(p, x, y, rx - x, ry - y);
+					g.Save();
+				}
 				pictureBox.Refresh();
 			}
 			else if(e.Button == MouseButtons.Right)
