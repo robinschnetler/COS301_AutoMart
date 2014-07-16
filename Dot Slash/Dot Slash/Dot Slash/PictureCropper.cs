@@ -61,6 +61,9 @@ namespace Dot_Slash
 					g.Save();
 				}
 				pictureBox.Refresh();
+				g = null;
+				pen = null;
+				p = null;
 			}
 			else if(e.Button == MouseButtons.Right)
 			{
@@ -91,6 +94,8 @@ namespace Dot_Slash
 						x = width;
 						y = height;
 						clickCount = 0;
+						oldPic = null;
+						newImage = null;
 					}
 					else
 						this.Close();
