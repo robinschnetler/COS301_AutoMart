@@ -157,11 +157,30 @@ namespace Dot_Slash
 			{
 				path = dialog.SelectedPath;
 			}
-			String[] files = Directory.GetFiles(path, "*.jpg", SearchOption.TopDirectoryOnly);
-			photoChooser pc = new photoChooser(files);
+            if (!File.Exists("classified"))
+            {
+                File.Create("classified");
+            }
+            else
+            {
+                cleanOld();
+            }
+            String[] files = Directory.GetFiles(path, "*.jpeg", SearchOption.TopDirectoryOnly);
+            photoChooser pc = new photoChooser(files);
 			pc.Activate();
-			pc.ShowDialog();
+            pc.ShowDialog();
+            Console.WriteLine(pc.current + " images classified");
 		}
+
+        private void cleanOld()
+        {
+            StreamReader read = new StreamReader("classified");
+            while(!read.EndOfStream)
+            {
+                File.Delete(read.ReadLine());
+            }
+            read.Close();
+        }
 
 		public int[,] generateIntegralImage(String filename)
 		{
