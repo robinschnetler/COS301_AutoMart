@@ -141,7 +141,7 @@ namespace Dot_Slash
 			{
 				path = dialog.SelectedPath;
 			}
-			String[] files = Directory.GetFiles(path, "*.jpg", SearchOption.TopDirectoryOnly);
+			String[] files = Directory.GetFiles(path, "*.jpeg", SearchOption.TopDirectoryOnly);
 			PictureCropper pc = new PictureCropper(files, 3, 2);
 			pc.Activate();
 			pc.ShowDialog();
