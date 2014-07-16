@@ -64,12 +64,20 @@ namespace Dot_Slash
 			}
 			else if(e.Button == MouseButtons.Right)
 			{
-				if(clickCount < 4)
+				if(clickCount < 4 && clickCount > 0)
 					MessageBox.Show("Please select more regions by left-clicking", "Not enough information", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
 				else
 				{ 
 					Bitmap oldPic = new Bitmap(files[index]);
-					Bitmap newImage = oldPic.Clone(new Rectangle(x, y, rx - x, ry-y), oldPic.PixelFormat);
+					Bitmap newImage;
+					if (clickCount == 0)
+					{
+						newImage = oldPic;
+					}
+					else
+					{
+						newImage = oldPic.Clone(new Rectangle(x, y, rx - x, ry - y), oldPic.PixelFormat);
+					}
 					bool cropExist = Directory.Exists("Cropped/");
 					if(!cropExist)
 						Directory.CreateDirectory("Cropped/");
