@@ -14,8 +14,9 @@ namespace Dot_Slash
 	public partial class photoChooser : Form
 	{
 		string[] files;
-		int current = 0;
+		public int current = 0;
 		int iconWidth, iconHeight;
+        StreamWriter file = new StreamWriter("classified", true);
 		public photoChooser(String[] _files)
 		{
 			bool directoryExists = Directory.Exists("SelectedCars/");
@@ -62,24 +63,18 @@ namespace Dot_Slash
 			updateView();
 		}
 
-		private void formClose(Object o, FormClosedEventArgs e)
+		private void formClose(Object o, FormClosingEventArgs e)
 		{
-			pb2previous.Image = null;
-			pbPrevious.Image = null;
-			pbCurrent.Image = null;
-			pbView.Image = null;
-			pbNext.Image = null;
-			pb2next.Image = null;
-			for (int i = 0; i < current; i++)
-			{
-				File.Delete(files[i]);
-			}	
+            file.Close();	
 		}
 
 		private void updateView()
 		{
-			if(current < files.Length)
-				current++;
+            if (current < files.Length)
+            {
+                file.Write(files[current]+"\n");
+                current++;
+            }
 			pb2previous.Image = pbPrevious.Image;
 			pb2previous.Refresh();
 			pbPrevious.Image = pbCurrent.Image;

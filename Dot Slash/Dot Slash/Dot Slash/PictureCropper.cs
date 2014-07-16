@@ -49,20 +49,38 @@ namespace Dot_Slash
 				if (e.Y > ry)
 					ry = e.Y;
 				clickCount++;
-				Graphics c = Graphics.FromImage(pictureBox.Image);
+				Graphics g = Graphics.FromImage(pictureBox.Image);
 				Pen pen = new Pen(Color.Red, 2);
-				c.DrawEllipse(pen, e.X, e.Y, 2,2);
-				c.Save();
+				g.DrawEllipse(pen, e.X, e.Y, 2,2);
+				if(clickCount < 4)
+					g.Save();
+				Pen p = new Pen(Color.Yellow, 1);
+				if(clickCount > 3)
+				{
+					g.DrawRectangle(p, x, y, rx - x, ry - y);
+					g.Save();
+				}
 				pictureBox.Refresh();
+				g = null;
+				pen = null;
+				p = null;
 			}
 			else if(e.Button == MouseButtons.Right)
 			{
-				if(clickCount < 4)
+				if(clickCount < 4 && clickCount > 0)
 					MessageBox.Show("Please select more regions by left-clicking", "Not enough information", MessageBoxButtons.OK, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button1);
 				else
 				{ 
 					Bitmap oldPic = new Bitmap(files[index]);
-					Bitmap newImage = oldPic.Clone(new Rectangle(x, y, rx - x, ry-y), oldPic.PixelFormat);
+					Bitmap newImage;
+					if (clickCount == 0)
+					{
+						newImage = oldPic;
+					}
+					else
+					{
+						newImage = oldPic.Clone(new Rectangle(x, y, rx - x, ry - y), oldPic.PixelFormat);
+					}
 					bool cropExist = Directory.Exists("Cropped/");
 					if(!cropExist)
 						Directory.CreateDirectory("Cropped/");
@@ -76,6 +94,8 @@ namespace Dot_Slash
 						x = width;
 						y = height;
 						clickCount = 0;
+						oldPic = null;
+						newImage = null;
 					}
 					else
 						this.Close();

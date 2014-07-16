@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(formClose);
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.pbNext = new System.Windows.Forms.PictureBox();
 			this.pb2next = new System.Windows.Forms.PictureBox();
