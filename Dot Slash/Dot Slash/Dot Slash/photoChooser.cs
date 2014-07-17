@@ -16,7 +16,7 @@ namespace Dot_Slash
 		string[] files;
 		public int current = 0;
 		int iconWidth, iconHeight;
-        StreamWriter file = new StreamWriter("classified", true);
+		StreamWriter file = new StreamWriter("classified", true);
 		public photoChooser(String[] _files)
 		{
 			bool directoryExists = Directory.Exists("SelectedCars/");

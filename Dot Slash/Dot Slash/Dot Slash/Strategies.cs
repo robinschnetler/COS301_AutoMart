@@ -14,9 +14,12 @@ using Emgu.Util;
 
 namespace Dot_Slash
 {
+	/// <summary>
+	/// all extensions specified in extensions array will be considered when doing image processing
+	/// </summary>
 	static class Globals
 	{
-		static public String[] extensions = {"jpg", "jpeg", "bmp", "png", "pbm"};
+		static public String[] extensions = {"jpg", "jpeg", "bmp", "png", "pgm"};
 	}
 	//interface for multiple image proccessing tools: each sub-program will implement its own overriden execute() function
 	interface Strategy

@@ -16,26 +16,33 @@ namespace Dot_Slash
 {
 	public class Tools
 	{
-		public void createDat()
+		public void createDat(String imgPath, String datName, Boolean positive)
 		{
-			String imgPath = "images/";
-			Boolean greyExists = Directory.Exists("Greyscale/");
-			if(greyExists)
-				imgPath = "Greyscale";
 			String[] pictures = Tools.getImages(imgPath, Globals.extensions);
-			Bitmap sample = new Bitmap(pictures[0]);
+			Image<Gray, Byte> sample = new Image<Gray, Byte>(pictures[0]);
 			int width = sample.Width;
 			int height = sample.Height;
-			StreamWriter writer = new StreamWriter("samples.dat",false);
-			for (int i = 0; i < pictures.Length; i++)
+			StreamWriter writer = new StreamWriter(datName,false);
+			if(positive)
+			{ 
+				for (int i = 0; i < pictures.Length; i++)
+				{
+					writer.WriteLine(pictures[i] + " 1 " + "0 0 " + width + " "  + height);
+					Tools.UpdateProgress(i + 1, pictures.Length, 50, '=');
+				}
+			}
+			else
 			{
-				writer.WriteLine(pictures[i] + " 1 " + "0 0 " + width + " "  + height);
-				Tools.UpdateProgress(i + 1, pictures.Length, 50, '=');
+				for (int i = 0; i < pictures.Length; i++)
+				{
+					writer.WriteLine(pictures[i]);
+					Tools.UpdateProgress(i + 1, pictures.Length, 50, '=');
+				}
 			}
 			writer.Close();
 			Console.WriteLine();
 			Console.WriteLine();
-			Console.WriteLine("Generated samples.dat file for "+pictures.Length + " images.");
+			Console.WriteLine("Generated "+datName+" file for "+pictures.Length + " images.");
 			Console.WriteLine();
 		}
 
