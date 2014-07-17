@@ -32,7 +32,8 @@ namespace Dot_Slash
 			Console.WriteLine("7) Filter images by hand");
 			Console.WriteLine("8) Create positives.dat");
 			Console.WriteLine("9) Create negatives.dat");
-			Console.WriteLine("10) Exit");
+			Console.WriteLine("10) Change filename extensions");
+			Console.WriteLine("11) Exit");
 		}
 
 		[STAThread] //allows for main to open dialogs(something to do with threads)
@@ -42,7 +43,7 @@ namespace Dot_Slash
 			Tools tools = new Tools();
 			display();
 			int chosen = Convert.ToInt32(Console.ReadLine());
-			while(chosen != 10)
+			while(chosen != 11)
 			{ 
 				switch(chosen)
 				{ 
@@ -102,6 +103,11 @@ namespace Dot_Slash
 					case 9:
 						{
 							tools.createDat("negative/", "negatives.dat", false);
+							break;
+						}
+					case 10:
+						{
+							tools.changeExtension();
 							break;
 						}
 					default:
