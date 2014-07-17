@@ -16,6 +16,25 @@ namespace Dot_Slash
 {
 	public class Tools
 	{
+		public void createDat()
+		{
+			String imgPath = "images/";
+			Boolean greyExists = Directory.Exists("Greyscale/");
+			if(greyExists)
+				imgPath = "Greyscale";
+			String[] pictures = Tools.getImages(imgPath, Globals.extensions);
+			Bitmap sample = new Bitmap(pictures[0]);
+			int width = sample.Width;
+			int height = sample.Height;
+			StreamWriter writer = new StreamWriter("samples.dat",false);
+			for (int i = 0; i < pictures.Length; i++)
+			{
+				writer.WriteLine(pictures[i] + " 1 " + "0 0 " + width + " "  + height);
+			}
+			writer.Close();
+			Console.WriteLine("generated samples.dat file for "+pictures.Length + " images.");
+		}
+
 		static public String[] getImages(String imagePath, String[] extension)
 		{
 			ArrayList images = new ArrayList();

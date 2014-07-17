@@ -30,7 +30,8 @@ namespace Dot_Slash
 			Console.WriteLine("5) generate integral image");
 			Console.WriteLine("6) crop images");
 			Console.WriteLine("7) filter images by hand");
-			Console.WriteLine("8) Exit");
+			Console.WriteLine("8) create samples.dat");
+			Console.WriteLine("9) Exit");
 		}
 
 		[STAThread] //allows for main to open dialogs(something to do with threads)
@@ -40,7 +41,7 @@ namespace Dot_Slash
 			Tools tools = new Tools();
 			display();
 			int chosen = Convert.ToInt32(Console.ReadLine());
-			while(chosen != 8)
+			while(chosen != 9)
 			{ 
 				switch(chosen)
 				{ 
@@ -85,6 +86,11 @@ namespace Dot_Slash
 					case 7:
 						{
 							tools.photoChooser();
+							break;
+						}
+					case 8:
+						{
+							tools.createDat();
 							break;
 						}
 					default:
