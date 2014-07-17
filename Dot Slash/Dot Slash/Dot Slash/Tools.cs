@@ -27,16 +27,16 @@ namespace Dot_Slash
 			int width = sample.Width;
 			int height = sample.Height;
 			StreamWriter writer = new StreamWriter("samples.dat",false);
-			ProgressBar progress = new ProgressBar();
 			for (int i = 0; i < pictures.Length; i++)
 			{
 				writer.WriteLine(pictures[i] + " 1 " + "0 0 " + width + " "  + height);
-				progress.UpdateProgress(i + 1, pictures.Length, 50, '=');
+				Tools.UpdateProgress(i + 1, pictures.Length, 50, '=');
 			}
 			writer.Close();
 			Console.WriteLine();
 			Console.WriteLine();
-			Console.WriteLine("generated samples.dat file for "+pictures.Length + " images.");
+			Console.WriteLine("Generated samples.dat file for "+pictures.Length + " images.");
+			Console.WriteLine();
 		}
 
 		static public String[] getImages(String imagePath, String[] extension)
@@ -124,6 +124,28 @@ namespace Dot_Slash
 			Image<Gray, Double> integral = new Image<Gray, Double>(filename);
 			integral = integral.Integral();
 			return integral.ToBitmap();
+		}
+
+
+		static public void UpdateProgress(int complete, int maxVal, int barSize, char progressCharacter)
+		{
+			Console.CursorVisible = false;
+			int left = Console.CursorLeft;
+			decimal perc = (decimal)complete / (decimal)maxVal;
+			int chars = (int)Math.Floor(perc / ((decimal)1 / (decimal)barSize));
+			string p1 = String.Empty, p2 = String.Empty;
+
+			for (int i = 0; i < chars; i++) p1 += progressCharacter;
+			for (int i = 0; i < barSize - chars; i++) p2 += progressCharacter;
+
+			Console.ForegroundColor = ConsoleColor.Green;
+			Console.Write(p1);
+			Console.ForegroundColor = ConsoleColor.DarkRed;
+			Console.Write(p2);
+
+			Console.ResetColor();
+			Console.Write(" {0}%", (perc * 100).ToString("N2"));
+			Console.CursorLeft = left;
 		}
 	}
 }
