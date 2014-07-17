@@ -122,46 +122,4 @@ namespace Dot_Slash
 			return integral.ToBitmap();
 		}
 	}
-	/// <summary>
-	/// Each image processing task must be  encapsulated into a class that inherits from interface Strategy. Based on the mathod called
-	/// in ImageProcessor, the correct strategy object is created and executed.
-	/// </summary>
-	class ImageProcessor
-	{
-		String imagePath;
-		Strategy strategy;
-
-		public ImageProcessor()
-		{
-			imagePath = "images/";
-		}
-
-		public void makeGreyscale()
-		{
-			strategy = new Greyscaler(imagePath);
-			strategy.execute();
-			strategy = null;
-		}
-
-		public void detectEdges()
-		{
-			strategy = new EdgeDetector(imagePath);
-			strategy.execute();
-			strategy = null;
-		}
-
-		public void applyGaussian()
-		{
-			strategy = new GaussianFilter(imagePath);
-			strategy.execute();
-			strategy = null;
-		}
-
-		public void resize()
-		{
-			strategy = new ImageResizer(imagePath);
-			strategy.execute();
-			strategy = null;
-		}
-	} 
 }
