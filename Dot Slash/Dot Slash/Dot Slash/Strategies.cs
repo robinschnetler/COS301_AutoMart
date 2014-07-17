@@ -86,14 +86,17 @@ namespace Dot_Slash
 			bool isExists = System.IO.Directory.Exists("Resized/");
 			if (!isExists)
 				System.IO.Directory.CreateDirectory("Resized/");
+			ProgressBar progress = new ProgressBar();
 			for (int i = 0; i < pictures.Length; i++)
 			{
 				Bitmap img = new Bitmap(pictures[i]);
 				Bitmap resized = new Bitmap(img, size);
 				resized.Save("Resized/resized_" + new FileInfo(pictures[i]).Name);
-				//Console.WriteLine(imagePath + "->Resized/resized_" + new FileInfo(pictures[i]).Name);
+				progress.UpdateProgress(i + 1, pictures.Length, 50, '=');
 			}
-			Console.WriteLine("Resized " + pictures.Length + " images from " + imagePath + "/ to " + "Resized/");
+			Console.WriteLine();
+			Console.WriteLine();
+			Console.WriteLine("Resized " + pictures.Length + " images from " + imagePath + " to " + "Resized/");
 		}
 	}
 
@@ -115,13 +118,17 @@ namespace Dot_Slash
 			if (gausExists)
 				imagePath = "Gaussian/";
 			String[] pictures = Tools.getImages(imagePath, Globals.extensions);
+			ProgressBar progress = new ProgressBar();
 			for (int i = 0; i < pictures.Length; i++)
 			{
 				Bitmap img = new Bitmap(pictures[i]);
 				Image<Gray, Byte> edgedImg;
 				edgedImg = makeEdge(img);
 				edgedImg.Save("Edged/Edged_" + new FileInfo(pictures[i]).Name);
+				progress.UpdateProgress(i + 1, pictures.Length, 50, '=');
 			}
+			Console.WriteLine();
+			Console.WriteLine();
 			Console.WriteLine("Edged " + pictures.Length + " images from " + imagePath + "/ to " + "Edged/");
 		}
 
@@ -149,14 +156,18 @@ namespace Dot_Slash
 			if (!isExists)
 				System.IO.Directory.CreateDirectory("Gaussian/");
 			String[] pictures = Tools.getImages(imagePath, Globals.extensions);
+			ProgressBar progress = new ProgressBar();
 			for (int i = 0; i < pictures.Length; i++)
 			{
 				Bitmap img = new Bitmap(pictures[i]);
 				Image<Bgra, Byte> gaus;
 				gaus = smooth(img);
 				gaus.Save("Gaussian/Filtered_" + new FileInfo(pictures[i]).Name);
+				progress.UpdateProgress(i + 1, pictures.Length, 50, '=');
 			}
-			Console.WriteLine("Smoothed " + pictures.Length + " images from " + imagePath + "/ to " + "Gaussian/");
+			Console.WriteLine();
+			Console.WriteLine();
+			Console.WriteLine("Smoothed " + pictures.Length + " images from " + imagePath + " to " + "Gaussian/");
 		}
 
 		public Image<Bgra, Byte> smooth(Bitmap img)
@@ -184,15 +195,18 @@ namespace Dot_Slash
 			if (gausExists)
 				imagePath = "Resized/";
 			String[] pictures = Tools.getImages(imagePath, Globals.extensions);
-
+			ProgressBar progress = new ProgressBar();
 			for (int i = 0; i < pictures.Length; i++)
 			{
 				Bitmap img = new Bitmap(pictures[i]);
 				Image<Gray, Byte> grey;
 				grey = makeGreyScale(img);
 				grey.Save("Greyscale/greyscaled_" + new FileInfo(pictures[i]).Name);
+				progress.UpdateProgress(i + 1, pictures.Length, 50, '=');
 			}
-			Console.WriteLine("Greyscaled " + pictures.Length + " images from " + imagePath + "/ to " + "Greyscaled/");
+			Console.WriteLine();
+			Console.WriteLine();
+			Console.WriteLine("Greyscaled " + pictures.Length + " images from " + imagePath + " to " + "Greyscaled/");
 		}
 
 		private Image<Gray, Byte> makeGreyScale(Bitmap originalImage)

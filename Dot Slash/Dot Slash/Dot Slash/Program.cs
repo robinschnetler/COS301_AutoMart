@@ -24,13 +24,13 @@ namespace Dot_Slash
 		{
 			Console.WriteLine("Image processing options:");
 			Console.WriteLine("1) Resizing to 480 X 240");
-			Console.WriteLine("2) apply gaussian filter");
-			Console.WriteLine("3) grey scaling");
-			Console.WriteLine("4) edge Detection");
-			Console.WriteLine("5) generate integral image");
-			Console.WriteLine("6) crop images");
-			Console.WriteLine("7) filter images by hand");
-			Console.WriteLine("8) create samples.dat");
+			Console.WriteLine("2) Apply Gaussian Filter");
+			Console.WriteLine("3) Greyscaling");
+			Console.WriteLine("4) Edge Detection");
+			Console.WriteLine("5) Generate Integral Image");
+			Console.WriteLine("6) Crop images");
+			Console.WriteLine("7) Filter images by hand");
+			Console.WriteLine("8) Create samples.dat");
 			Console.WriteLine("9) Exit");
 		}
 
@@ -47,35 +47,40 @@ namespace Dot_Slash
 				{ 
 					case 1:
 						{ 
-							Console.WriteLine("resizing");
+							Console.WriteLine("Resizing Images");
 							imageProcessor.resize();
+							Console.WriteLine();
 							break;
 						}
 					case 2:
 						{
-							Console.WriteLine("Applying Gauusian Filter");
+							Console.WriteLine("Applying Gaussian Filter");
 							imageProcessor.applyGaussian();
+							Console.WriteLine();
 							break;
 						}
 					case 3:
 						{
-							Console.WriteLine("Changing images to greyscale");
+							Console.WriteLine("Changing images to Greyscale");
 							imageProcessor.makeGreyscale();
+							Console.WriteLine();
 							break;
 						}
 					case 4:
 						{
 							Console.WriteLine("Applying Edge Detector");
 							imageProcessor.detectEdges();
+							Console.WriteLine();
 							break;
 						}
 					case 5:
 						{
-							Console.WriteLine("creating integral image(summed are table) for 'integral/grey.jpg'");
+							Console.WriteLine("Creating Integral Image(summed area table) for 'integral/grey.jpg'");
 							Tools t = new Tools();
 							Bitmap integralImage = t.generateIntegralImage("integral/grey.jpg");
 							integralImage.Save("integral/integralimage.jpg");
-							Console.WriteLine("saving integral image for 'integral/grey.jpg' as 'integral/integralimage.jpg'");
+							Console.WriteLine("Saving integral image for 'integral/grey.jpg' as 'integral/integralimage.jpg'");
+							Console.WriteLine();
 							break;
 						}
 					case 6:
@@ -95,12 +100,14 @@ namespace Dot_Slash
 						}
 					default:
 						{
-							Console.WriteLine("please choose valid option");
+							Console.WriteLine("Please choose valid option");
+							Console.WriteLine();
 							break;
 						}
 				}
 				display();
 				chosen = Convert.ToInt32(Console.ReadLine());
+				Console.WriteLine();
 			}
 		}
 	}

@@ -27,11 +27,15 @@ namespace Dot_Slash
 			int width = sample.Width;
 			int height = sample.Height;
 			StreamWriter writer = new StreamWriter("samples.dat",false);
+			ProgressBar progress = new ProgressBar();
 			for (int i = 0; i < pictures.Length; i++)
 			{
 				writer.WriteLine(pictures[i] + " 1 " + "0 0 " + width + " "  + height);
+				progress.UpdateProgress(i + 1, pictures.Length, 50, '=');
 			}
 			writer.Close();
+			Console.WriteLine();
+			Console.WriteLine();
 			Console.WriteLine("generated samples.dat file for "+pictures.Length + " images.");
 		}
 
