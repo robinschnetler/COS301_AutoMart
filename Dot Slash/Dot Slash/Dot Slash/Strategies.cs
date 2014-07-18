@@ -99,10 +99,23 @@ namespace Dot_Slash
 				System.IO.Directory.CreateDirectory("Resized/");
 			for (int i = 0; i < pictures.Length; i++)
 			{
-				Image<Gray, Byte> img = new Image<Gray, Byte>(pictures[i]);
-				img = img.Resize(size.Width, size.Height, Emgu.CV.CvEnum.INTER.CV_INTER_NN);
-				img.Save("Resized/resized_" + new FileInfo(pictures[i]).Name);
-				Tools.UpdateProgress(i + 1, pictures.Length, 50, '=');
+				//Check extension, create image based on file extension
+				string ext = Path.GetExtension(pictures[i]);
+				
+				if (ext == ".pgm")	//Image is greyscale
+				{
+					Image<Gray, Byte> img = new Image<Gray, Byte>(pictures[i]);
+					img = img.Resize(size.Width, size.Height, Emgu.CV.CvEnum.INTER.CV_INTER_NN);
+					img.Save("Resized/resized_" + new FileInfo(pictures[i]).Name);
+					Tools.UpdateProgress(i + 1, pictures.Length, 50, '=');
+				}
+				else	//Assume image is in Bgra format (eg jpg or png)
+				{
+					Image<Bgra, Byte> img = new Image<Bgra, Byte>(pictures[i]);
+					img = img.Resize(size.Width, size.Height, Emgu.CV.CvEnum.INTER.CV_INTER_NN);
+					img.Save("Resized/resized_" + new FileInfo(pictures[i]).Name);
+					Tools.UpdateProgress(i + 1, pictures.Length, 50, '=');
+				}
 			}
 			Console.WriteLine();
 			Console.WriteLine();

@@ -51,9 +51,10 @@ namespace Dot_Slash
 						{ 
 							String input;
 							Console.WriteLine("Resizing Images");
-							Console.WriteLine("Width: (default = 480)");
+							Console.WriteLine("Width: (Default = 480)");
 							int w, h;
 							input = Console.ReadLine();
+							
 							if(input.Length == 0)
 							{
 								w = 480;
@@ -62,8 +63,10 @@ namespace Dot_Slash
 							{
 								w = Convert.ToInt32(input);
 							}
-							Console.WriteLine("Height: default = 240");
+							
+							Console.WriteLine("Height: (Default = 240)");
 							input = Console.ReadLine();
+							
 							if(input.Length == 0)
 							{
 								h = 240;
@@ -72,8 +75,20 @@ namespace Dot_Slash
 							{
 								h = Convert.ToInt32(input);
 							}
-							Console.WriteLine("Folder: (Default = 'images/')");
-							string folder = Console.ReadLine() + "/";
+							
+							Console.WriteLine("Folder: (Default = 'images')");
+							input = Console.ReadLine();
+							String folder;
+
+							if (input.Length == 0)
+							{
+								folder = "images";
+							}
+							else
+							{
+								folder = input;
+							}
+							
 							if(Directory.Exists(folder))
 							{
 								imageProcessor.resize(folder, w, h);
