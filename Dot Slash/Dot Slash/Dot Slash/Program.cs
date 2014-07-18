@@ -23,7 +23,7 @@ namespace Dot_Slash
 		static void display()
 		{
 			Console.WriteLine("Image processing options:");
-			Console.WriteLine("1) Resizing to 480 X 240");
+			Console.WriteLine("1) Resizing (Default: to 480 X 240 in 'images/')");
 			Console.WriteLine("2) Apply Gaussian Filter");
 			Console.WriteLine("3) Greyscaling");
 			Console.WriteLine("4) Edge Detection");
@@ -49,8 +49,39 @@ namespace Dot_Slash
 				{ 
 					case 1:
 						{ 
+							String input;
 							Console.WriteLine("Resizing Images");
-							imageProcessor.resize();
+							Console.WriteLine("Width: (default = 480)");
+							int w, h;
+							input = Console.ReadLine();
+							if(input.Length == 0)
+							{
+								w = 480;
+							}
+							else
+							{
+								w = Convert.ToInt32(input);
+							}
+							Console.WriteLine("Height: default = 240");
+							input = Console.ReadLine();
+							if(input.Length == 0)
+							{
+								h = 240;
+							}
+							else
+							{
+								h = Convert.ToInt32(input);
+							}
+							Console.WriteLine("Folder: (Default = 'images/')");
+							string folder = Console.ReadLine() + "/";
+							if(Directory.Exists(folder))
+							{
+								imageProcessor.resize(folder, w, h);
+							}
+							else
+							{
+								imageProcessor.resize(w, h);
+							}
 							Console.WriteLine();
 							break;
 						}

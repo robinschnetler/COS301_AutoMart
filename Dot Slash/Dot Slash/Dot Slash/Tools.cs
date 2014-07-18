@@ -172,14 +172,16 @@ namespace Dot_Slash
 			Console.WriteLine();
 
 			String[] filePaths = System.IO.Directory.GetFiles(dir + "/", "*." + from);
-
-			foreach (string myfile in filePaths)
+			Console.WriteLine("Converting files from ." + from + " to ." + to);
+			for (int i = 0; i < filePaths.Length; i++)
 			{
-				String filename = System.IO.Path.ChangeExtension(myfile, "." + to);
-				System.IO.File.Move(myfile, filename);
+				String filePath = filePaths[i];
+				String filename = System.IO.Path.ChangeExtension(filePath, "." + to);
+				System.IO.File.Move(filePath, filename);
+				Tools.UpdateProgress(i + 1, filePaths.Length, 50, '=');
 			}
 
-			Console.WriteLine("Done renaming.");
+			Console.WriteLine();
 			Console.WriteLine();
 		}
 	}

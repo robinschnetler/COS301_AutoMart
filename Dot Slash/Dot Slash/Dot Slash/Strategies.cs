@@ -62,9 +62,16 @@ namespace Dot_Slash
 			strategy = null;
 		}
 
-		public void resize()
+		public void resize(int width, int height)
 		{
-			strategy = new ImageResizer(imagePath);
+			strategy = new ImageResizer(imagePath, width, height);
+			strategy.execute();
+			strategy = null;
+		}
+
+		public void resize(String folder, int width, int height)
+		{
+			strategy = new ImageResizer(folder, width, height);
 			strategy.execute();
 			strategy = null;
 		}
@@ -76,10 +83,11 @@ namespace Dot_Slash
 	class ImageResizer : Strategy
 	{
 		//set the desired size to resize to here in the format:(width, height)
-		private Size size = new Size(480, 240);
+		private Size size;
 		private string imagePath;
-		public ImageResizer(String _imagePath)
+		public ImageResizer(String _imagePath, int _width, int _height)
 		{
+			size = new Size(_width, _height);
 			imagePath = _imagePath;
 		}
 
@@ -91,9 +99,9 @@ namespace Dot_Slash
 				System.IO.Directory.CreateDirectory("Resized/");
 			for (int i = 0; i < pictures.Length; i++)
 			{
-				Bitmap img = new Bitmap(pictures[i]);
-				Bitmap resized = new Bitmap(img, size);
-				resized.Save("Resized/resized_" + new FileInfo(pictures[i]).Name);
+				Image<Gray, Byte> img = new Image<Gray, Byte>(pictures[i]);
+				img = img.Resize(size.Width, size.Height, Emgu.CV.CvEnum.INTER.CV_INTER_NN);
+				img.Save("Resized/resized_" + new FileInfo(pictures[i]).Name);
 				Tools.UpdateProgress(i + 1, pictures.Length, 50, '=');
 			}
 			Console.WriteLine();
