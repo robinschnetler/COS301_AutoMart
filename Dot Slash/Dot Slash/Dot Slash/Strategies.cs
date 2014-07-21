@@ -48,6 +48,14 @@ namespace Dot_Slash
 			strategy = null;
 		}
 
+		public void detectCars(String path)
+		{
+			strategy = new CarClassifier(path);
+			strategy.execute();
+			strategy = null;
+
+		}
+
 		public void detectEdges()
 		{
 			strategy = new EdgeDetector(imagePath);
@@ -161,6 +169,36 @@ namespace Dot_Slash
 			return image;
 		}
 
+	}
+
+	class CarClassifier : Strategy
+	{
+		String imagePath;
+		public CarClassifier(String _imagePath)
+		{
+			imagePath = _imagePath;
+		}
+
+		public virtual void execute()
+		{
+			String[] pictures = Tools.getImages(imagePath, Globals.extensions);
+			bool existsDetected = Directory.Exists("Detected/");
+			if(!existsDetected)
+				Directory.CreateDirectory("Detected/");
+			for (int i = 0; i < pictures.Length; i++)
+			{
+				Console.WriteLine(pictures[i]);
+				Image<Gray, Byte> image = (new Image<Bgra,int>(pictures[i])).Convert<Gray, Byte>();
+				Image<Bgra, Int32> original = new Image<Bgra, Int32>(pictures[i]);
+				CascadeClassifier cc = new CascadeClassifier("classifier/cascade.xml");
+				Rectangle[] objects = cc.DetectMultiScale(image,1.05, 10, new Size(150, 90), new Size(480, 320));
+				for (int j = 0; j < objects.Length; j++)
+				{
+					original.Draw(objects[i], new Bgra(255, 153, 51, 255), 2);
+				}
+				original.Save("Detected/Detected_" + new FileInfo(pictures[i]).Name);
+			}
+		}
 	}
 
 	class GaussianFilter : Strategy

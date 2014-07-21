@@ -33,7 +33,8 @@ namespace Dot_Slash
 			Console.WriteLine("8) Create positives.dat");
 			Console.WriteLine("9) Create negatives.dat");
 			Console.WriteLine("10) Change filename extensions");
-			Console.WriteLine("11) Exit");
+			Console.WriteLine("11) Detect car objects");
+			Console.WriteLine("12) Exit");
 		}
 
 		[STAThread] //allows for main to open dialogs(something to do with threads)
@@ -43,7 +44,7 @@ namespace Dot_Slash
 			Tools tools = new Tools();
 			display();
 			int chosen = Convert.ToInt32(Console.ReadLine());
-			while(chosen != 11)
+			while(chosen != 12)
 			{ 
 				switch(chosen)
 				{ 
@@ -88,7 +89,8 @@ namespace Dot_Slash
 							{
 								folder = input;
 							}
-							
+
+							folder += "/";						
 							if(Directory.Exists(folder))
 							{
 								imageProcessor.resize(folder, w, h);
@@ -154,6 +156,13 @@ namespace Dot_Slash
 					case 10:
 						{
 							tools.changeExtension();
+							break;
+						}
+					case 11:
+						{
+							Console.WriteLine("Which folder of images would you like to run the classifier on?");
+							String path = Console.ReadLine();
+							imageProcessor.detectCars(path + "/");
 							break;
 						}
 					default:
