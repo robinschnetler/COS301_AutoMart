@@ -16,10 +16,5 @@ namespace Dot_Slash
 		{
 			InitializeComponent();
 		}
-
-		private void resizeImageToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-
-		}
-	}
+	}	
 }

@@ -54,6 +54,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ImagePreparation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImagePreparation.Designer.cs">
+      <DependentUpon>ImagePreparation.cs</DependentUpon>
+    </Compile>
     <Compile Include="photoChooser.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -75,6 +81,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ImagePreparation.resx">
+      <DependentUpon>ImagePreparation.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="photoChooser.resx">
       <DependentUpon>photoChooser.cs</DependentUpon>
     </EmbeddedResource>
