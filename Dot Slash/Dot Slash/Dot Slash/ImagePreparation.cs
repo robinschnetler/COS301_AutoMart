@@ -12,9 +12,12 @@ namespace Dot_Slash
 {
 	public partial class ImagePreparation : Form
 	{
-		public ImagePreparation()
+		String[] pictures;
+		public ImagePreparation(String[] _pictures)
 		{
+			pictures = _pictures;
 			InitializeComponent();
+			
 		}
 	}	
 }

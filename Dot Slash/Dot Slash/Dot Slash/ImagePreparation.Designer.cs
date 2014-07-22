@@ -28,126 +28,39 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-			this.imagePreparattionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.FilterDrop = new System.Windows.Forms.ToolStripMenuItem();
-			this.sourceFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.destinationDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.CropDrop = new System.Windows.Forms.ToolStripMenuItem();
-			this.sourceDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.destinationDirectoryToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-			this.NaturalDrop = new System.Windows.Forms.ToolStripMenuItem();
-			this.sourceDirectoryToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-			this.datFileToAppendToToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.lblInfo = new System.Windows.Forms.Label();
-			this.menuStrip1.SuspendLayout();
+			this.pictureBox1 = new System.Windows.Forms.PictureBox();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			this.SuspendLayout();
-			// 
-			// menuStrip1
-			// 
-			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.imagePreparattionToolStripMenuItem});
-			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(838, 24);
-			this.menuStrip1.TabIndex = 0;
-			this.menuStrip1.Text = "menuStrip1";
-			// 
-			// imagePreparattionToolStripMenuItem
-			// 
-			this.imagePreparattionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.FilterDrop,
-            this.CropDrop,
-            this.NaturalDrop});
-			this.imagePreparattionToolStripMenuItem.Name = "imagePreparattionToolStripMenuItem";
-			this.imagePreparattionToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
-			this.imagePreparattionToolStripMenuItem.Text = "Tools";
-			// 
-			// FilterDrop
-			// 
-			this.FilterDrop.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sourceFolderToolStripMenuItem,
-            this.destinationDirectoryToolStripMenuItem});
-			this.FilterDrop.Name = "FilterDrop";
-			this.FilterDrop.Size = new System.Drawing.Size(154, 22);
-			this.FilterDrop.Text = "Filter By Hand";
-			// 
-			// sourceFolderToolStripMenuItem
-			// 
-			this.sourceFolderToolStripMenuItem.Name = "sourceFolderToolStripMenuItem";
-			this.sourceFolderToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-			this.sourceFolderToolStripMenuItem.Text = "Source Directory";
-			// 
-			// destinationDirectoryToolStripMenuItem
-			// 
-			this.destinationDirectoryToolStripMenuItem.Name = "destinationDirectoryToolStripMenuItem";
-			this.destinationDirectoryToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-			this.destinationDirectoryToolStripMenuItem.Text = "Destination Directory";
-			// 
-			// CropDrop
-			// 
-			this.CropDrop.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sourceDirectoryToolStripMenuItem,
-            this.destinationDirectoryToolStripMenuItem1});
-			this.CropDrop.Name = "CropDrop";
-			this.CropDrop.Size = new System.Drawing.Size(154, 22);
-			this.CropDrop.Text = "Crop Image";
-			// 
-			// sourceDirectoryToolStripMenuItem
-			// 
-			this.sourceDirectoryToolStripMenuItem.Name = "sourceDirectoryToolStripMenuItem";
-			this.sourceDirectoryToolStripMenuItem.Size = new System.Drawing.Size(185, 22);
-			this.sourceDirectoryToolStripMenuItem.Text = "Source Directory";
-			// 
-			// destinationDirectoryToolStripMenuItem1
-			// 
-			this.destinationDirectoryToolStripMenuItem1.Name = "destinationDirectoryToolStripMenuItem1";
-			this.destinationDirectoryToolStripMenuItem1.Size = new System.Drawing.Size(185, 22);
-			this.destinationDirectoryToolStripMenuItem1.Text = "Destination Directory";
-			// 
-			// NaturalDrop
-			// 
-			this.NaturalDrop.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.sourceDirectoryToolStripMenuItem1,
-            this.datFileToAppendToToolStripMenuItem});
-			this.NaturalDrop.Name = "NaturalDrop";
-			this.NaturalDrop.Size = new System.Drawing.Size(154, 22);
-			this.NaturalDrop.Text = "Natural Images";
-			// 
-			// sourceDirectoryToolStripMenuItem1
-			// 
-			this.sourceDirectoryToolStripMenuItem1.Name = "sourceDirectoryToolStripMenuItem1";
-			this.sourceDirectoryToolStripMenuItem1.Size = new System.Drawing.Size(188, 22);
-			this.sourceDirectoryToolStripMenuItem1.Text = "Source Directory";
-			// 
-			// datFileToAppendToToolStripMenuItem
-			// 
-			this.datFileToAppendToToolStripMenuItem.Name = "datFileToAppendToToolStripMenuItem";
-			this.datFileToAppendToToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
-			this.datFileToAppendToToolStripMenuItem.Text = ".dat File to Append to";
 			// 
 			// lblInfo
 			// 
 			this.lblInfo.AutoSize = true;
 			this.lblInfo.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.lblInfo.Location = new System.Drawing.Point(0, 232);
+			this.lblInfo.Location = new System.Drawing.Point(0, 428);
 			this.lblInfo.Name = "lblInfo";
-			this.lblInfo.Size = new System.Drawing.Size(180, 13);
+			this.lblInfo.Size = new System.Drawing.Size(356, 13);
 			this.lblInfo.TabIndex = 1;
-			this.lblInfo.Text = "Please select a tool from Tools menu";
+			this.lblInfo.Text = "Left click around border of vehicle and right click to move onto next image";
+			// 
+			// pictureBox1
+			// 
+			this.pictureBox1.Location = new System.Drawing.Point(12, 12);
+			this.pictureBox1.Name = "pictureBox1";
+			this.pictureBox1.Size = new System.Drawing.Size(588, 417);
+			this.pictureBox1.TabIndex = 2;
+			this.pictureBox1.TabStop = false;
 			// 
 			// ImagePreparation
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(838, 245);
+			this.ClientSize = new System.Drawing.Size(612, 441);
+			this.Controls.Add(this.pictureBox1);
 			this.Controls.Add(this.lblInfo);
-			this.Controls.Add(this.menuStrip1);
-			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "ImagePreparation";
 			this.Text = "ImagePreparation";
-			this.menuStrip1.ResumeLayout(false);
-			this.menuStrip1.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -155,17 +68,7 @@
 
 		#endregion
 
-		private System.Windows.Forms.MenuStrip menuStrip1;
-		private System.Windows.Forms.ToolStripMenuItem imagePreparattionToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem FilterDrop;
-		private System.Windows.Forms.ToolStripMenuItem CropDrop;
-		private System.Windows.Forms.ToolStripMenuItem NaturalDrop;
 		private System.Windows.Forms.Label lblInfo;
-		private System.Windows.Forms.ToolStripMenuItem sourceFolderToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem destinationDirectoryToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem sourceDirectoryToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem destinationDirectoryToolStripMenuItem1;
-		private System.Windows.Forms.ToolStripMenuItem sourceDirectoryToolStripMenuItem1;
-		private System.Windows.Forms.ToolStripMenuItem datFileToAppendToToolStripMenuItem;
+		private System.Windows.Forms.PictureBox pictureBox1;
 	}
 }
