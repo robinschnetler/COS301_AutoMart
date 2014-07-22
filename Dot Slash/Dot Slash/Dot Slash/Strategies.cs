@@ -185,16 +185,24 @@ namespace Dot_Slash
 			bool existsDetected = Directory.Exists("Detected/");
 			if(!existsDetected)
 				Directory.CreateDirectory("Detected/");
+			CascadeClassifier cc = new CascadeClassifier("classifier/cascade.xml");
+			Bgr pen = new Bgr(255, 153, 51);
 			for (int i = 0; i < pictures.Length; i++)
 			{
-				Console.WriteLine(pictures[i]);
-				Image<Gray, Byte> image = (new Image<Bgra,int>(pictures[i])).Convert<Gray, Byte>();
-				Image<Bgra, Int32> original = new Image<Bgra, Int32>(pictures[i]);
-				CascadeClassifier cc = new CascadeClassifier("classifier/cascade.xml");
+				Tools.UpdateProgress(i + 1, pictures.Length, 50, '=');
+				Image<Gray, Byte> image = new Image<Gray,Byte>(pictures[i]);
+				Image<Bgr, Int32> original = new Image<Bgr, Int32>(pictures[i]);
 				Rectangle[] objects = cc.DetectMultiScale(image,1.05, 10, new Size(150, 90), new Size(480, 320));
+				//Console.WriteLine("Number of Rectangles: " + objects.Length);
 				for (int j = 0; j < objects.Length; j++)
 				{
-					original.Draw(objects[i], new Bgra(255, 153, 51, 255), 2);
+					try
+					{ 
+						original.Draw(objects[j], pen, 2);
+					}
+					catch(IndexOutOfRangeException)
+					{ }
+
 				}
 				original.Save("Detected/Detected_" + new FileInfo(pictures[i]).Name);
 			}
