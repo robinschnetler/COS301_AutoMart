@@ -192,7 +192,7 @@ namespace Dot_Slash
 				Tools.UpdateProgress(i + 1, pictures.Length, 50, '=');
 				Image<Gray, Byte> image = new Image<Gray,Byte>(pictures[i]);
 				Image<Bgr, Int32> original = new Image<Bgr, Int32>(pictures[i]);
-				Rectangle[] objects = cc.DetectMultiScale(image,1.05, 10, new Size(150, 90), new Size(480, 320));
+				Rectangle[] objects = cc.DetectMultiScale(image,1.05, 16, new Size(150, 90), new Size(480, 320));
 				//Console.WriteLine("Number of Rectangles: " + objects.Length);
 				for (int j = 0; j < objects.Length; j++)
 				{
@@ -204,8 +204,12 @@ namespace Dot_Slash
 					{ }
 
 				}
-				original.Save("Detected/Detected_" + new FileInfo(pictures[i]).Name);
+				if(objects.Length > 0)
+					original.Save("Detected/Detected_" + new FileInfo(pictures[i]).Name);
 			}
+
+			Console.WriteLine();
+			Console.WriteLine();
 		}
 	}
 

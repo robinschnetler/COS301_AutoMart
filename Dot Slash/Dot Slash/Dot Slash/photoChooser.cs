@@ -25,6 +25,15 @@ namespace Dot_Slash
 			bool otherdirectoryExists = Directory.Exists("otherImages/");
 			if (!otherdirectoryExists)
 				Directory.CreateDirectory("otherImages/");
+			bool frontDirectory = Directory.Exists("frontView/");
+			if (!frontDirectory)
+				Directory.CreateDirectory("frontView/");
+			bool sideDirectory = Directory.Exists("sideView/");
+			if (!sideDirectory)
+				Directory.CreateDirectory("sideView/");
+			bool angleDirectory = Directory.Exists("angledView/");
+			if (!angleDirectory)
+				Directory.CreateDirectory("angledView/");
 			InitializeComponent();
 			iconHeight = pbCurrent.Height;
 			iconWidth = pbCurrent.Width;
@@ -56,9 +65,21 @@ namespace Dot_Slash
 					this.Close();
 				}
 			}
-			else
+			else if(e.KeyChar == 'm')
 			{
 				pbView.Image.Save("otherImages/" + new FileInfo(files[current]).Name);
+			}
+			else if (e.KeyChar == 's')
+			{
+				pbView.Image.Save("sideView/" + new FileInfo(files[current]).Name);
+			}
+			else if (e.KeyChar == 'f')
+			{
+				pbView.Image.Save("frontView/" + new FileInfo(files[current]).Name);
+			}
+			else if (e.KeyChar == 'a')
+			{
+				pbView.Image.Save("angledView/" + new FileInfo(files[current]).Name);
 			}
 			updateView();
 		}

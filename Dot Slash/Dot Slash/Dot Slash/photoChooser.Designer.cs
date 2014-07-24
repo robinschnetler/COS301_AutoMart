@@ -129,7 +129,6 @@
 			this.Name = "photoChooser";
 			this.Text = "photoChooser";
 			this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(keypressed);
-			//this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(formClose);
 			this.panel1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.pbNext)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pb2next)).EndInit();

@@ -17,7 +17,6 @@ namespace Dot_Slash
 		{
 			pictures = _pictures;
 			InitializeComponent();
-			
 		}
 	}	
 }
