@@ -24,29 +24,15 @@ namespace ImageExporter
         {
             byte[] bytImage = null;
             string constring = @"Data Source=localhost;Initial Catalog=AutomartImages;Integrated Security=True";
-//            SqlCommand command = new SqlCommand(@"select count(c.AdvertID) as advert from (select advert.AdvertID 
-//,advert.MainImage
-//from [AutomartImages].[dbo].[DSAdvertImage] as advert
-//inner join
-//(select table2.AdvertID
-//, table2.CategoryID 
-//from [AutomartImages].[dbo].[DSAdvert] as table2
-//where CategoryID = 172 or CategoryID = 173) as images
-//on advert.AdvertID = images.AdvertID) as c");
-//            command.CommandType = CommandType.Text;
-            
-            //reader.Read();
-            //int count = (int)reader.GetInt32(0);
-            //button1.Text = Convert.ToString
-            SqlCommand command = new SqlCommand(@"select advert.AdvertID 
-,advert.MainImage
-from [AutomartImages].[dbo].[DSAdvertImage] as advert
-inner join
-(select table2.AdvertID
-, table2.CategoryID 
-from [AutomartImages].[dbo].[DSAdvert] as table2
-where CategoryID = 172 or CategoryID = 173) as images
-on advert.AdvertID = images.AdvertID");
+
+            SqlCommand command = new SqlCommand(@"SELECT advert.AdvertID, advert.MainImage
+FROM [AutomartImages].[dbo].[DSAdvertImage] AS advert
+INNER JOIN
+(SELECT table2.AdvertID, table2.CategoryID 
+FROM [AutomartImages].[dbo].[DSAdvert] AS table2
+WHERE CategoryID = 172 or CategoryID = 173 or CategoryID = 119 or CategoryID = 120 or CategoryID = 121 or CategoryID = 122) AS images
+ON advert.AdvertID = images.AdvertID");
+
             command.CommandType = CommandType.Text;
             SqlConnection myconn = new SqlConnection(constring);
 
@@ -55,7 +41,6 @@ on advert.AdvertID = images.AdvertID");
 
             SqlDataReader reader = command.ExecuteReader();
 
-            Int32 c = 1;
             while (reader.Read())
             {
                 bytImage = (byte[])reader["MainImage"];
@@ -64,8 +49,28 @@ on advert.AdvertID = images.AdvertID");
                 {
                     MemoryStream ms = new MemoryStream(bytImage);
                     Image img = new Bitmap(ms);
-                    img.Save("adverts/" + id + ".jpeg");
-                    label1.Text = c.ToString();
+                    String imgName = "adverts/" + id;
+
+                    if(File.Exists(imgName + ".jpeg"))
+                    {
+                        int i = 0;
+                        imgName += "_";
+                        while(true)
+                        {
+                            i++;
+                            if(File.Exists(imgName + i + ".jpeg"))
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                imgName += i;
+                                break;
+                            }
+                        }
+                    }
+                    imgName += ".jpeg";
+                    img.Save(imgName);
                 }
             }
             System.Windows.Forms.MessageBox.Show("Extraction complete.");
