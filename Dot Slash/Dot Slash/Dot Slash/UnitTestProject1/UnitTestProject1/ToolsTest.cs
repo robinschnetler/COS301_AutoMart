@@ -17,5 +17,16 @@ namespace UnitTestProject1
 			String[] directoryFiles = Directory.GetFiles("testGetImages/");
 			Assert.AreEqual(directoryFiles.Length, files.Length, "Not all images were collected as expected");
 		}
+
+		[TestMethod]
+		public void changeExtensionsTest()
+		{
+			Tools tool = new Tools();
+			String path = "testExtensions/";
+			String[] files = Directory.GetFiles(path, "*.jpg");
+			tool.changeExtension(path, "jpg", "vec");
+			String[] newFiles = Directory.GetFiles(path, "*.vec");
+			Assert.AreEqual(files.Length, newFiles.Length, "Not all extensions were changed");
+		}
 	}
 }

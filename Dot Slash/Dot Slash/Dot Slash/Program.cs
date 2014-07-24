@@ -155,7 +155,20 @@ namespace Dot_Slash
 						}
 					case 10:
 						{
-							tools.changeExtension();
+							Console.WriteLine("Renaming filename extensions:");
+
+							Console.WriteLine("Directory containing the files you wish to rename: [eg 'negative' or 'negative/rename']");
+							String dir = Console.ReadLine();
+							Console.WriteLine();
+
+							Console.WriteLine("Extension from: [eg 'jpg' to change all .jpg files]");
+							String from = Console.ReadLine();
+							Console.WriteLine();
+
+							Console.WriteLine("Extension to: [eg 'vec' to change to .vec files]");
+							String to = Console.ReadLine();
+							Console.WriteLine();
+							tools.changeExtension(dir, from, to);
 							break;
 						}
 					case 11:

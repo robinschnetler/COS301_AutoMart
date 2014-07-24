@@ -155,22 +155,8 @@ namespace Dot_Slash
 			Console.CursorLeft = left;
 		}
 
-		public void changeExtension()
+		public void changeExtension(String dir, String from, String to)
 		{
-			Console.WriteLine("Renaming filename extensions:");
-
-			Console.WriteLine("Directory containing the files you wish to rename: [eg 'negative' or 'negative/rename']");
-			String dir = Console.ReadLine();
-			Console.WriteLine();
-
-			Console.WriteLine("Extension from: [eg 'jpg' to change all .jpg files]");
-			String from = Console.ReadLine();
-			Console.WriteLine();
-
-			Console.WriteLine("Extension to: [eg 'vec' to change to .vec files]");
-			String to = Console.ReadLine();
-			Console.WriteLine();
-
 			String[] filePaths = System.IO.Directory.GetFiles(dir + "/", "*." + from);
 			Console.WriteLine("Converting files from ." + from + " to ." + to);
 			for (int i = 0; i < filePaths.Length; i++)
