@@ -31,7 +31,7 @@ namespace Dot_Slash
 	/// Each image processing task must be  encapsulated into a class that inherits from interface Strategy. Based on the mathod called
 	/// in ImageProcessor, the correct strategy object is created and executed.
 	/// </summary>
-	class ImageProcessor
+	public class ImageProcessor
 	{
 		String imagePath;
 		Strategy strategy;
@@ -88,7 +88,7 @@ namespace Dot_Slash
 	/// <summary>
 	/// Tool used to resize images in a directory to a size specified in the "size" variable
 	/// </summary>
-	class ImageResizer : Strategy
+	public class ImageResizer : Strategy
 	{
 		//set the desired size to resize to here in the format:(width, height)
 		private Size size;
@@ -131,7 +131,7 @@ namespace Dot_Slash
 		}
 	}
 
-	class EdgeDetector : Strategy
+	public class EdgeDetector : Strategy
 	{
 		private string imagePath;
 
@@ -171,7 +171,7 @@ namespace Dot_Slash
 
 	}
 
-	class CarClassifier : Strategy
+	public class CarClassifier : Strategy
 	{
 		String imagePath;
 		public CarClassifier(String _imagePath)
@@ -213,7 +213,7 @@ namespace Dot_Slash
 		}
 	}
 
-	class GaussianFilter : Strategy
+	public class GaussianFilter : Strategy
 	{
 		String imagePath;
 
@@ -249,7 +249,7 @@ namespace Dot_Slash
 		}
 	}
 
-	class Greyscaler : Strategy
+	public class Greyscaler : Strategy
 	{
 		String imagePath;
 		public Greyscaler(String _imagePath)
@@ -262,9 +262,9 @@ namespace Dot_Slash
 			bool isExists = System.IO.Directory.Exists("Greyscale/");
 			if (!isExists)
 				System.IO.Directory.CreateDirectory("Greyscale/");
-			bool gausExists = System.IO.Directory.Exists("Resized/");
-			if (gausExists)
-				imagePath = "Resized/";
+			//bool gausExists = System.IO.Directory.Exists("Resized/");
+			//if (gausExists)
+			//	imagePath = "Resized/";
 			String[] pictures = Tools.getImages(imagePath, Globals.extensions);
 			for (int i = 0; i < pictures.Length; i++)
 			{
