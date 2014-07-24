@@ -24,20 +24,7 @@ namespace ImageExporter
         {
             byte[] bytImage = null;
             string constring = @"Data Source=localhost;Initial Catalog=AutomartImages;Integrated Security=True";
-//            SqlCommand command = new SqlCommand(@"select count(c.AdvertID) as advert from (select advert.AdvertID 
-//,advert.MainImage
-//from [AutomartImages].[dbo].[DSAdvertImage] as advert
-//inner join
-//(select table2.AdvertID
-//, table2.CategoryID 
-//from [AutomartImages].[dbo].[DSAdvert] as table2
-//where CategoryID = 172 or CategoryID = 173) as images
-//on advert.AdvertID = images.AdvertID) as c");
-//            command.CommandType = CommandType.Text;
-            
-            //reader.Read();
-            //int count = (int)reader.GetInt32(0);
-            //button1.Text = Convert.ToString
+
             SqlCommand command = new SqlCommand(@"SELECT advert.AdvertID, advert.MainImage
 FROM [AutomartImages].[dbo].[DSAdvertImage] AS advert
 INNER JOIN
