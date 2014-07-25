@@ -112,10 +112,10 @@
 			this.label1.AutoSize = true;
 			this.label1.Location = new System.Drawing.Point(12, 359);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(472, 13);
+			this.label1.Size = new System.Drawing.Size(375, 13);
 			this.label1.TabIndex = 3;
-			this.label1.Text = "press <Up> for back view, <Down> for front view, <Left> for angled view and <Righ" +
-    "t> for side view";
+			this.label1.Text = "press \'b\' for back view, \'f\' for front view, \'a\' for angled view and \'s\' for side" +
+    " view";
 			// 
 			// photoChooser
 			// 

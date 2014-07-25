@@ -52,20 +52,19 @@ namespace Dot_Slash
 		{
 			try
 			{
-				Message m = new Message();
-				if (ProcessCmdKey(ref m, Keys.Right))
+				if (e.KeyChar == 's')
 				{
 					pbView.Image.Save("sideView/" + new FileInfo(files[current]).Name);
 				}
-				else if (ProcessCmdKey(ref m, Keys.Down))
+				else if (e.KeyChar == 'f')
 				{
 					pbView.Image.Save("frontView/" + new FileInfo(files[current]).Name);
 				}
-				else if (ProcessCmdKey(ref m, Keys.Left))
+				else if (e.KeyChar == 'a')
 				{
 					pbView.Image.Save("angledView/" + new FileInfo(files[current]).Name);
 				}
-				else if (ProcessCmdKey(ref m, Keys.Up))
+				else if (e.KeyChar == 'b')
 				{
 					pbView.Image.Save("backView/" + new FileInfo(files[current]).Name);
 				}
