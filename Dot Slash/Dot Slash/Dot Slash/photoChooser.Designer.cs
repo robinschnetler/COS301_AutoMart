@@ -28,7 +28,6 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(formClose);
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.pbNext = new System.Windows.Forms.PictureBox();
 			this.pb2next = new System.Windows.Forms.PictureBox();
@@ -113,10 +112,10 @@
 			this.label1.AutoSize = true;
 			this.label1.Location = new System.Drawing.Point(12, 359);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(412, 13);
+			this.label1.Size = new System.Drawing.Size(472, 13);
 			this.label1.TabIndex = 3;
-			this.label1.Text = "press space to save image as car or any other key to save image to alternate dire" +
-    "ctory";
+			this.label1.Text = "press <Up> for back view, <Down> for front view, <Left> for angled view and <Righ" +
+    "t> for side view";
 			// 
 			// photoChooser
 			// 
@@ -128,7 +127,8 @@
 			this.Controls.Add(this.panel1);
 			this.Name = "photoChooser";
 			this.Text = "photoChooser";
-			this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(keypressed);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.formClose);
+			this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.keypressed);
 			this.panel1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.pbNext)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.pb2next)).EndInit();

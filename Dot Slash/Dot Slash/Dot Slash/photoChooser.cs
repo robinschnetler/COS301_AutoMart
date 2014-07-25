@@ -19,9 +19,9 @@ namespace Dot_Slash
 		StreamWriter file = new StreamWriter("classified", true);
 		public photoChooser(String[] _files)
 		{
-			bool directoryExists = Directory.Exists("SelectedCars/");
+			bool directoryExists = Directory.Exists("backView/");
 			if (!directoryExists)
-				Directory.CreateDirectory("SelectedCars/");
+				Directory.CreateDirectory("backView/");
 			bool otherdirectoryExists = Directory.Exists("otherImages/");
 			if (!otherdirectoryExists)
 				Directory.CreateDirectory("otherImages/");
@@ -50,38 +50,39 @@ namespace Dot_Slash
 
 		private void keypressed(Object o, KeyPressEventArgs e)
 		{
-			if(e.KeyChar == (char) Keys.Space)
+			try
 			{
-				try
-				{ 
-					pbView.Image.Save("SelectedCars/" + new FileInfo(files[current]).Name);
-				}
-				catch(System.NullReferenceException)
+				Message m = new Message();
+				if (ProcessCmdKey(ref m, Keys.Right))
 				{
-					this.Close();
+					pbView.Image.Save("sideView/" + new FileInfo(files[current]).Name);
 				}
-				catch(System.IndexOutOfRangeException)
+				else if (ProcessCmdKey(ref m, Keys.Down))
 				{
-					this.Close();
+					pbView.Image.Save("frontView/" + new FileInfo(files[current]).Name);
 				}
+				else if (ProcessCmdKey(ref m, Keys.Left))
+				{
+					pbView.Image.Save("angledView/" + new FileInfo(files[current]).Name);
+				}
+				else if (ProcessCmdKey(ref m, Keys.Up))
+				{
+					pbView.Image.Save("backView/" + new FileInfo(files[current]).Name);
+				}
+				else
+				{
+					pbView.Image.Save("otherImages/" + new FileInfo(files[current]).Name);
+				}
+				updateView();
 			}
-			else if(e.KeyChar == 'm')
+			catch(System.NullReferenceException)
 			{
-				pbView.Image.Save("otherImages/" + new FileInfo(files[current]).Name);
+				this.Close();
 			}
-			else if (e.KeyChar == 's')
+			catch(System.IndexOutOfRangeException)
 			{
-				pbView.Image.Save("sideView/" + new FileInfo(files[current]).Name);
+				this.Close();
 			}
-			else if (e.KeyChar == 'f')
-			{
-				pbView.Image.Save("frontView/" + new FileInfo(files[current]).Name);
-			}
-			else if (e.KeyChar == 'a')
-			{
-				pbView.Image.Save("angledView/" + new FileInfo(files[current]).Name);
-			}
-			updateView();
 		}
 
 		private void formClose(Object o, FormClosingEventArgs e)

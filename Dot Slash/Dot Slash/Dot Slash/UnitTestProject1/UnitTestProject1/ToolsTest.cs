@@ -27,6 +27,7 @@ namespace UnitTestProject1
 			tool.changeExtension(path, "jpg", "vec");
 			String[] newFiles = Directory.GetFiles(path, "*.vec");
 			Assert.AreEqual(files.Length, newFiles.Length, "Not all extensions were changed");
+			tool.changeExtension(path, "vec", "jpg");
 		}
 	}
 }

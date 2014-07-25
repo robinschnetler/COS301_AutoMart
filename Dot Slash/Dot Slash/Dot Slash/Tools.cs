@@ -105,6 +105,7 @@ namespace Dot_Slash
 			pc.Activate();
 			pc.ShowDialog();
 			Console.WriteLine(pc.current + " images classified");
+			pc.Dispose();
 		}
 
 		/// <summary>
