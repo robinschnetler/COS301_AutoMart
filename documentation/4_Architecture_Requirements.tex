@@ -1,0 +1,38 @@
+\section{Architecture Requirements}
+\subsection{Access Channel Requirements}
+The system dealing with evaluating the advert, images specifically, needs to be implemented in the back end of the website. Therefore there is no graphical user interface that the user will interact with. The user will only get messages back from the system stating the success or failure of the advert to be uploaded. The messages will be displayed in the browser which will be implemented by dot slash. 
+
+The training part for car recognition will have a graphical user interface that will guide the user in training the classifiers with the new data to ensure that the system stays up to date with the latest cars on the market. This part of the system will be accessible through a computer running on Windows OS.
+
+\subsection{Quality Requirements}
+
+\subsubsection{Performance}
+
+\subsubsection{Reliability}
+
+\subsubsection{Scalability}
+
+\subsubsection{Security}
+
+\subsubsection{Flexibility}
+
+\subsubsection{Maintainability}
+
+\subsubsection{Auditability}
+
+\subsubsection{Integrability}
+
+\subsubsection{Cost}
+
+\subsubsection{Usability}
+
+
+Since many users access the AutoMart website at the same time, it is essential that the algorithm that process the uploaded images works at a fast rate in order to prevent backlog and bottleneck on the server side when many users upload their images concurrently. It should be noted however that the visualization component of this project will cause additional computational usage and slow the program down. This component will not be needed when the final project is integrated with the AutoMart website and this should be taken into consideration.
+
+It is also essential that the information we obtain from the image is accurate since the basis of AutoMart\'s business operations will rely on how well we implement our algorithm and how accurate it is.
+
+\subsection{Integration Requirements}
+The final product needs to integrate with current AutoMart system. This is to be achieved by implementing an API through which AutoMarts website will be able to access the functions needed to determine adverts validity.
+
+\subsection{Architecture Constraints}
+The system needs to be implemented in C\#. The system also needs to be able to communicate with the Microsoft SQL Server.

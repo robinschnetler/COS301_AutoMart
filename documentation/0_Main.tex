@@ -1,0 +1,27 @@
+%#YOCO - You Only Code Once
+%This is the main tex file that will produce the final document
+%Uncompleted sections input commands are commented out, and will be uncommented as they are needed
+\documentclass[12pt,a4paper]{article}
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+\begin{document}
+	\input{./1_Title_Page.tex}
+	\pagebreak
+	\input{./2_Introduction.tex}
+	\pagebreak
+	\input{./3_Vision.tex}
+	\pagebreak
+	\input{./4_Architecture_Requirements.tex}
+	\pagebreak
+	\input{./5_Functional_Requirements.tex}
+	%\pagebreak	
+	%\input{./6_Functional_Testing_Guidelines.tex}
+	%\pagebreak
+	%\input{./7_Non_Functional_Testing_Guidelines.tex}
+	%\pagebreak
+	%\input{./8_Deployment_Guidelines.tex}
+	%\pagebreak
+	%\input{./9_User_Manual.tex}
+	%\pagebreak
+	%\input{./10_Glossary.tex}
+\end{document}
