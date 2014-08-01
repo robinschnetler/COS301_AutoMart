@@ -85,7 +85,7 @@ namespace Dot_Slash
 			FolderBrowserDialog dialog = new FolderBrowserDialog();
 			Console.WriteLine("please select folder with all images");
 			Console.WriteLine("Note: sub directories will not be parsed");
-			String path = "";
+			String path = "images/";
 			if (dialog.ShowDialog() == DialogResult.OK)
 			{
 				path = dialog.SelectedPath;

@@ -145,12 +145,16 @@ namespace Dot_Slash
 						}
 					case 8:
 						{
-							tools.createDat("Greyscale/", "positives.dat", true);
+							Console.WriteLine("Which folder has positive samples?");
+							String path = Console.ReadLine();
+							tools.createDat(path + "/", "positives.dat", true);
 							break;
 						}
 					case 9:
 						{
-							tools.createDat("negative/", "negatives.dat", false);
+							Console.WriteLine("Which folder has negative samples?");
+							String path = Console.ReadLine();
+							tools.createDat(path + "/", "negatives.dat", false);
 							break;
 						}
 					case 10:
