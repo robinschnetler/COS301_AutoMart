@@ -11,7 +11,9 @@ The system must be used in real time when a user creates and advert for a vehicl
 
 The detection of one feature, through experience has not taken more than 2 seconds. We have achieved this through OpenCV\'s object recognition framework. All features to be detected will use the exact same framework. hence we can infer this time constraint. 
 \subsubsection{Reliability}
-The core of the system depend on the existence of a classifier xml file that consists of the weights required for the classification algorithm. Each feature has its own classification xml file. For our system to be reliable, a backup of each xml file must be stored on a secure system. The loss or corruption of the xml file for a feature will result in the inability of the classification of that feature. 
+The system will classify the feature at least 8 out of 10 times.
+
+The openCV framework suggests usage of atleast 5000 images when classifying faces. This has worked and historical data proves that this had been effective. Our system will be using 5000 images for each characteristic.
 \subsubsection{Scalability}
 
 \subsubsection{Flexibility}
