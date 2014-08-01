@@ -25,6 +25,13 @@ We are using SOLID design principles and have implemented a strategy design patt
 
 It is also essential that the information we obtain from the image is accurate since the basis of AutoMart\'s business operations will rely on how well we implement our algorithm and how accurate it is.
 
+\subsection{Tradeoffs}
+In order to achieve our processing speeds of 2 seconds per feature in the image as well as a further 2 seconds to generate a rating for the image, we will need to use a lot of memory for buffering so that a lot of data is immediately at hand. This requires a large amount of memory as the images we are working with will require sizeable chunks of RAM. We will also use a lot of processing power since there is a lot of processing that happens on the image. Thus to achieve these speeds we will have to sacrifice memory and processing power.
+
+To ensure our system correctly classifies features 80\% of the time will need a lot of training for the system to achieve this level of accuracy. Thus this will take time, hence to achieve accuracy we will need to sacrifice a lot of time to train our program. As mentioned, we will need approximately 5000 images for every feature that we want to train. Take into consideration how many features we aim to correctly classify, as well as all the man-power it takes to prepare images for this training (cropping and sorting followed by the actual training being the most time consuming). This training process is also very memory intensive as the training process has been adapted to use 4GB of memory. We also need to consider the processing power required for the training.
+
+Lastly, we aimed to achieve flexibility by ensuring our system can be trained for each classification. This again requires a lot of training which, as above, is very time consuming and memory intensive above needing string processing power.
+
 \subsection{Integration Requirements}
 The final product needs to integrate with current AutoMart system. This is to be achieved by implementing an API through which AutoMarts website will be able to access the functions needed to determine adverts validity.
 
