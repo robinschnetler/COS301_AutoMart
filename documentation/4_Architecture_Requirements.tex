@@ -17,14 +17,13 @@ The openCV framework suggests usage of atleast 5000 images when classifying face
 \subsubsection{Scalability}
 
 \subsubsection{Flexibility}
-The system needs to be trained for each classification. One classification cannot work for another feature detection use case.
+The system needs to be trained for each classification. One classification cannot work for another feature detection use case. But the inability of classification of one feature will not result in a system failure. 
+
+This will be achieved using the rating of an image based on the features that the system was, in fact, able to detect.
 \subsubsection{Maintainability}
+The addition of new feature classifiers will be pluggable at a later stage. 
 
-\subsubsection{Integrability}
-
-\subsubsection{Cost}
-
-\subsubsection{Usability}
+We are using SOLID design principles and have implemented a strategy design pattern for each of the feature classifiers. At a later stage, if a new feature is required, it will merely have to be trained and plugged into the current strategy framework.
 
 It is also essential that the information we obtain from the image is accurate since the basis of AutoMart\'s business operations will rely on how well we implement our algorithm and how accurate it is.
 
