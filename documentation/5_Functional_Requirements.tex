@@ -28,61 +28,109 @@ The system should only be implemented to work with cars and should not consider 
 
 \subsection{Required Functionality}
 \begin{figure}[h!]
-  \caption{Low Level Evaluate Advert Use Case Diagram.}
+  \caption{Detect Car Low Level Use Case Diagram.}
   \centering
-	\includegraphics{LowLevelEvaluateAdvertUseCase.jpg}
+	\includegraphics{DetectCarLowLevelUseCaseDiagram.jpg}
+\end{figure}
+
+\begin{figure}[h!]
+  \caption{Describe Car Low Level Use Case Diagram.}
+  \centering
+	\includegraphics{DescribeCarLowLevelUseCaseDiagram.jpg}
+\end{figure}
+
+\begin{figure}[h!]
+  \caption{Generate Rating Low Level Use Case Diagram.}
+  \centering
+	\includegraphics{GenerateRatingLowLevelUseCaseDiagram.jpg}
 \end{figure}
 
 \subsection{Use Case Prioritization}
-\begin{tabular}{l | l}
+\begin{tabular}{| l | l |}
+	\hline
 	Use Case & Priority \\
 	\hline
-	Upload Advert & Important \\
-	Evaluate Advert Image & Critical \\
-	
-	Filter by Hand & Nice to Have \\
-	Crop by Hand & Nice to Have \\
-	Resize & Nice to Have \\
-	Grayscale & Important \\
-		
-	Sample Generation & Critical\\
-	Training & Critical \\
-	Test Classifier & Critical \\
-		
 	Detect Car & Critical \\
-	Determine Colour & Important \\
-	Determine Make & Nice to Have \\
-	Determine Model & Nice to Have \\
-		
-	Compare Image Against Text & Critical \\
-	Upload approval & Critical \\
+	Find Bounding Box & Important \\
+	Describe Car & Critical \\
+	Get Colour & Important \\	
+	Get Make & Important \\
+	Get Model & Nice to Have \\
+	Generate Rating & Critical \\
+	\hline
 \end{tabular}
 
 \subsection{Use Case/Services Contracts}
-\begin{tabular}{l | l | l}
-	Use Case & Pre-Condition & Post-Condition \\
+\textbf{Detect Car} \\
+\begin{tabular}{| l | l |}
 	\hline
-	Upload Advert && \\
-	Evaluate Advert Image && \\
-	
-	Filter by Hand && \\
-	Crop by Hand && \\
-	Resize && \\
-	Grayscale && \\
-		
-	Sample Generation && \\
-	Training && \\
-	Test Classifier && \\
-		
-	Detect Car && \\
-	Determine Colour && \\
-	Determine Make &&  \\
-	Determine Model && \\
-		
-	Compare Image Against Text && \\
-	Upload approval && \\
+	Pre-Condition & Valid image file. \\
+	\hline
+	Post-Condition & \\
+	\hline
 \end{tabular}
-
+\\
+\\
+\textbf{Find Bounding Box} \\
+\begin{tabular}{| l | l |}
+	\hline
+	Pre-Condition & Trained classifier exists.\\
+	\hline
+	Post-Condition & \\
+	\hline
+\end{tabular}
+\\
+\\
+\textbf{Describe Car} \\
+\begin{tabular}{| l | l |}
+	\hline
+	Pre-Condition & A car must exist in the photo.\\
+	\hline
+	Post-Condition & Car details generated.\\
+	\hline
+\end{tabular}
+\\
+\\
+\textbf{Get Colour} \\
+\begin{tabular}{| l | l |}
+	\hline
+	Pre-Condition & A car must exist in the photo.\\
+	\hline
+	Post-Condition & \\
+	\hline
+\end{tabular}
+\\
+\\
+\textbf{Get Make} \\
+\begin{tabular}{| l | l |}
+	\hline
+	Pre-Condition & Car must be classified.\\
+	\hline
+	Post-Condition & \\
+	\hline
+\end{tabular}
+\\
+\\
+\textbf{Get Model} \\
+\begin{tabular}{| l | l |}
+	\hline
+	Pre-Condition & Car must be classified.\\
+	\hline
+	Post-Condition & \\
+	\hline
+\end{tabular}
+\\
+\\
+\textbf{Generate Rating}  \\
+\begin{tabular}{| l | l |}
+	\hline
+	Pre-Condition & A car must exist in the photo.\\
+	\hline
+	Post-Condition & Rating given in range [0, 100].\\
+	\hline
+\end{tabular}
+\\
+\\
 \subsection{Process Specifications}
 
 \subsection{Domain Objects}
