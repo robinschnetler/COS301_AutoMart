@@ -1,0 +1,20 @@
+\begin{center}
+	%Title
+	\textbf{\huge  Software Requirement Specification} \\[3cm]
+	%Project Name
+	{\huge AutoMart} \\[10pt]
+	%Client Name
+	{\huge dot slash} \\[2cm]
+	%Group Name
+	{\Huge \#YOCO} \\[5pt]
+	{\huge You Only Code Once} \\[20pt]
+	%Team Members
+	\begin{tabular}{c c c}
+		\large Schnetler Robin & \large Sinovcic Marko & \large Tanna Yashu \\[2pt]
+		12220702 & 10693034 & 12076164 \\[2pt]
+		robin.schnetler@gmail.com & markosinovcic@gmail.com &  tanna.yashu@gmail.com \\[2cm]
+	\end{tabular}
+	%Date
+	{\today} \\
+	%Version
+\end{center}

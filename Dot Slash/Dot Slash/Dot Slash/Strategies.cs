@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Drawing;
 using System.Text;
@@ -185,27 +186,52 @@ namespace Dot_Slash
 			bool existsDetected = Directory.Exists("Detected/");
 			if(!existsDetected)
 				Directory.CreateDirectory("Detected/");
-			CascadeClassifier cc = new CascadeClassifier("classifier/cascade.xml");
-			Bgr pen = new Bgr(255, 153, 51);
+			/**
+			 * new CascadeClassifier("classifier/cars.xml")
+			 * new CascadeClassifier("classifier/haarout.xml"), 
+			 * new CascadeClassifier("classifier/cascade2.xml"), 
+			 * new CascadeClassifier("classifier/cascade.xml"), 
+			 * new CascadeClassifier("classifier/cas1.xml"),
+			 * new CascadeClassifier("classifier/cas2.xml"),
+			 * new CascadeClassifier("classifier/cas3.xml"), 
+			 * new CascadeClassifier("classifier/cas4.xml"), 
+			 * new CascadeClassifier("classifier/checkcas.xml")
+			 **/
+
+			CascadeClassifier[] cc = { new CascadeClassifier("classifier/cas3.xml"), new CascadeClassifier("classifier/checkcas.xml"), new CascadeClassifier("classifier/cas4.xml"), 
+			new CascadeClassifier("classifier/cas2.xml"), new CascadeClassifier("classifier/cas1.xml"), 
+			new CascadeClassifier("classifier/cascade2.xml"), new CascadeClassifier("classifier/haarout.xml"), new CascadeClassifier("classifier/cars.xml") };
+			Bgr pen = new Bgr(50, 50, 255);
 			for (int i = 0; i < pictures.Length; i++)
 			{
 				Tools.UpdateProgress(i + 1, pictures.Length, 50, '=');
 				Image<Gray, Byte> image = new Image<Gray,Byte>(pictures[i]);
 				Image<Bgr, Int32> original = new Image<Bgr, Int32>(pictures[i]);
-				Rectangle[] objects = cc.DetectMultiScale(image,1.1,1, new Size(3, 2), new Size(480, 320));
-				//Console.WriteLine("Number of Rectangles: " + objects.Length);
-				for (int j = 0; j < objects.Length; j++)
+				List<Rectangle[]> rectangleList = new List<Rectangle[]>();
+				for (int j = 0; j < cc.Length; j++)
 				{
-					try
-					{ 
-						original.Draw(objects[j], pen, 2);
-					}
-					catch(IndexOutOfRangeException)
-					{ }
-
+					//162, 108
+					Rectangle[] objects = cc[j].DetectMultiScale(image, 1.1, 3, new Size(162, 108), new Size(480, 480));
+					rectangleList.Add(objects);
 				}
-				if(objects.Length > 0)
-					original.Save("Detected/Detected_" + new FileInfo(pictures[i]).Name);
+				//Console.WriteLine("Number of Rectangles: " + objects.Length);
+				for (int j = 0; j < rectangleList.Count; j++)
+				{
+					Rectangle[] objs = rectangleList.ElementAt(j);
+					for (int k = 0; k < objs.Length; k++)
+					{
+						try
+						{
+							//Console.WriteLine("x:" + objs[j].X + " y:"+ objs[j].Y + " width" + objs[j].Width + " height:" + objs[j].Height);
+							original.Draw(objs[k], pen, 2);
+						}
+						catch (IndexOutOfRangeException)
+						{
+							Console.WriteLine("dafaq just happened?"); 
+						}
+					}
+				}
+				original.Save("Detected/Detected_" + new FileInfo(pictures[i]).Name);
 			}
 
 			Console.WriteLine();

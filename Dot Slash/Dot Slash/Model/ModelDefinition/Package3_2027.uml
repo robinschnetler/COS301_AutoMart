@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm4="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm5="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="fa45d0e1-8e8a-4eb7-a5e2-b1986088c5d2"
+  name="Structure"
+  visibility="Private" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <referencesInternal>
+    <reference
+      Id="8cb0f9cf-73ee-429e-9d4e-878b98835761"
+      handle="viewcode://./CodeSchema_Namespace?Namespace%3DEmgu.CV.Structure"
+      tag="ViewCode" />
+  </referencesInternal>
+  <packagedElements>
+    <packageHasNamedElement>
+      <class
+        Id="9efc0f03-6d63-43d9-a5f7-e54a6ce0698f"
+        name="Bgra"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <referencesInternal>
+          <reference
+            Id="061368c7-739f-41bc-abcd-62cd35f12ddd"
+            handle="viewcode://./CodeSchema_Struct?Assembly%3D&quot;file:%2F%2F%2FC:%2FEmgu%2Femgucv-windows-universal-cuda 2.9.0.1922%2Fbin%2FEmgu.CV.dll&quot; Namespace%3DEmgu.CV.Structure Type%3DBgra"
+            tag="ViewCode" />
+        </referencesInternal>
+        <appliedStereotypesInternal>
+          <stereotypeInstance
+            Id="6dad6d9a-7128-401c-a215-975bbfdf9504"
+            name="struct"
+            profile="CSharpProfile">
+            <propertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="bb053b98-9a93-4620-b22c-6a9e66318c71">
+                <propertyInstance
+                  Id="83260027-2d3e-4bd3-9723-f771be843306"
+                  name="ClrAttributes" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="0353841f-2cd0-4134-a262-893f2fcb306d">
+                <propertyInstance
+                  Id="14eff89e-e979-4d17-8749-3e91625231d7"
+                  name="IsPartial"
+                  value="false" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="178c17a9-2180-4495-95c1-83df0df8da82">
+                <propertyInstance
+                  Id="4dcd46b1-020b-4f57-b7dc-b10d298b845d"
+                  name="IsUnsafe"
+                  value="false" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="3acdded7-d292-4c78-8e27-d27f6d49760e">
+                <propertyInstance
+                  Id="f2d8d6f2-3354-4b6d-ac9c-c56b62d5896e"
+                  name="PackageVisibility"
+                  value="internal" />
+              </stereotypeInstanceHasPropertyInstances>
+            </propertyInstances>
+          </stereotypeInstance>
+        </appliedStereotypesInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="467ce44b-ba86-4472-a43d-41946b794a91"
+        name="Gray"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <referencesInternal>
+          <reference
+            Id="550c0902-689e-45f5-a170-118e9af28ec0"
+            handle="viewcode://./CodeSchema_Struct?Assembly%3D&quot;file:%2F%2F%2FC:%2FEmgu%2Femgucv-windows-universal-cuda 2.9.0.1922%2Fbin%2FEmgu.CV.dll&quot; Namespace%3DEmgu.CV.Structure Type%3DGray"
+            tag="ViewCode" />
+        </referencesInternal>
+        <appliedStereotypesInternal>
+          <stereotypeInstance
+            Id="c74dab46-00bc-4b66-870e-8c4eeadd9a8e"
+            name="struct"
+            profile="CSharpProfile">
+            <propertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="a4113d4a-9118-42e0-b44b-38b238878753">
+                <propertyInstance
+                  Id="9f4e1778-985b-4435-a64c-9c69f55e1278"
+                  name="ClrAttributes" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="01ccb774-966e-4f09-b717-86705396bdf8">
+                <propertyInstance
+                  Id="3b6b6257-a97c-4cae-81d0-b7ba07f1239a"
+                  name="IsPartial"
+                  value="false" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="82369f58-d453-4a29-902e-c0952496073b">
+                <propertyInstance
+                  Id="aff2cc9c-3043-44d2-a462-576892de63e3"
+                  name="IsUnsafe"
+                  value="false" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="fac6bc67-851f-44d7-bbea-9c14c9b0c41f">
+                <propertyInstance
+                  Id="1d2f706d-062d-483d-89da-2759a0fb3c5d"
+                  name="PackageVisibility"
+                  value="internal" />
+              </stereotypeInstanceHasPropertyInstances>
+            </propertyInstances>
+          </stereotypeInstance>
+        </appliedStereotypesInternal>
+      </class>
+    </packageHasNamedElement>
+  </packagedElements>
+</package>
