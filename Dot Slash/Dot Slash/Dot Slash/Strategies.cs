@@ -186,17 +186,6 @@ namespace Dot_Slash
 			bool existsDetected = Directory.Exists("Detected/");
 			if(!existsDetected)
 				Directory.CreateDirectory("Detected/");
-			/**
-			 * new CascadeClassifier("classifier/cars.xml")
-			 * new CascadeClassifier("classifier/haarout.xml"), 
-			 * new CascadeClassifier("classifier/cascade2.xml"), 
-			 * new CascadeClassifier("classifier/cascade.xml"), 
-			 * new CascadeClassifier("classifier/cas1.xml"),
-			 * new CascadeClassifier("classifier/cas2.xml"),
-			 * new CascadeClassifier("classifier/cas3.xml"), 
-			 * new CascadeClassifier("classifier/cas4.xml"), 
-			 * new CascadeClassifier("classifier/checkcas.xml")
-			 **/
 
 			CascadeClassifier[] cc = { new CascadeClassifier("classifier/cas3.xml"), new CascadeClassifier("classifier/checkcas.xml"), new CascadeClassifier("classifier/cas4.xml"), 
 			new CascadeClassifier("classifier/cas2.xml"), new CascadeClassifier("classifier/cas1.xml"), 
@@ -208,6 +197,7 @@ namespace Dot_Slash
 				Image<Gray, Byte> image = new Image<Gray,Byte>(pictures[i]);
 				Image<Bgr, Int32> original = new Image<Bgr, Int32>(pictures[i]);
 				List<Rectangle[]> rectangleList = new List<Rectangle[]>();
+				int x = image.Width, y = image.Height, rx = 0, ry = 0;
 				for (int j = 0; j < cc.Length; j++)
 				{
 					//162, 108
@@ -222,8 +212,53 @@ namespace Dot_Slash
 					{
 						try
 						{
+							//top left pixel
+							if (objs[k].X < x)
+								x = objs[k].X;
+							if (objs[k].Y < y)
+								y = objs[k].Y;
+							if (objs[k].X > rx)
+								rx = objs[k].X;
+							if (objs[k].Y > ry)
+								ry = objs[k].Y;
+
+							//top right
+							int currentx = objs[k].X + objs[k].Width;
+							int currenty = objs[k].Y;
+							if (currentx < x)
+								x = currentx;
+							if (currenty < y)
+								y = currenty;
+							if (currentx > rx)
+								rx = currentx;
+							if (currenty > ry)
+								ry = currenty;
+
+							//bottom left
+							currentx = objs[k].X;
+							currenty = objs[k].Y + objs[k].Height;
+							if (currentx < x)
+								x = currentx;
+							if (currenty < y)
+								y = currenty;
+							if (currentx > rx)
+								rx = currentx;
+							if (currenty > ry)
+								ry = currenty;
+
+							//bottom right
+							currentx = objs[k].X + objs[k].Width;
+							currenty = objs[k].Y + objs[k].Height;
+							if (currentx < x)
+								x = currentx;
+							if (currenty < y)
+								y = currenty;
+							if (currentx > rx)
+								rx = currentx;
+							if (currenty > ry)
+								ry = currenty;
+
 							//Console.WriteLine("x:" + objs[j].X + " y:"+ objs[j].Y + " width" + objs[j].Width + " height:" + objs[j].Height);
-							original.Draw(objs[k], pen, 2);
 						}
 						catch (IndexOutOfRangeException)
 						{
@@ -231,6 +266,7 @@ namespace Dot_Slash
 						}
 					}
 				}
+				original.Draw(new Rectangle(x, y, rx-x, ry-y), pen, 2);
 				original.Save("Detected/Detected_" + new FileInfo(pictures[i]).Name);
 			}
 
