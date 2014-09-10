@@ -36,12 +36,23 @@ namespace HSVColourDetection
 		public int g;
 		public int b;
 
+		public double h;
+		public double s;
+		public double v;
+
 		public ColourBucket(string name, int red, int green, int blue)
 		{
 			colourName = name;
 			r = red;
 			g = green;
 			b = blue;
+
+			int max = Math.Max(r, Math.Max(g, b));
+			int min = Math.Min(r, Math.Min(g, b));
+
+			h = Color.FromArgb(r,g,b).GetHue();
+			s = (max == 0) ? 0 : 1d - (1d * min / max);
+			v = max / 255d;
 		}
 	}
 
@@ -52,8 +63,8 @@ namespace HSVColourDetection
 			Console.WriteLine("Name of the image? [Make sure it's in the same folder]");
 			string fileName = Console.ReadLine();
 			Bitmap img = new Bitmap(fileName);
-
-			Color dominantColour = colourDetect(img);
+			colourDetect(img);
+			Console.ReadKey();
 		}
 
 		/// <summary>
@@ -61,9 +72,8 @@ namespace HSVColourDetection
 		/// </summary>
 		/// <param name="img"> The image that is tested for colour detection </param>
 		/// <returns></returns>
-		static private Color colourDetect(Bitmap img)
+		static private String colourDetect(Bitmap img)
 		{
-			//A
 			int width = img.Width;
 			int height = img.Height;
 
@@ -82,54 +92,121 @@ namespace HSVColourDetection
 			colourBuckets.Add(new ColourBucket("Red", 255, 0, 0));
 			colourBuckets.Add(new ColourBucket("Maroon", 128, 0, 0));
 			colourBuckets.Add(new ColourBucket("Violet", 238, 130, 238));
-			colourBuckets.Add(new ColourBucket("Beige", 245, 245, 220));
 			colourBuckets.Add(new ColourBucket("Bronze", 205, 127, 50));
 			colourBuckets.Add(new ColourBucket("Charcoal", 51, 51, 51));
+			//colourBuckets.Add(new ColourBucket("Beige", 245, 245, 220));
 
+			//Loop through and find dominate colour
+			loopThroughPixels(1, 0, colourBuckets, width, height, img);
+
+			return "";
+		}
+
+		private static bool isInRange(double pixelValue, double binValue, int range)
+		{
+			if (pixelValue > (binValue + range) || pixelValue < (binValue - range))
+				return false;
+			else
+				return true;
+		}
+
+		private static ArrayList loopThroughPixels(int pixelHop, int numBinsToEliminate, ArrayList colourBuckets, int width, int height, Bitmap img)
+		{
+			int hueTolerance = 2;		//Should be in the range of 5 - 10
+			int saturationTolerance = 80;	//Should be approx 100
+			int valueTolerance = 150;	//Should be in the range of 170 - 200
+
+			int counter = 0;
+			Console.WriteLine("NUM COLOUR BUCKETS: " + colourBuckets.Count);
 			int numColourBuckets = colourBuckets.Count;
 
-			int hueTolerance = 8;		//Should be in the range of 5 - 10
-			int saturationTolerance = 100;	//Should be approx 100
-			int valueTolerance = 180;	//Should be in the range of 170 - 200
+			int[] colourCounter = new int[numColourBuckets];
 
-			int[] bucketCounter = new int[numColourBuckets];
-
-			for (int i = 0; i < numColourBuckets; i++ )
+			for (int i = 0; i < numColourBuckets; i++)
 			{
-				bucketCounter[i] = 0;
+				colourCounter[i] = 0;
 			}
 
-			foreach(ColourBucket bucketColour in colourBuckets)
+			foreach (ColourBucket currentBucket in colourBuckets)
 			{
-				Color currentBucketColour = Color.FromArgb(bucketColour.r, bucketColour.g, bucketColour.b);
-
-				
-				//Loop through every 5th pixel
-				for (int i = 0; i < width; i++)
+				Console.WriteLine("Testing on colour bucket " + counter);
+				for (int x = 0; x < width; x++)
 				{
-					for (int j = 0; j < height; j += 5)	//only evaluate every 5th pixel [CHANGE AND TEST]
+					for (int y = 0; y < height; y += pixelHop)
 					{
-					//Loop through every colour bucket
-					
-						Color currentColour = img.GetPixel(i, j);
-						double p_hue = 0.0, p_saturation = 0.0, p_value = 0.0;
-						convertRGBtoHSV(currentColour, p_hue, p_saturation, p_value);
+						Color clr = img.GetPixel(x, y);
 
+						double p_hue = 0.0, p_saturation = 0.0, p_value = 0.0;
+						double bin_hue = currentBucket.h;
+						double bin_saturation = currentBucket.s;
+						double bin_value = currentBucket.v;
+						convertRGBtoHSV(clr, out p_hue, out p_saturation, out p_value);
+						//Console.WriteLine("HSV OF PIXEL: H" + p_hue + " S:" + p_saturation + " V: " + p_value);
+						if (isInRange(p_hue, bin_hue, hueTolerance))						//Check if the hue is in range
+							if (isInRange(p_saturation * 255, bin_saturation * 255, saturationTolerance))	//Check if the saturation is in range
+								if (isInRange(p_value * 255, bin_value * 255, valueTolerance))		//Check if the value is in range
+									colourCounter[counter] = colourCounter[counter] + 1;
 					}
 				}
+				counter++;
 			}
-			
-			return new Color();
+
+			//Console.WriteLine("colourCounter.Length: " + colourCounter.Length);
+
+			int max = -99999;
+			int index1 = 0;
+			for (int i = 0; i < colourCounter.Length; i++)
+			{
+				Console.WriteLine("colourCounter[" + i + "] = " + colourCounter[i]);
+				if (colourCounter[i] >= max)
+				{
+					index1 = i;
+					max = colourCounter[i];
+				}
+			}
+			Console.WriteLine();
+			ColourBucket dominantColour = (ColourBucket) colourBuckets[index1];
+			Console.WriteLine("Most common colour: " + dominantColour.colourName);
+
+			max = -99999;
+			int index2 = 0;
+			for (int i = 0; i < colourCounter.Length; i++)
+			{
+				if (colourCounter[i] >= max && i != index1)
+				{
+					index2 = i;
+					max = colourCounter[i];
+				}
+			}
+
+			dominantColour = (ColourBucket)colourBuckets[index2];
+			Console.WriteLine("Second most common colour: " + dominantColour.colourName);
+
+			max = -99999;
+			int index3 = 0;
+			for (int i = 0; i < colourCounter.Length; i++)
+			{
+				if (colourCounter[i] >= max && i != index1 && i != index2)
+				{
+					index3 = i;
+					max = colourCounter[i];
+				}
+			}
+
+			dominantColour = (ColourBucket)colourBuckets[index3];
+			Console.WriteLine("Third most common colour: " + dominantColour.colourName);
+
+			return colourBuckets;
 		}
 
 		/// <summary>
 		/// A function that will convert a colour from RGB colour space to HSV colour space (as seen on stackoverflow.com/questions/359612/how-to-change-rgb-color-to-hsv)
 		/// </summary>
 		/// <param name="colour"> The RGB colour to convert </param>
-		/// <param name="hue"> An out parameter that returns the Hue of the colour </param>
-		/// <param name="saturation"> An out parameter that returns the Saturation of the colour </param>
-		/// <param name="value"> An out parameter that returns the Value of the colour </param>
-		private static void convertRGBtoHSV(Color colour, double hue, double saturation, double value)
+		/// <param name="hue"> An out parameter that returns the Hue of the colour in range of 0 - 360</param>
+		/// <param name="saturation"> An out parameter that returns the Saturation of the colour in range of 0 - 1</param>
+		/// <param name="value"> An out parameter that returns the Value of the colour in range of 0 - 1</param>
+		private static void convertRGBtoHSV(Color colour, out double hue, out double saturation, out double value)
 		{
 			int max = Math.Max(colour.R, Math.Max(colour.G, colour.B));
 			int min = Math.Min(colour.R, Math.Min(colour.G, colour.B));
@@ -146,7 +223,7 @@ namespace HSVColourDetection
 		/// <param name="saturation"> The saturation of the colour </param>
 		/// <param name="value"> The value of the colour </param>
 		/// <returns> A colour object of the HSV colour in RGB colour space </returns>
-		static public Color convertHSVtoRGB(double hue, double saturation, double value)
+		static private Color convertHSVtoRGB(double hue, double saturation, double value)
 		{
 			int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
 			double f = hue / 60 - Math.Floor(hue / 60);
