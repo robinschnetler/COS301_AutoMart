@@ -25,13 +25,23 @@ namespace ImageExporter
             byte[] bytImage = null;
             string constring = @"Data Source=localhost;Initial Catalog=AutomartImages;Integrated Security=True";
 
-            SqlCommand command = new SqlCommand(@"SELECT advert.AdvertID, advert.MainImage
+            /*SqlCommand command = new SqlCommand(@"SELECT advert.AdvertID, advert.MainImage
 FROM [AutomartImages].[dbo].[DSAdvertImage] AS advert
 INNER JOIN
 (SELECT table2.AdvertID, table2.CategoryID 
 FROM [AutomartImages].[dbo].[DSAdvert] AS table2
 WHERE CategoryID = 172 or CategoryID = 173 or CategoryID = 119 or CategoryID = 120 or CategoryID = 121 or CategoryID = 122) AS images
-ON advert.AdvertID = images.AdvertID");
+ON advert.AdvertID = images.AdvertID");*/
+
+
+             SqlCommand command = new SqlCommand(@"SELECT advert.[AdvertID], advert.[MakeID], advertImage.[MainImage]
+FROM [AutomartImages].[dbo].[DSAdvert] AS advert
+INNER JOIN 
+(SELECT [MainImage], [AdvertID]
+FROM [AutomartImages].[dbo].[DSAdvertImage])
+AS advertImage ON advert.AdvertID = advertImage.AdvertID
+WHERE MakeID = 1049");
+
 
             command.CommandType = CommandType.Text;
             SqlConnection myconn = new SqlConnection(constring);
