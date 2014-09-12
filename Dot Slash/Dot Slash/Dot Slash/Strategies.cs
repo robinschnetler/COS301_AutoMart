@@ -49,9 +49,16 @@ namespace Dot_Slash
 			strategy = null;
 		}
 
-		public void detectCars(String path)
+		public void detectBlur(String path, double thresh)
 		{
-			strategy = new CarClassifier(path);
+			strategy = new BlurDetector(path, thresh);
+			strategy.execute();
+			strategy = null;
+		}
+
+		public void detectCars(String path, Boolean b)
+		{
+			strategy = new CarClassifier(path, b);
 			strategy.execute();
 			strategy = null;
 
@@ -84,7 +91,52 @@ namespace Dot_Slash
 			strategy.execute();
 			strategy = null;
 		}
-	} 
+	}
+
+	public class BlurDetector : Strategy
+	{
+		String imagePath;
+		double thresh;
+		public BlurDetector(String path, double _thresh)
+		{
+			imagePath = path;
+			thresh = _thresh;
+		}
+		public virtual void execute()
+		{
+			String[] pictures = Tools.getImages(imagePath, Globals.extensions);
+			for (int i = 0; i < pictures.Length; i++)
+			{
+				Tools.UpdateProgress(i + 1, pictures.Length, 50, '=');
+				Image<Gray, Byte> image = new Image<Gray,byte>(pictures[i]);
+				Image<Gray, float> con = image.Laplace(1);
+				Bitmap b = image.ToBitmap();
+				double sum = 0;
+				double avg = 0;
+				int rad = 56;
+				for (int j = 0; j < con.Width-1; j++)
+				{
+
+					for (int k = 0; k < con.Height-1; k++)
+					{
+						if (Math.Abs(b.GetPixel(j, k).R - b.GetPixel(j + 1, k).R) > rad || Math.Abs(b.GetPixel(j, k).R - b.GetPixel(j, k+1).R) > rad)
+						{
+							sum++;
+						}
+					}
+				}
+				avg =sum / (b.Width * b.Height) * 100;
+				if(avg > thresh)
+				{
+					con.Save("convoluted/non_blurry" + avg + "_" + new FileInfo(pictures[i]).Name);
+				}
+				else
+				{
+					con.Save("convoluted/blurry" + avg + "_" + new FileInfo(pictures[i]).Name);
+				}
+			}
+		}
+	}
 
 	/// <summary>
 	/// Tool used to resize images in a directory to a size specified in the "size" variable
@@ -175,9 +227,11 @@ namespace Dot_Slash
 	public class CarClassifier : Strategy
 	{
 		String imagePath;
-		public CarClassifier(String _imagePath)
+		Boolean merge;
+		public CarClassifier(String _imagePath, Boolean _merge)
 		{
 			imagePath = _imagePath;
+			merge = _merge;
 		}
 
 		public virtual void execute()
@@ -186,10 +240,19 @@ namespace Dot_Slash
 			bool existsDetected = Directory.Exists("Detected/");
 			if(!existsDetected)
 				Directory.CreateDirectory("Detected/");
-
-			CascadeClassifier[] cc = { new CascadeClassifier("classifier/cas3.xml"), new CascadeClassifier("classifier/checkcas.xml"), new CascadeClassifier("classifier/cas4.xml"), 
-			new CascadeClassifier("classifier/cas2.xml"), new CascadeClassifier("classifier/cas1.xml"), 
-			new CascadeClassifier("classifier/cascade2.xml"), new CascadeClassifier("classifier/haarout.xml"), new CascadeClassifier("classifier/cars.xml") };
+			/**
+			 *
+			 * ,new CascadeClassifier("classifier/5.xml")
+			 * new CascadeClassifier("classifier/5.xml")
+			 */
+			CascadeClassifier[] cc = { 
+			new CascadeClassifier("classifier/1.xml"), new CascadeClassifier("classifier/2.xml"), 
+			new CascadeClassifier("classifier/3.xml"), new CascadeClassifier("classifier/6.xml"), 
+			new CascadeClassifier("classifier/7.xml"), new CascadeClassifier("classifier/8.xml"), 
+			new CascadeClassifier("classifier/9.xml") 
+			//new CascadeClassifier("classifier/classifiers/front/cascade.xml")
+			};
+			
 			Bgr pen = new Bgr(50, 50, 255);
 			for (int i = 0; i < pictures.Length; i++)
 			{
@@ -200,76 +263,97 @@ namespace Dot_Slash
 				int x = image.Width, y = image.Height, rx = 0, ry = 0;
 				for (int j = 0; j < cc.Length; j++)
 				{
-					//162, 108
-					Rectangle[] objects = cc[j].DetectMultiScale(image, 1.1, 3, new Size(162, 108), new Size(480, 480));
+					//162, 108 - for side View
+					Rectangle[] objects = cc[j].DetectMultiScale(image, 1.1, 1, new Size(108, 108), new Size(480, 480));
 					rectangleList.Add(objects);
 				}
-				//Console.WriteLine("Number of Rectangles: " + objects.Length);
-				for (int j = 0; j < rectangleList.Count; j++)
-				{
-					Rectangle[] objs = rectangleList.ElementAt(j);
-					for (int k = 0; k < objs.Length; k++)
+				if(merge)
+				{ 
+					for (int j = 0; j < rectangleList.Count; j++)
 					{
-						try
+						Rectangle[] objs = rectangleList.ElementAt(j);
+						for (int k = 0; k < objs.Length; k++)
 						{
-							//top left pixel
-							if (objs[k].X < x)
-								x = objs[k].X;
-							if (objs[k].Y < y)
-								y = objs[k].Y;
-							if (objs[k].X > rx)
-								rx = objs[k].X;
-							if (objs[k].Y > ry)
-								ry = objs[k].Y;
+							try
+							{
+								//top left pixel
+								if (objs[k].X < x)
+									x = objs[k].X;
+								if (objs[k].Y < y)
+									y = objs[k].Y;
+								if (objs[k].X > rx)
+									rx = objs[k].X;
+								if (objs[k].Y > ry)
+									ry = objs[k].Y;
 
-							//top right
-							int currentx = objs[k].X + objs[k].Width;
-							int currenty = objs[k].Y;
-							if (currentx < x)
-								x = currentx;
-							if (currenty < y)
-								y = currenty;
-							if (currentx > rx)
-								rx = currentx;
-							if (currenty > ry)
-								ry = currenty;
+								//top right
+								int currentx = objs[k].X + objs[k].Width;
+								int currenty = objs[k].Y;
+								if (currentx < x)
+									x = currentx;
+								if (currenty < y)
+									y = currenty;
+								if (currentx > rx)
+									rx = currentx;
+								if (currenty > ry)
+									ry = currenty;
 
-							//bottom left
-							currentx = objs[k].X;
-							currenty = objs[k].Y + objs[k].Height;
-							if (currentx < x)
-								x = currentx;
-							if (currenty < y)
-								y = currenty;
-							if (currentx > rx)
-								rx = currentx;
-							if (currenty > ry)
-								ry = currenty;
+								//bottom left
+								currentx = objs[k].X;
+								currenty = objs[k].Y + objs[k].Height;
+								if (currentx < x)
+									x = currentx;
+								if (currenty < y)
+									y = currenty;
+								if (currentx > rx)
+									rx = currentx;
+								if (currenty > ry)
+									ry = currenty;
 
-							//bottom right
-							currentx = objs[k].X + objs[k].Width;
-							currenty = objs[k].Y + objs[k].Height;
-							if (currentx < x)
-								x = currentx;
-							if (currenty < y)
-								y = currenty;
-							if (currentx > rx)
-								rx = currentx;
-							if (currenty > ry)
-								ry = currenty;
+								//bottom right
+								currentx = objs[k].X + objs[k].Width;
+								currenty = objs[k].Y + objs[k].Height;
+								if (currentx < x)
+									x = currentx;
+								if (currenty < y)
+									y = currenty;
+								if (currentx > rx)
+									rx = currentx;
+								if (currenty > ry)
+									ry = currenty;
 
-							//Console.WriteLine("x:" + objs[j].X + " y:"+ objs[j].Y + " width" + objs[j].Width + " height:" + objs[j].Height);
-						}
-						catch (IndexOutOfRangeException)
-						{
-							Console.WriteLine("dafaq just happened?"); 
+								//Console.WriteLine("x:" + objs[j].X + " y:"+ objs[j].Y + " width" + objs[j].Width + " height:" + objs[j].Height);
+							}
+							catch (IndexOutOfRangeException)
+							{
+								Console.WriteLine("Dafuq just happened?"); 
+							}
 						}
 					}
+					if(rx-x >0 && ry-y >0)
+					{ 
+						Rectangle rec = new Rectangle(x, y, rx - x, ry - y);
+						Image<Bgr, Int32>newImage = original.GetSubRect(rec);
+						newImage.Save("Detected/Detected_" + new FileInfo(pictures[i]).Name);
+					}
+					//original.Draw(new Rectangle(x, y, rx-x, ry-y), pen, 2);
 				}
-				original.Draw(new Rectangle(x, y, rx-x, ry-y), pen, 2);
-				original.Save("Detected/Detected_" + new FileInfo(pictures[i]).Name);
+				else
+				{
+					for (int j = 0; j < rectangleList.Count; j++)
+					{
+						Rectangle[] objs = rectangleList.ElementAt(j);
+						for (int k = 0; k < objs.Length; k++)
+						{
+							original.Draw(objs[k], pen,2);
+						}
+					}
+					original.Save("Detected/Detected_" + new FileInfo(pictures[i]).Name);
+				}
+				
 			}
-
+			//ImageResizer ir = new ImageResizer("Detected/", 240, 160);
+			//ir.execute();
 			Console.WriteLine();
 			Console.WriteLine();
 		}

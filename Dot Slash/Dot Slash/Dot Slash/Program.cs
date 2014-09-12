@@ -34,7 +34,8 @@ namespace Dot_Slash
 			Console.WriteLine("9) Create negatives.dat");
 			Console.WriteLine("10) Change filename extensions");
 			Console.WriteLine("11) Detect car objects");
-			Console.WriteLine("12) Exit");
+			Console.WriteLine("12) Detect blur on images");
+			Console.WriteLine("13) Exit");
 		}
 
 		[STAThread] //allows for main to open dialogs(something to do with threads)
@@ -44,7 +45,7 @@ namespace Dot_Slash
 			Tools tools = new Tools();
 			display();
 			int chosen = Convert.ToInt32(Console.ReadLine());
-			while(chosen != 12)
+			while(chosen != 13)
 			{ 
 				switch(chosen)
 				{ 
@@ -179,7 +180,17 @@ namespace Dot_Slash
 						{
 							Console.WriteLine("Which folder of images would you like to run the classifier on?");
 							String path = Console.ReadLine();
-							imageProcessor.detectCars(path + "/");
+							Console.WriteLine("would you like to merge the classified rectangles? (y/n)");
+							String val = Console.ReadLine();
+							Boolean merge = (val.ToUpper().Equals("Y"))?true: false;
+							imageProcessor.detectCars(path + "/", merge);
+							break;
+						}
+					case 12:
+						{
+							Console.WriteLine("Which folder of images would you like to run the blur detector on?");
+							String path = Console.ReadLine();
+							imageProcessor.detectBlur(path + "/", 0.5);
 							break;
 						}
 					default:
