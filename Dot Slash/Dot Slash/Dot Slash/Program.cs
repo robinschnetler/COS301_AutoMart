@@ -35,7 +35,10 @@ namespace Dot_Slash
 			Console.WriteLine("10) Change filename extensions");
 			Console.WriteLine("11) Detect car objects");
 			Console.WriteLine("12) Detect blur on images");
-			Console.WriteLine("13) Exit");
+			Console.WriteLine("13) Detect Model");
+			Console.WriteLine("14) Detect Colour");
+			Console.WriteLine("15) Subdivide image");
+			Console.WriteLine("16) Exit");
 		}
 
 		[STAThread] //allows for main to open dialogs(something to do with threads)
@@ -45,7 +48,7 @@ namespace Dot_Slash
 			Tools tools = new Tools();
 			display();
 			int chosen = Convert.ToInt32(Console.ReadLine());
-			while(chosen != 13)
+			while(chosen != 16)
 			{ 
 				switch(chosen)
 				{ 
@@ -180,10 +183,12 @@ namespace Dot_Slash
 						{
 							Console.WriteLine("Which folder of images would you like to run the classifier on?");
 							String path = Console.ReadLine();
-							Console.WriteLine("would you like to merge the classified rectangles? (y/n)");
-							String val = Console.ReadLine();
-							Boolean merge = (val.ToUpper().Equals("Y"))?true: false;
-							imageProcessor.detectCars(path + "/", merge);
+							Console.WriteLine("Would you like to crop the detected car?");
+							Boolean input  = (Console.ReadLine().ToUpper().Equals("Y"))?true:false;
+							//162, 10
+							Console.WriteLine("Num neighbours?");
+							int n = Convert.ToInt32(Console.ReadLine());
+							imageProcessor.detect(path + "/", "classifier/classifiers/front/cascade.xml", "DetectedCars", new Bgr(50, 50, 255), new Size(140, 120), new Size(480, 480), n, input);
 							break;
 						}
 					case 12:
@@ -191,6 +196,39 @@ namespace Dot_Slash
 							Console.WriteLine("Which folder of images would you like to run the blur detector on?");
 							String path = Console.ReadLine();
 							imageProcessor.detectBlur(path + "/", 0.5);
+							break;
+						}
+					case 13:
+						{
+							Console.WriteLine("Which folder of image would you like to run the Model Detection on?");
+							String path = Console.ReadLine();
+							Console.WriteLine("Num neighbours?");
+							int input = Convert.ToInt32(Console.ReadLine());
+							imageProcessor.detect(path + "/", "classifier/classifiers/model/Volkwagen.xml", "DetectedModels", new Bgr(255,50,50), new Size(15,15), new Size(60,60), input, false);
+							break;
+						}
+					case 14:
+						{
+							Console.WriteLine("Which folder if images would you like to run colour detector on?");
+							String path = Console.ReadLine();
+							imageProcessor.detectColour(path, "ColourDetector");
+							break;
+						}
+					case 15:
+						{
+							Console.WriteLine("Which folder would you like to run subdivision on?");
+							String path = Console.ReadLine();
+							String[] images = Tools.getImages(path + "/", Globals.extensions);
+							Console.WriteLine("How many sub-divisions?");
+							int div = Convert.ToInt32(Console.ReadLine());
+							Console.WriteLine("Where would you like to save to?");
+							String to = Console.ReadLine();
+							if(!Directory.Exists(to + "/"))
+								Directory.CreateDirectory(to + "/");
+							for (int i = 0; i < images.Length; i++)
+							{
+								tools.subDivide(new Image<Bgr,Int32>(images[i]), div).Save("divided_" + new FileInfo(images[i]).Name);
+							}
 							break;
 						}
 					default:

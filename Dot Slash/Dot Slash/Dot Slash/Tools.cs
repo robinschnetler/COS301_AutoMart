@@ -156,6 +156,28 @@ namespace Dot_Slash
 			Console.CursorLeft = left;
 		}
 
+		public Image<Bgr, Int32> subDivide(Image<Bgr, Int32> image, int divisions)
+		{
+			Bgr pen = new Bgr(255,255,255);
+			LineSegment2D[] lines = new LineSegment2D[(divisions-1) * 2];
+			int widSpace = (image.Width % divisions)-1;
+			int heiSpace = (image.Height % divisions)-1;
+			int count = 0;
+			for (int i = 0; i < image.Width; i += widSpace)
+			{
+				lines[count++] = new LineSegment2D(new Point(i, 0), new Point(i, image.Height-1));
+			}
+			for (int i = 0; i < image.Height; i += heiSpace)
+			{
+				lines[count++] = new LineSegment2D(new Point(0, i), new Point(image.Width-1, i));
+			}
+			for (int i = 0; i < lines.Length; i++)
+			{
+				image.Draw(lines[i], pen, 1);
+			}
+			return image;
+		}
+
 		public void changeExtension(String dir, String from, String to)
 		{
 			String[] filePaths = System.IO.Directory.GetFiles(dir + "/", "*." + from);

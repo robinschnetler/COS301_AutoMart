@@ -15,6 +15,54 @@ using Emgu.Util;
 
 namespace Dot_Slash
 {
+	class ColourBucket
+	{
+		//				   Colour Bins
+		// Colour		INT			HEX		R	G	B
+		//==================================================================================
+		//White			16777215		FFFFFF		255	255	255
+		//Silver		12632256		C0C0C0		192	192	192
+		//Grey			8421504			808080		128	128	128
+		//Black			0			000000		0	0	0
+		//Blue			255			0000FF		0	0	255
+		//Turquoise		4251856			40E0D0		64	224	208
+		//Green			32768			008000		0	128	0
+		//Yellow		16776960		FFFF00		255	255	0
+		//Gold			16766720		FFD700		255	215	0
+		//Orange		16753920		FFA500		255	165	0
+		//Brown			4796700			49311C		73	49	28
+		//Red			16711680		FF0000		255	0	0
+		//Maroon		8388608			800000		128	0	0
+		//Violet		15631086		EE82EE		238	130	238
+		//Beige			16119260		F5F5DC		245	245	220
+		//Bronze		13467442		CD7F32		205	127	50
+		//Charcoal		3355443			333333		51	51	51
+
+		public string colourName;
+		public int r;
+		public int g;
+		public int b;
+
+		public double h;
+		public double s;
+		public double v;
+
+		public ColourBucket(string name, int red, int green, int blue)
+		{
+			colourName = name;
+			r = red;
+			g = green;
+			b = blue;
+
+			int max = Math.Max(r, Math.Max(g, b));
+			int min = Math.Min(r, Math.Min(g, b));
+
+			h = Color.FromArgb(r, g, b).GetHue();
+			s = (max == 0) ? 0 : 1d - (1d * min / max);
+			v = max / 255d;
+		}
+	}
+
 	/// <summary>
 	/// all extensions specified in extensions array will be considered when doing image processing
 	/// </summary>
@@ -56,9 +104,9 @@ namespace Dot_Slash
 			strategy = null;
 		}
 
-		public void detectCars(String path, Boolean b)
+		public void detect(String path, String classifier, String to, Bgr b, Size min, Size max, int n, Boolean input)
 		{
-			strategy = new CarClassifier(path, b);
+			strategy = new Classifier(path, classifier, to, b, min, max, n, input);
 			strategy.execute();
 			strategy = null;
 
@@ -74,6 +122,13 @@ namespace Dot_Slash
 		public void applyGaussian()
 		{
 			strategy = new GaussianFilter(imagePath);
+			strategy.execute();
+			strategy = null;
+		}
+
+		public void detectColour(String path, String s)
+		{
+			strategy = new ColourDetector(path, s);
 			strategy.execute();
 			strategy = null;
 		}
@@ -128,11 +183,13 @@ namespace Dot_Slash
 				avg =sum / (b.Width * b.Height) * 100;
 				if(avg > thresh)
 				{
-					con.Save("convoluted/non_blurry" + avg + "_" + new FileInfo(pictures[i]).Name);
+					new Image<Bgr, Int32>(pictures[i]).Save("convoluted/non_blurry" + avg + "_" + new FileInfo(pictures[i]).Name);
+					con.Save("convoluted/non_blurry" + avg + "_con_" + new FileInfo(pictures[i]).Name);
 				}
 				else
 				{
-					con.Save("convoluted/blurry" + avg + "_" + new FileInfo(pictures[i]).Name);
+					new Image<Bgr, Int32>(pictures[i]).Save("convoluted/blurry" + avg + "_" + new FileInfo(pictures[i]).Name);
+					con.Save("convoluted/blurry" + avg + "_con_" + new FileInfo(pictures[i]).Name);
 				}
 			}
 		}
@@ -224,136 +281,273 @@ namespace Dot_Slash
 
 	}
 
-	public class CarClassifier : Strategy
+
+	public class ColourDetector : Strategy
 	{
-		String imagePath;
-		Boolean merge;
-		public CarClassifier(String _imagePath, Boolean _merge)
+		static String imagePath;
+		static String saveTo;
+
+		public ColourDetector(String iP, String sT)
 		{
-			imagePath = _imagePath;
-			merge = _merge;
+			imagePath = iP;
+			saveTo = sT;
 		}
 
 		public virtual void execute()
 		{
 			String[] pictures = Tools.getImages(imagePath, Globals.extensions);
-			bool existsDetected = Directory.Exists("Detected/");
-			if(!existsDetected)
-				Directory.CreateDirectory("Detected/");
-			/**
-			 *
-			 * ,new CascadeClassifier("classifier/5.xml")
-			 * new CascadeClassifier("classifier/5.xml")
-			 */
-			CascadeClassifier[] cc = { 
-			new CascadeClassifier("classifier/1.xml"), new CascadeClassifier("classifier/2.xml"), 
-			new CascadeClassifier("classifier/3.xml"), new CascadeClassifier("classifier/6.xml"), 
-			new CascadeClassifier("classifier/7.xml"), new CascadeClassifier("classifier/8.xml"), 
-			new CascadeClassifier("classifier/9.xml") 
-			//new CascadeClassifier("classifier/classifiers/front/cascade.xml")
-			};
+			bool existsColourDetected = Directory.Exists(saveTo + "/");
+			if(!existsColourDetected)
+				Directory.CreateDirectory(saveTo + "/");
+
+			ArrayList colourBuckets = new ArrayList();
+			colourBuckets.Add(new ColourBucket("White", 255, 255, 255));
+			colourBuckets.Add(new ColourBucket("Silver", 192, 192, 192));
+			colourBuckets.Add(new ColourBucket("Grey", 128, 128, 128));
+			colourBuckets.Add(new ColourBucket("Black", 0, 0, 0));
+			colourBuckets.Add(new ColourBucket("Blue", 0, 0, 255));
+			colourBuckets.Add(new ColourBucket("Turquoise", 64, 224, 208));
+			colourBuckets.Add(new ColourBucket("Green", 0, 128, 0));
+			colourBuckets.Add(new ColourBucket("Yellow", 255, 255, 0));
+			colourBuckets.Add(new ColourBucket("Gold", 255, 215, 0));
+			colourBuckets.Add(new ColourBucket("Orange", 255, 165, 0));
+			colourBuckets.Add(new ColourBucket("Brown", 73, 49, 28));
+			colourBuckets.Add(new ColourBucket("Red", 255, 0, 0));
+			colourBuckets.Add(new ColourBucket("Maroon", 128, 0, 0));
+			colourBuckets.Add(new ColourBucket("Violet", 238, 130, 238));
+			colourBuckets.Add(new ColourBucket("Bronze", 205, 127, 50));
+			colourBuckets.Add(new ColourBucket("Charcoal", 51, 51, 51));
+			//colourBuckets.Add(new ColourBucket("Beige", 245, 245, 220));
+
+			for (int i = 0; i < pictures.Length; i++)
+			{
+				Tools.UpdateProgress(i + 1, pictures.Length, 50, '=');
+				Bitmap img = new Bitmap(pictures[i]);
+				colourDetect(img, colourBuckets, i);
+			}
+		}
+
+		static private String colourDetect(Bitmap img, ArrayList colourBuckets, int i)
+		{
+			int width = img.Width;
+			int height = img.Height;
+
+			//Loop through and find dominate colour
+			loopThroughPixels(1, 0, colourBuckets, width, height, img, i);
+
+			return "";
+		}
+
+		private static bool isInRange(double pixelValue, double binValue, int range)
+		{
+			if (pixelValue > (binValue + range) || pixelValue < (binValue - range))
+				return false;
+			else
+				return true;
+		}
+
+		private static ArrayList loopThroughPixels(int pixelHop, int numBinsToEliminate, ArrayList colourBuckets, int width, int height, Bitmap img, int num)
+		{
+			int hueTolerance = 2;		//Should be in the range of 5 - 10
+			int saturationTolerance = 80;	//Should be approx 100
+			int valueTolerance = 150;	//Should be in the range of 170 - 200
+
+			int counter = 0;
+			//Console.WriteLine("NUM COLOUR BUCKETS: " + colourBuckets.Count);
+			int numColourBuckets = colourBuckets.Count;
+
+			int[] colourCounter = new int[numColourBuckets];
+
+			for (int i = 0; i < numColourBuckets; i++)
+			{
+				colourCounter[i] = 0;
+			}
+
+			foreach (ColourBucket currentBucket in colourBuckets)
+			{
+				//Console.WriteLine("Testing on colour bucket " + counter);
+				int halfx = width /2;
+				int halfy = height / 2;
+				int thirdx = width / 3;
+				int thirdy = height / 3;
+
+				for (int x = width/4; x < width * 3/4; x++)
+				{
+					for (int y = height/2; y < height * 3/4; y += pixelHop)
+					{
+						Color clr = img.GetPixel(x, y);
+
+						double p_hue = 0.0, p_saturation = 0.0, p_value = 0.0;
+						double bin_hue = currentBucket.h;
+						double bin_saturation = currentBucket.s;
+						double bin_value = currentBucket.v;
+						convertRGBtoHSV(clr, out p_hue, out p_saturation, out p_value);
+						//Console.WriteLine("HSV OF PIXEL: H" + p_hue + " S:" + p_saturation + " V: " + p_value);
+						if (isInRange(p_hue, bin_hue, hueTolerance))						//Check if the hue is in range
+							if (isInRange(p_saturation * 255, bin_saturation * 255, saturationTolerance))	//Check if the saturation is in range
+								if (isInRange(p_value * 255, bin_value * 255, valueTolerance))		//Check if the value is in range
+									colourCounter[counter] = colourCounter[counter] + 1;
+					}
+				}
+				counter++;
+			}
+
+			int max = -99999;
+			int index1 = 0;
+			for (int i = 0; i < colourCounter.Length; i++)
+			{
+				//Console.WriteLine("colourCounter[" + i + "] = " + colourCounter[i]);
+				if (colourCounter[i] >= max)
+				{
+					index1 = i;
+					max = colourCounter[i];
+				}
+			}
+			//Console.WriteLine();
+			ColourBucket dominantColour = (ColourBucket) colourBuckets[index1];
+			String firstMostCommon = dominantColour.colourName;
+			//Console.WriteLine("Most common colour: " + dominantColour.colourName);
+
+			max = -99999;
+			int index2 = 0;
+			for (int i = 0; i < colourCounter.Length; i++)
+			{
+				if (colourCounter[i] >= max && i != index1)
+				{
+					index2 = i;
+					max = colourCounter[i];
+				}
+			}
+
+			dominantColour = (ColourBucket)colourBuckets[index2];
+			String secondMostCommon = dominantColour.colourName;
+			//Console.WriteLine("Second most common colour: " + dominantColour.colourName);
+
+			max = -99999;
+			int index3 = 0;
+			for (int i = 0; i < colourCounter.Length; i++)
+			{
+				if (colourCounter[i] >= max && i != index1 && i != index2)
+				{
+					index3 = i;
+					max = colourCounter[i];
+				}
+			}
+
+			dominantColour = (ColourBucket)colourBuckets[index3];
+			String thirdMostCommon = dominantColour.colourName;
+			img.Save(saveTo + "/" + firstMostCommon + "_" + secondMostCommon + "_" + thirdMostCommon + num + ".jpg");
+			//Console.WriteLine("Third most common colour: " + dominantColour.colourName);
+
+			return colourBuckets;
+		}
+
+		/// <summary>
+		/// A function that will convert a colour from RGB colour space to HSV colour space (as seen on stackoverflow.com/questions/359612/how-to-change-rgb-color-to-hsv)
+		/// </summary>
+		/// <param name="colour"> The RGB colour to convert </param>
+		/// <param name="hue"> An out parameter that returns the Hue of the colour in range of 0 - 360</param>
+		/// <param name="saturation"> An out parameter that returns the Saturation of the colour in range of 0 - 1</param>
+		/// <param name="value"> An out parameter that returns the Value of the colour in range of 0 - 1</param>
+		private static void convertRGBtoHSV(Color colour, out double hue, out double saturation, out double value)
+		{
+			int max = Math.Max(colour.R, Math.Max(colour.G, colour.B));
+			int min = Math.Min(colour.R, Math.Min(colour.G, colour.B));
+
+			hue = colour.GetHue();
+			saturation = (max == 0) ? 0 : 1d - (1d * min / max);
+			value = max / 255d;
+		}
+
+		/// <summary>
+		/// A function that converts a colour from HSV colour space to RGB colour space (as seen on stackoverflow.com/questions/359612/how-to-change-rgb-color-to-hsv)
+		/// </summary>
+		/// <param name="hue"> The hue of the colour </param>
+		/// <param name="saturation"> The saturation of the colour </param>
+		/// <param name="value"> The value of the colour </param>
+		/// <returns> A colour object of the HSV colour in RGB colour space </returns>
+		static private Color convertHSVtoRGB(double hue, double saturation, double value)
+		{
+			int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
+			double f = hue / 60 - Math.Floor(hue / 60);
+
+			value = value * 255;
+			int v = Convert.ToInt32(value);
+			int p = Convert.ToInt32(value * (1 - saturation));
+			int q = Convert.ToInt32(value * (1 - f * saturation));
+			int t = Convert.ToInt32(value * (1 - (1 - f) * saturation));
+
+			if (hi == 0)
+				return Color.FromArgb(255, v, t, p);
+			else if (hi == 1)
+				return Color.FromArgb(255, q, v, p);
+			else if (hi == 2)
+				return Color.FromArgb(255, p, v, t);
+			else if (hi == 3)
+				return Color.FromArgb(255, p, q, v);
+			else if (hi == 4)
+				return Color.FromArgb(255, t, p, v);
+			else
+				return Color.FromArgb(255, v, p, q);
+		}
+	}
+	public class Classifier : Strategy
+	{
+		String imagePath;
+		String classifer;
+		String saveTo;
+		Size min, max;
+		Bgr pen;
+		Boolean toCrop;
+		int numNeighbours;
+		public Classifier(String _imagePath, String _classifier, String _saveTo, Bgr _pen, Size _min, Size _max, int _numN, Boolean input)
+		{
+			imagePath = _imagePath;
+			classifer = _classifier;
+			saveTo = _saveTo;
+			pen = _pen;
+			min = _min;
+			max = _max;
+			numNeighbours = _numN;
+			toCrop = input;
+		}
+
+		public virtual void execute()
+		{
+			String[] pictures = Tools.getImages(imagePath, Globals.extensions);
+			bool existsDetected = Directory.Exists(saveTo + "/");
+			if (!existsDetected)
+				Directory.CreateDirectory(saveTo + "/");
+			existsDetected = Directory.Exists(saveTo + "/" + "Cropped/");
+			if (!existsDetected)
+				Directory.CreateDirectory(saveTo + "/" + "Cropped/");
 			
-			Bgr pen = new Bgr(50, 50, 255);
+			CascadeClassifier cc = new CascadeClassifier(classifer);
+			//new CascadeClassifier("classifier/1.xml"), new CascadeClassifier("classifier/2.xml"), 
+			//new CascadeClassifier("classifier/3.xml"), new CascadeClassifier("classifier/6.xml"), 
+			//new CascadeClassifier("classifier/7.xml"), new CascadeClassifier("classifier/8.xml"), 
+			//new CascadeClassifier("classifier/9.xml") 
+			
+
+			//bonnet (44, 22)
 			for (int i = 0; i < pictures.Length; i++)
 			{
 				Tools.UpdateProgress(i + 1, pictures.Length, 50, '=');
 				Image<Gray, Byte> image = new Image<Gray,Byte>(pictures[i]);
 				Image<Bgr, Int32> original = new Image<Bgr, Int32>(pictures[i]);
-				List<Rectangle[]> rectangleList = new List<Rectangle[]>();
-				int x = image.Width, y = image.Height, rx = 0, ry = 0;
-				for (int j = 0; j < cc.Length; j++)
+				Rectangle[] rectangleList = cc.DetectMultiScale(image, 1.05, numNeighbours, min, max);
+				if (toCrop)
 				{
-					//162, 108 - for side View
-					Rectangle[] objects = cc[j].DetectMultiScale(image, 1.1, 1, new Size(108, 108), new Size(480, 480));
-					rectangleList.Add(objects);
+					if (rectangleList.Length > 0)
+						original.GetSubRect(rectangleList.Last()).Save(saveTo + "/Cropped/Detected_" + new FileInfo(pictures[i]).Name);
 				}
-				if(merge)
-				{ 
-					for (int j = 0; j < rectangleList.Count; j++)
-					{
-						Rectangle[] objs = rectangleList.ElementAt(j);
-						for (int k = 0; k < objs.Length; k++)
-						{
-							try
-							{
-								//top left pixel
-								if (objs[k].X < x)
-									x = objs[k].X;
-								if (objs[k].Y < y)
-									y = objs[k].Y;
-								if (objs[k].X > rx)
-									rx = objs[k].X;
-								if (objs[k].Y > ry)
-									ry = objs[k].Y;
-
-								//top right
-								int currentx = objs[k].X + objs[k].Width;
-								int currenty = objs[k].Y;
-								if (currentx < x)
-									x = currentx;
-								if (currenty < y)
-									y = currenty;
-								if (currentx > rx)
-									rx = currentx;
-								if (currenty > ry)
-									ry = currenty;
-
-								//bottom left
-								currentx = objs[k].X;
-								currenty = objs[k].Y + objs[k].Height;
-								if (currentx < x)
-									x = currentx;
-								if (currenty < y)
-									y = currenty;
-								if (currentx > rx)
-									rx = currentx;
-								if (currenty > ry)
-									ry = currenty;
-
-								//bottom right
-								currentx = objs[k].X + objs[k].Width;
-								currenty = objs[k].Y + objs[k].Height;
-								if (currentx < x)
-									x = currentx;
-								if (currenty < y)
-									y = currenty;
-								if (currentx > rx)
-									rx = currentx;
-								if (currenty > ry)
-									ry = currenty;
-
-								//Console.WriteLine("x:" + objs[j].X + " y:"+ objs[j].Y + " width" + objs[j].Width + " height:" + objs[j].Height);
-							}
-							catch (IndexOutOfRangeException)
-							{
-								Console.WriteLine("Dafuq just happened?"); 
-							}
-						}
-					}
-					if(rx-x >0 && ry-y >0)
-					{ 
-						Rectangle rec = new Rectangle(x, y, rx - x, ry - y);
-						Image<Bgr, Int32>newImage = original.GetSubRect(rec);
-						newImage.Save("Detected/Detected_" + new FileInfo(pictures[i]).Name);
-					}
-					//original.Draw(new Rectangle(x, y, rx-x, ry-y), pen, 2);
-				}
-				else
+				for (int j = 0; j < rectangleList.Length; j++)
 				{
-					for (int j = 0; j < rectangleList.Count; j++)
-					{
-						Rectangle[] objs = rectangleList.ElementAt(j);
-						for (int k = 0; k < objs.Length; k++)
-						{
-							original.Draw(objs[k], pen,2);
-						}
-					}
-					original.Save("Detected/Detected_" + new FileInfo(pictures[i]).Name);
+					original.Draw(rectangleList[j], pen, 2);	
 				}
+				original.Save(saveTo+"/Detected_" + new FileInfo(pictures[i]).Name);
 				
 			}
-			//ImageResizer ir = new ImageResizer("Detected/", 240, 160);
-			//ir.execute();
 			Console.WriteLine();
 			Console.WriteLine();
 		}
@@ -430,6 +624,24 @@ namespace Dot_Slash
 			Image<Bgra, Byte> c = new Image<Bgra, Byte>(originalImage);
 			Image<Gray, Byte> img = c.Convert<Gray, Byte>();
 			return img;
+		}
+	}
+
+	public class Coverage : Strategy
+	{
+		String imagePath;
+		Rectangle r;
+		public Coverage(String _imagePath, Rectangle _rectangle)
+		{
+			imagePath = _imagePath;
+		}
+
+		public virtual void execute()
+		{
+			String[] images = Tools.getImages(imagePath, Globals.extensions);
+
+			double area = r.Width * r.Height;
+			area /= 1536; // (480*320)*100 = %
 		}
 	}
 }
