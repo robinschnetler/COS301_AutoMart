@@ -54,6 +54,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CarDetect.cs" />
+    <Compile Include="Filter.cs" />
     <Compile Include="ImagePreparation.cs">
       <SubType>Form</SubType>
     </Compile>
