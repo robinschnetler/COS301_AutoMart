@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Dot_Slash
 {
-    class Pipe
+    public class Pipe
     {
         List<Filter> filtersList;
         AdvertDetails advertDetails;
@@ -14,11 +15,12 @@ namespace Dot_Slash
 
         public AdvertDetails flow()
         {
-            foreach(Filter filter in filtersList)
-            {
-                filter.pump(ref advertDetails);
-            }
-            return advertDetails;
+		foreach(Filter filter in filtersList)
+		{
+
+			filter.pump(ref advertDetails);
+		}
+		return advertDetails;
         }
     }
 }

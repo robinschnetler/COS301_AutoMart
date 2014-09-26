@@ -15,13 +15,16 @@ using Emgu.Util;
 
 namespace Dot_Slash
 {
-    class CoverageDetector : Filter
+    public class CoverageDetector : Filter
     {
         public void pump(ref AdvertDetails _advertDetails)
         {
-            float area = _advertDetails.Image.Width * _advertDetails.Image.Height;
-            area /= 1536; // (480*320)*100 = %
-            _advertDetails.CoverageValue = area;
+		if(!_advertDetails.CarFound)
+			_advertDetails.ExceptionList.Add("Cannot calculate coverage if car not found");
+		float totalArea = _advertDetails.Image.Width * _advertDetails.Image.Height;
+		float area = _advertDetails.Rect.Width * _advertDetails.Rect.Height;
+		float coverage = area/totalArea*100;
+		_advertDetails.CoverageValue = coverage;
         }
     }
 }

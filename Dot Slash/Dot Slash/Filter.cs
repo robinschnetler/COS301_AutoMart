@@ -1,8 +1,8 @@
 ﻿namespace Dot_Slash
 {
-	interface Filter
-    {
-        void pump(ref AdvertDetails _advertDetails);
+	public interface Filter
+	{
+		void pump(ref AdvertDetails _advertDetails);
 	}
 }
 

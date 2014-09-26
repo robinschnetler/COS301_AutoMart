@@ -15,7 +15,7 @@ using Emgu.Util;
 
 namespace Dot_Slash
 {
-    class ColourDetector : Filter
+    public class ColourDetector : Filter
     {
         ArrayList colourBuckets; 
         public ColourDetector()
@@ -42,13 +42,15 @@ namespace Dot_Slash
 
         public void pump(ref AdvertDetails _advertDetails)
         {
-            Bitmap img = _advertDetails.Image.ToBitmap();
-            int width = img.Width;
-            int height = img.Height;
-            String[] colours = loopThroughPixels(1, 0, colourBuckets, width, height, img);
-            _advertDetails.Colour1 = colours[0];
-            _advertDetails.Colour2 = colours[1];
-            _advertDetails.Colour3 = colours[2];
+		if(!_advertDetails.CarFound)
+			_advertDetails.ExceptionList.Add("Car not found");
+		Bitmap img = _advertDetails.Image.ToBitmap().Clone(_advertDetails.Rect, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+		int width = img.Width;
+		int height = img.Height;
+		String[] colours = loopThroughPixels(1, 0, colourBuckets, width, height, img);
+		_advertDetails.Colour1 = colours[0];
+		_advertDetails.Colour2 = colours[1];
+		_advertDetails.Colour3 = colours[2];
         }
 
         private String[] loopThroughPixels(int pixelHop, int numBinsToEliminate, ArrayList colourBuckets, int width, int height, Bitmap img)

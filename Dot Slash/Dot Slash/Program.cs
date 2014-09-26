@@ -237,11 +237,11 @@ namespace Dot_Slash
                         {
                             Byte[] image = File.ReadAllBytes("pipe/image.jpeg"); 
                             AdvertDetails advertDetails = new AdvertDetails(image);
-                            Filter[] filters = { new CarDetector(), new BlurDetector(), new ColourDetector(), new CoverageDetector() };
+			    Filter[] filters = { new CarDetector("classifiers/frontClassifer.xml", "classifiers/backClassifer.xml", "classifiers/sideClassifer.xml"), new BlurDetector(), new ColourDetector(), new CoverageDetector() };
                             List<Filter> filterList = new List<Filter>(filters);
                             Pipe pipe = new Pipe(filterList, advertDetails);
                             advertDetails = pipe.flow();
-                            Console.WriteLine(advertDetails.retreiveDetails());
+			    Console.WriteLine(advertDetails.retrieveDetails());
                             break;
                         }
 					default:
