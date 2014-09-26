@@ -13,12 +13,14 @@ using Emgu.CV.Structure;
 using Emgu.CV.UI;
 using Emgu.Util;
 using System.Data.Linq;
+using System.Runtime.Serialization.Json;
 
 namespace Dot_Slash
 {
 	public class AdvertDetails
 	{
-		public List<String> ExceptionList = new List<string>();
+		//public List<String> ExceptionList = new List<string>();
+		public String exception;
 		private Boolean carFound;
 		public Boolean CarFound
 		{
@@ -146,10 +148,21 @@ namespace Dot_Slash
 
 		public String retrieveDetails()
 		{
-			String output = "&";
-			output += carFound + "&" + blurValue + "&" + coverageValue + "&" + colour1 +"&" + colour2 + "&" + colour3;
-			output += "&" + ExceptionList.ToString();
+			String output = "";
+			output += "&car_found = " + carFound + "&view=" + view + "&blur_Value=" + blurValue + "&Coverage_value=" + coverageValue + "&colour1=" + colour1 +"&colour2=" + colour2 + "&colour3=" + colour3 + "&error=" +exception;
 			return output;
 		}
+
+		public string JsonSerializer<T> (T t)
+		{
+			DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(T));
+			MemoryStream ms = new MemoryStream();
+			ser.WriteObject(ms, t);
+			string jsonString = Encoding.UTF8.GetString(ms.ToArray());
+			ms.Close();
+			return jsonString;
+		}
+
+		
 	}
 }

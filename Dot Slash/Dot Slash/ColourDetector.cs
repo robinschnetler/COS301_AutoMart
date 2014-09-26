@@ -43,7 +43,7 @@ namespace Dot_Slash
         public void pump(ref AdvertDetails _advertDetails)
         {
 		if(!_advertDetails.CarFound)
-			_advertDetails.ExceptionList.Add("Car not found");
+			throw new Exception("Car not found");
 		Bitmap img = _advertDetails.Image.ToBitmap().Clone(_advertDetails.Rect, System.Drawing.Imaging.PixelFormat.Format32bppRgb);
 		int width = img.Width;
 		int height = img.Height;

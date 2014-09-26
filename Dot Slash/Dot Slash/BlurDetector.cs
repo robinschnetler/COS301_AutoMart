@@ -26,7 +26,8 @@ namespace Dot_Slash
 			image = _advertDetails.Image.Convert<Gray, byte>();
 		else
 		{
-			image = new Image<Gray,byte>(_advertDetails.Image.ToBitmap().Clone(_advertDetails.Rect, System.Drawing.Imaging.PixelFormat.Format16bppGrayScale));
+			image = _advertDetails.Image.GetSubRect(_advertDetails.Rect).Convert<Gray, byte>();
+			image.Resize(480, 320, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
 		}
 		Image<Gray, float> con = image.Laplace(1);
 		Bitmap b = image.ToBitmap();
@@ -44,6 +45,10 @@ namespace Dot_Slash
 		}
 		}
 		_advertDetails.BlurValue = sum / (b.Width * b.Height) * 100;
+		if(_advertDetails.BlurValue < blurTreshold)
+		{
+			throw new Exception("Image is Blurry");
+		}
         }
     }
 }

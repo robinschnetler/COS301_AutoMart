@@ -18,13 +18,13 @@ namespace Dot_Slash
 {
 	public class CarDetector : Filter
 	{
-		const int numNeighbours = 3;
+		const int numNeighbours = 1;
 		const double scaleFac = 1.05;
-		Size side_minSize = new Size(162, 108), fb_minSize = new Size(150, 125);
-        Size maxSize = new Size(480, 320); //width height
-    	String frontClassifier;
-        String backClassifier;
-        String sideClassifier;
+		Size side_minSize = new Size(140, 120), fb_minSize = new Size(150, 125);
+		Size maxSize = new Size(480, 320); //width height
+    		String frontClassifier;
+		String backClassifier;
+		String sideClassifier;
 
 	public CarDetector(String front, String back, String side)
 	{
@@ -35,57 +35,55 @@ namespace Dot_Slash
         //idea comnine the views to get angled view
         public virtual void pump(ref AdvertDetails _advertDetails) 
         {
-            int count = 0;
-            int numClassified = 0;
-            Rectangle rect = new Rectangle();
-            String view = "Uknown";
+		    string track = "";
+		    int count = 0;
+		    Rectangle rect = new Rectangle();
+		    String view = "Unknown";
 
-            Image<Gray, Byte> image = _advertDetails.Image.Convert<Gray, byte>();
+		    Image<Gray, Byte> image = _advertDetails.Image.Convert<Gray, byte>();
             
-            CascadeClassifier classifier = new CascadeClassifier(frontClassifier);
-            Rectangle[] rectangleList = classifier.DetectMultiScale(image, scaleFac, numNeighbours, fb_minSize, maxSize);
-            if(rectangleList.Length > count)
-            {
-                count = rectangleList.Length;
-                view = "Front View";
-                rect = rectangleList.Last();
-                numClassified += 1;
-            }
+		    CascadeClassifier classifier = new CascadeClassifier(frontClassifier);
+		    Rectangle[] rectangleList = classifier.DetectMultiScale(image, scaleFac, numNeighbours, fb_minSize, maxSize);
+		    track += "a: with front as :" + rectangleList.Length;
+		    if(rectangleList.Length > count)
+		    {
+			count = rectangleList.Length;
+			track += "1: with count as :" + count;
+			view = "Front View";
+			rect = rectangleList.Last();
+		    }
 
-            classifier = new CascadeClassifier(backClassifier);
-            rectangleList = classifier.DetectMultiScale(image, scaleFac, numNeighbours, fb_minSize, maxSize);
-            if (rectangleList.Length > count)
-            {
-                if(count < rectangleList.Length)
-                {
-                    count = rectangleList.Length;
-                    view = "Back View";
-                    rect = rectangleList.Last();
-                    numClassified += 1;
-                }
-            }
+		    //classifier = new CascadeClassifier(backClassifier);
+		    //rectangleList = classifier.DetectMultiScale(image, scaleFac, numNeighbours, fb_minSize, maxSize);
+		    //if (rectangleList.Length > count)
+		    //{
+		    //	count = rectangleList.Length;
+		    //	view = "Back View";
+		    //	rect = rectangleList.Last();
+		    //}
 
-            classifier = new CascadeClassifier(sideClassifier);
-            rectangleList = classifier.DetectMultiScale(image, scaleFac, numNeighbours, side_minSize, maxSize);
-            if (rectangleList.Length > count)
-            {
-                if (count < rectangleList.Length)
-                {
-                    count = rectangleList.Length;
-                    view = "Side View";
-                    rect = rectangleList.Last();
-                    numClassified += 1;
-                }
-            }
+		    classifier = new CascadeClassifier(sideClassifier);
+		    rectangleList = classifier.DetectMultiScale(image, scaleFac, numNeighbours, side_minSize, maxSize);
+		    track += "b: with front as :" + rectangleList.Length;
+		    if (rectangleList.Length > count)
+		    {
+			    count = rectangleList.Length; 
+			    track += "2: with count as :" + count;
+			    view = "Side View";
+			    rect = rectangleList.Last();
+		    }
 
-            if (count > 0)
-            {
-                _advertDetails.Rect = rect;
-                _advertDetails.CarFound = true;
-                _advertDetails.View = view;
-            }
-            else
-                _advertDetails.CarFound = false;
-        }
+		    if (count > 0)
+		    {
+			_advertDetails.Rect = rect;
+			_advertDetails.CarFound = true;
+			_advertDetails.View = view;
+		    }
+		    else
+		    { 
+			_advertDetails.CarFound = false;
+			throw new Exception(track);
+		    }
+		}
 	}
 }

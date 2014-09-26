@@ -20,7 +20,7 @@ namespace Dot_Slash
         public void pump(ref AdvertDetails _advertDetails)
         {
 		if(!_advertDetails.CarFound)
-			_advertDetails.ExceptionList.Add("Cannot calculate coverage if car not found");
+			throw new Exception("Cannot calculate coverage if car not found");
 		float totalArea = _advertDetails.Image.Width * _advertDetails.Image.Height;
 		float area = _advertDetails.Rect.Width * _advertDetails.Rect.Height;
 		float coverage = area/totalArea*100;
