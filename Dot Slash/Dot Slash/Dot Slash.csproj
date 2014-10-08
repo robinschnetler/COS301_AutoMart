@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{2CE100A0-8FF4-45AB-8BAC-DA9AEC01D0C5}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dot_Slash</RootNamespace>
     <AssemblyName>Dot Slash</AssemblyName>
@@ -66,9 +66,11 @@
     <Compile Include="BlurDetector.cs" />
     <Compile Include="BrandDetector.cs" />
     <Compile Include="CarDetector.cs" />
+    <Compile Include="ColourBucket.cs" />
     <Compile Include="ColourDetector.cs" />
     <Compile Include="CoverageDetector.cs" />
     <Compile Include="Filter.cs" />
+    <Compile Include="ImageBlock.cs" />
     <Compile Include="ImagePreparation.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -93,6 +95,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Strategies.cs" />
     <Compile Include="Tools.cs" />
+    <Compile Include="Training.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
