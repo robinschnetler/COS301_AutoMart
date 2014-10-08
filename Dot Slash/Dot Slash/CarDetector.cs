@@ -32,7 +32,7 @@ namespace Dot_Slash
 		backClassifier = back;
 		sideClassifier = side;
 	}
-        //idea comnine the views to get angled view
+        //idea combine the views to get angled view
         public virtual void pump(ref AdvertDetails _advertDetails) 
         {
 		    string track = "";
@@ -44,31 +44,27 @@ namespace Dot_Slash
             
 		    CascadeClassifier classifier = new CascadeClassifier(frontClassifier);
 		    Rectangle[] rectangleList = classifier.DetectMultiScale(image, scaleFac, numNeighbours, fb_minSize, maxSize);
-		    track += "a: with front as :" + rectangleList.Length;
 		    if(rectangleList.Length > count)
 		    {
 			count = rectangleList.Length;
-			track += "1: with count as :" + count;
 			view = "Front View";
 			rect = rectangleList.Last();
 		    }
 
-		    //classifier = new CascadeClassifier(backClassifier);
-		    //rectangleList = classifier.DetectMultiScale(image, scaleFac, numNeighbours, fb_minSize, maxSize);
-		    //if (rectangleList.Length > count)
-		    //{
-		    //	count = rectangleList.Length;
-		    //	view = "Back View";
-		    //	rect = rectangleList.Last();
-		    //}
+		    classifier = new CascadeClassifier(backClassifier);
+		    rectangleList = classifier.DetectMultiScale(image, scaleFac, numNeighbours, fb_minSize, maxSize);
+		    if (rectangleList.Length > count)
+		    {
+			    count = rectangleList.Length;
+			    view = "Back View";
+			    rect = rectangleList.Last();
+		    }
 
 		    classifier = new CascadeClassifier(sideClassifier);
 		    rectangleList = classifier.DetectMultiScale(image, scaleFac, numNeighbours, side_minSize, maxSize);
-		    track += "b: with front as :" + rectangleList.Length;
 		    if (rectangleList.Length > count)
 		    {
 			    count = rectangleList.Length; 
-			    track += "2: with count as :" + count;
 			    view = "Side View";
 			    rect = rectangleList.Last();
 		    }
@@ -82,6 +78,7 @@ namespace Dot_Slash
 		    else
 		    { 
 			_advertDetails.CarFound = false;
+			_advertDetails.Error = true;
 			throw new Exception(track);
 		    }
 		}

@@ -17,7 +17,12 @@ namespace Dot_Slash
 {
     public class BlurDetector : Filter
     {
-        const double blurTreshold = 0.5;
+        double blurTreshold = 0.5;
+
+	public BlurDetector(double t)
+	{
+		blurTreshold = t;
+	}
 
         public void pump(ref AdvertDetails _advertDetails)
         {
@@ -40,13 +45,15 @@ namespace Dot_Slash
 		{
 			if (Math.Abs(b.GetPixel(j, k).R - b.GetPixel(j + 1, k).R) > rad || Math.Abs(b.GetPixel(j, k).R - b.GetPixel(j, k + 1).R) > rad)
 			{
-			sum++;
+				sum++;
 			}
 		}
 		}
 		_advertDetails.BlurValue = sum / (b.Width * b.Height) * 100;
 		if(_advertDetails.BlurValue < blurTreshold)
 		{
+			_advertDetails.Blurry = true;
+			_advertDetails.Error = true;
 			throw new Exception("Image is Blurry");
 		}
         }

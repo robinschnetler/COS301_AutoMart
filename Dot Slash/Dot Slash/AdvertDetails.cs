@@ -20,18 +20,57 @@ namespace Dot_Slash
 	public class AdvertDetails
 	{
 		//public List<String> ExceptionList = new List<string>();
-		public String exception;
-		private Boolean carFound;
-		public Boolean CarFound
+		public string exception;
+		public bool blurry;
+		public bool Blurry
 		{
-		    get 
-		    {
-			return carFound; 
-		    }
-		    set 
-		    {
-			carFound = value; 
-		    }
+			get
+			{
+				return blurry;
+			}
+			set
+			{
+				blurry = value;
+			}
+		}
+
+		public bool error;
+		public bool Error
+		{
+			get
+			{
+				return error;
+			}
+			set
+			{
+				error = value;
+			}
+		}
+
+		private bool carFound;
+		public bool CarFound
+		{
+			get
+			{
+				return carFound;
+			}
+			set
+			{
+				carFound = value;
+			}
+		}
+
+		public int image_ID;
+		public int Image_ID
+		{
+			get
+			{
+				return image_ID;
+			}
+			set
+			{
+				image_ID = value;
+			}
 		}
 		private Image<Bgr, Int32> image;
 		public Image<Bgr, Int32> Image
@@ -69,7 +108,7 @@ namespace Dot_Slash
 			coverageValue = value;
 		    }
 		}
-		String colour1;
+		string colour1;
 		public String Colour1
 		{
 		    get
@@ -82,8 +121,8 @@ namespace Dot_Slash
 		    }
 		}
 
-		String colour2;
-		public String Colour2
+		string colour2;
+		public string Colour2
 		{
 		    get
 		    {
@@ -94,8 +133,8 @@ namespace Dot_Slash
 			colour2 = value;
 		    }
 		}
-			String colour3;
-		public String Colour3
+		string colour3;
+		public string Colour3
 		{
 		    get
 		    {
@@ -106,8 +145,8 @@ namespace Dot_Slash
 			colour3 = value;
 		    }
 		}
-		private String view;
-		public String View
+		private string view;
+		public string View
 		{
 		    get
 		    {
@@ -138,12 +177,15 @@ namespace Dot_Slash
 			MemoryStream ms = new MemoryStream(im.ToArray());
 			image = new Image<Bgr,int>(new Bitmap(ms));
 			blurValue = 0.0f;
+			blurry = false;
 			coverageValue = 0.0f;
 			colour1 = null;
 			colour2 = null;
 			colour3 = null;
+			Error = false;
 			view = "Uknown";
 			rect = new Rectangle();
+
 		}
 
 		public String retrieveDetails()
