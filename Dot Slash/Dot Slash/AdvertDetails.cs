@@ -72,6 +72,7 @@ namespace Dot_Slash
 				image_ID = value;
 			}
 		}
+
 		private Image<Bgr, Int32> image;
 		public Image<Bgr, Int32> Image
 		{
@@ -205,6 +206,9 @@ namespace Dot_Slash
 			return jsonString;
 		}
 
-		
+		public Bitmap getImage()
+		{
+			return image.ToBitmap();
+		}
 	}
 }

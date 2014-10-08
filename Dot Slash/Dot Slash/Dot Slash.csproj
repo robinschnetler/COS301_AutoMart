@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="AdvertDetails.cs" />
     <Compile Include="BlurDetector.cs" />
+    <Compile Include="BrandDetector.cs" />
     <Compile Include="CarDetector.cs" />
     <Compile Include="ColourDetector.cs" />
     <Compile Include="CoverageDetector.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="ImagePreparation.Designer.cs">
       <DependentUpon>ImagePreparation.cs</DependentUpon>
     </Compile>
+    <Compile Include="ModelContainer.cs" />
     <Compile Include="photoChooser.cs">
       <SubType>Form</SubType>
     </Compile>
