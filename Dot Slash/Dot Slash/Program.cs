@@ -190,7 +190,7 @@ namespace Dot_Slash
 							//162, 10
 							Console.WriteLine("Num neighbours?");
 							int n = Convert.ToInt32(Console.ReadLine());
-							imageProcessor.detect(path + "/", "classifier/classifiers/front/cascade.xml", "DetectedCars", new Bgr(50, 50, 255), new Size(140, 120), new Size(480, 480), n, input);
+							imageProcessor.detect(path + "/", "classifiers/frontClassifier.xml", "DetectedCars", new Bgr(50, 50, 255), new Size(140, 120), new Size(480, 480), n, input);
 							break;
 						}
 					case 12:
@@ -237,7 +237,7 @@ namespace Dot_Slash
                         {
                             Byte[] image = File.ReadAllBytes("pipe/image.jpeg"); 
                             AdvertDetails advertDetails = new AdvertDetails(image);
-			    Filter[] filters = { new CarDetector("classifiers/frontClassifer.xml", "classifiers/backClassifer.xml", "classifiers/sideClassifer.xml"), new BlurDetector(), new ColourDetector(), new CoverageDetector() };
+			    Filter[] filters = { new CarDetector("classifiers/frontClassifier.xml", "classifiers/backClassifier.xml", "classifiers/sideClassifier.xml"), new BlurDetector(0.3), new ColourDetector(), new CoverageDetector() };
                             List<Filter> filterList = new List<Filter>(filters);
                             Pipe pipe = new Pipe(filterList, advertDetails);
                             advertDetails = pipe.flow();
