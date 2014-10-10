@@ -32,7 +32,7 @@ namespace Dot_Slash
         double max_z_angle;
         double max_i_dev;
 
-        private const String[] IMAGE_EXTENSIONS= { "jpg", "jpeg", "bmp", "png", "pgm" };
+        private String[] IMAGE_EXTENSIONS= { "jpg", "jpeg", "bmp", "png", "pgm" };
 
         public Training(String _positives, String _negatives, int _w, int _h, int _stages, int _samples, int _bgColor, int _bgThresh, double _maxX, double _maxY, double _maxZ, double _maxI )
         {
@@ -62,7 +62,6 @@ namespace Dot_Slash
             //createSamples();
             //createDatFile("samples", "samples", "vec");
             //mergeVecFiles();
-                
         }
 
         private void changeExtensionToJpg(String _path)
@@ -142,7 +141,7 @@ namespace Dot_Slash
             return img;
         }
 
-        private void startTraining()
+        private void startTraining() 
         {
 
         }
@@ -159,20 +158,5 @@ namespace Dot_Slash
 
             return images.ToArray();           
         }
-
-        /*change extension
-         *  negatives
-         *  positives
-         * resize
-         * grayscale
-         *  negatives
-         *  positives
-         * dat files
-         *  positives
-         *  negatives
-         * samples
-         * dat sample file
-         * merge
-         */
     }
 }

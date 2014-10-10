@@ -13,7 +13,7 @@ using Emgu.CV.Structure;
 using Emgu.CV.UI;
 using Emgu.Util;
 
-namespace Dot_Slash
+/*namespace Dot_Slash
 {
 
 	/// <summary>
@@ -42,13 +42,6 @@ namespace Dot_Slash
 		{
 			imagePath = "images/";
 		}
-
-        public void makeGreyscale()
-        {
-            strategy = new Greyscaler(imagePath);
-            strategy.execute();
-            strategy = null;
-        }
 
 		public void detect(String path, String classifier, String to, Bgr b, Size min, Size max, int n, Boolean input)
 		{
@@ -90,6 +83,8 @@ namespace Dot_Slash
 	/// <summary>
 	/// Tool used to resize images in a directory to a size specified in the "size" variable
 	/// </summary>
+    /// 
+    
 	public class ImageResizer : Strategy
 	{
 		//set the desired size to resize to here in the format:(width, height)
@@ -132,7 +127,7 @@ namespace Dot_Slash
 			Console.WriteLine("Resized " + pictures.Length + " images from " + imagePath + " to " + "Resized/");
 		}
 	}
-
+    
 	public class EdgeDetector : Strategy
 	{
 		private string imagePath;
@@ -270,42 +265,4 @@ namespace Dot_Slash
 			return smoothed;
 		}
 	}
-
-	public class Greyscaler : Strategy
-	{
-		String imagePath;
-		public Greyscaler(String _imagePath)
-		{
-			imagePath = _imagePath;
-		}
-
-		public virtual void execute()
-		{
-			bool isExists = System.IO.Directory.Exists("Greyscale/");
-			if (!isExists)
-				System.IO.Directory.CreateDirectory("Greyscale/");
-			//bool gausExists = System.IO.Directory.Exists("Resized/");
-			//if (gausExists)
-			//	imagePath = "Resized/";
-			String[] pictures = Tools.getImages(imagePath, Globals.extensions);
-			for (int i = 0; i < pictures.Length; i++)
-			{
-				Bitmap img = new Bitmap(pictures[i]);
-				Image<Gray, Byte> grey;
-				grey = makeGreyScale(img);
-				grey.Save("Greyscale/greyscaled_" + new FileInfo(pictures[i]).Name);
-				Tools.UpdateProgress(i + 1, pictures.Length, 50, '=');
-			}
-			Console.WriteLine();
-			Console.WriteLine();
-			Console.WriteLine("Greyscaled " + pictures.Length + " images from " + imagePath + " to " + "Greyscaled/");
-		}
-
-		private Image<Gray, Byte> makeGreyScale(Bitmap originalImage)
-		{
-			Image<Bgra, Byte> c = new Image<Bgra, Byte>(originalImage);
-			Image<Gray, Byte> img = c.Convert<Gray, Byte>();
-			return img;
-		}
-	}
-}
+}*/

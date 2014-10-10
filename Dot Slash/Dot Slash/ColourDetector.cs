@@ -18,7 +18,6 @@ namespace Dot_Slash
     public class ColourDetector : Filter
     {
         ArrayList colourBuckets;
-        ArrayList imageBlocks;
         public ColourDetector()
         {
             colourBuckets  = new ArrayList();
@@ -39,31 +38,32 @@ namespace Dot_Slash
             colourBuckets.Add(new ColourBucket("Bronze", 205, 127, 50));
             colourBuckets.Add(new ColourBucket("Charcoal", 51, 51, 51));
             //colourBuckets.Add(new ColourBucket("Beige", 245, 245, 220
-
-            imageBlocks = new ArrayList();
         }
 
         public void pump(ref AdvertDetails _advertDetails)
         {
-            String[] colour = getBlocks(_advertDetails);
+            List<ImageBlock> imageBlocks = getImageBlocks(_advertDetails);
+            ImageBlock dominantBlock = getDominantBlock(_advertDetails, imageBlocks);
+            String[] colour = dominantBlock.Colours;
             _advertDetails.Colour1 = colour[0];
             _advertDetails.Colour2 = colour[1];
             _advertDetails.Colour3 = colour[2];
-
         }
 
-        public String[] getBlocks(AdvertDetails _advertDetails)
+        private List<ImageBlock> getImageBlocks(AdvertDetails _advertDetails)
         {
-            int num_rows = 10;
-            int num_cols = 10;
+            int num_rows = 15;
+            int num_cols = 15;
             int step_x = (int)(_advertDetails.Rect.Height / num_rows);
             int step_y = (int)(_advertDetails.Rect.Width / num_cols);
             int current_x = 0, current_y = 0;
+            List<ImageBlock> imageBlocks = new List<ImageBlock>();
 
-            double dots_treshold = 0.1;
+            double dots_treshold = 0.15;
             int max_dots = (int)((_advertDetails.Rect.Height * _advertDetails.Rect.Width) * dots_treshold);
 
             Bitmap edgedImage = drawEdge(_advertDetails.Image.ToBitmap());
+            edgedImage.Save("EdgedImage.jpg");
 
             while(true)
             {
@@ -76,39 +76,49 @@ namespace Dot_Slash
                             num_dots++;
 
                         if (num_dots > max_dots)
+                        {
                             goto Next;
+                        }
                     }
-                    imageBlocks.Add(new ImageBlock(current_x, current_y, step_x, step_y));
                 }
+                imageBlocks.Add(new ImageBlock(current_x, current_y, step_x, step_y));
 
             Next:
-                if (current_y + step_y < _advertDetails.Rect.Width)
                 {
-                    current_y += step_y;
+                    Console.WriteLine("current_x:" + current_x + " current_y:" + step_y);
+                    if (current_x + step_x < _advertDetails.Rect.Height)
+                    {
+                        current_x += step_x;
+                        current_y = 0;
+                    }
+                    else if (current_y + step_y < _advertDetails.Rect.Width)
+                    {
+                        current_y += step_y;
+                    }
+                    else
+                    {
+                        return imageBlocks;
+                    }
                 }
-                else if (current_x + step_x < _advertDetails.Rect.Height)
-                {
-                    current_x += step_x;
-                    current_y = 0;
-                }
-                else
-                    goto Colour;
             }
+        }
 
-        Colour:
+        private ImageBlock getDominantBlock(AdvertDetails _advertDetails, List<ImageBlock> _imageBlocks)
+        {
             List<List<ImageBlock>> groupedBlocks = new List<List<ImageBlock>>();
             bool added = false;
-            foreach(ImageBlock block in imageBlocks)
+            foreach (ImageBlock block in _imageBlocks)
             {
                 block.Colours = getBlockColours(_advertDetails.Image.ToBitmap(), block);
                 added = false;
-   
-                foreach(List<ImageBlock> list in groupedBlocks)
+
+                foreach (List<ImageBlock> list in groupedBlocks)
                 {
-                    if(containsColour(list, block))
+                    if (containsColour(list, block))
                     {
                         list.Add(block);
                         added = true;
+                        break;
                     }
                 }
                 if (!added)
@@ -122,10 +132,11 @@ namespace Dot_Slash
                 }
             );
 
-            return groupedBlocks.First().First().Colours;
+            return groupedBlocks.First().First();
         }
 
-        public bool containsColour(List<ImageBlock> _list, ImageBlock _block)
+
+        private bool containsColour(List<ImageBlock> _list, ImageBlock _block)
         {
             if (_list.First().Colours[1].Equals(_block.Colours[1]))
                 return true;
@@ -133,15 +144,20 @@ namespace Dot_Slash
                 return false;
         }
 
-        public Bitmap drawEdge(Bitmap img)
+        private Bitmap drawEdge(Bitmap img)
         {
             Image<Gray, Byte> image = new Image<Gray, Byte>(img);
             image = image.Canny(39, 60);
             return image.ToBitmap();
         }
 
-
-        public String[] getBlockColours(Bitmap _image, ImageBlock _block)
+        /// <summary>
+        /// The function returns the three main colours of the the specified block.
+        /// </summary>
+        /// <param name="_image"></param>
+        /// <param name="_block"></param>
+        /// <returns></returns>
+        private String[] getBlockColours(Bitmap _image, ImageBlock _block)
         {
             int pixelHop = 1;
             int hueTolerance = 2;		//Should be in the range of 5 - 10
@@ -174,7 +190,7 @@ namespace Dot_Slash
                         if (inRange(p_hue, bin_hue, hueTolerance))						//Check if the hue is in range
                             if (inRange(p_saturation * 255, bin_saturation * 255, saturationTolerance))	//Check if the saturation is in range
                                 if (inRange(p_value * 255, bin_value * 255, valueTolerance))		//Check if the value is in range
-                                    colourCounter[counter] = colourCounter[counter] + 1;
+                                    colourCounter[counter]++;// = colourCounter[counter] + 1;
                     }
                 }
                 counter++;

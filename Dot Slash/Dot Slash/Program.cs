@@ -46,9 +46,18 @@ namespace Dot_Slash
 		[STAThread] //allows for main to open dialogs(something to do with threads)
 		static void Main(string[] args)
 		{
-			ImageProcessor imageProcessor = new ImageProcessor();
-			Tools tools = new Tools();
-			display();
+            Byte[] image = File.ReadAllBytes("pipe/image.jpeg");
+            AdvertDetails advertDetails = new AdvertDetails(image);
+            Filter[] filters = { new CarDetector("classifiers/frontClassifier.xml", "classifiers/backClassifier.xml", "classifiers/sideClassifier.xml"), new BlurDetector(0.3), new ColourDetector(), new CoverageDetector() };
+            List<Filter> filterList = new List<Filter>(filters);
+            Pipe pipe = new Pipe(filterList, advertDetails);
+            advertDetails = pipe.flow();
+            Console.WriteLine(advertDetails.retrieveDetails());
+            String input = Console.ReadLine();
+
+			//ImageProcessor imageProcessor = new ImageProcessor();
+			//Tools tools = new Tools();
+			/*display();
 			int chosen = Convert.ToInt32(Console.ReadLine());
 			while(chosen != 17)
 			{ 
@@ -237,11 +246,11 @@ namespace Dot_Slash
                         {
                             Byte[] image = File.ReadAllBytes("pipe/image.jpeg"); 
                             AdvertDetails advertDetails = new AdvertDetails(image);
-			    Filter[] filters = { new CarDetector("classifiers/frontClassifier.xml", "classifiers/backClassifier.xml", "classifiers/sideClassifier.xml"), new BlurDetector(0.3), new ColourDetector(), new CoverageDetector() };
+			                Filter[] filters = { new CarDetector("classifiers/frontClassifier.xml", "classifiers/backClassifier.xml", "classifiers/sideClassifier.xml"), new BlurDetector(0.3), new ColourDetector(), new CoverageDetector() };
                             List<Filter> filterList = new List<Filter>(filters);
                             Pipe pipe = new Pipe(filterList, advertDetails);
                             advertDetails = pipe.flow();
-			    Console.WriteLine(advertDetails.retrieveDetails());
+			                 Console.WriteLine(advertDetails.retrieveDetails());
                             break;
                         }
 					default:
@@ -254,7 +263,7 @@ namespace Dot_Slash
 				display();
 				chosen = Convert.ToInt32(Console.ReadLine());
 				Console.WriteLine();
-			}
+			}*/
 		}
 	}
 }
