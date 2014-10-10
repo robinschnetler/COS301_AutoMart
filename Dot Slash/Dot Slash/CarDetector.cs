@@ -47,7 +47,7 @@ namespace Dot_Slash
 		    if(rectangleList.Length > count)
 		    {
 			count = rectangleList.Length;
-			view = "Front View";
+			view = "Front";
 			rect = rectangleList.Last();
 		    }
 
@@ -56,7 +56,7 @@ namespace Dot_Slash
 		    if (rectangleList.Length > count)
 		    {
 			    count = rectangleList.Length;
-			    view = "Back View";
+			    view = "Back";
 			    rect = rectangleList.Last();
 		    }
 
@@ -65,7 +65,7 @@ namespace Dot_Slash
 		    if (rectangleList.Length > count)
 		    {
 			    count = rectangleList.Length; 
-			    view = "Side View";
+			    view = "Side";
 			    rect = rectangleList.Last();
 		    }
 

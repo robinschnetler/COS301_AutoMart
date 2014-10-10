@@ -13,6 +13,27 @@ using Emgu.CV.Structure;
 using Emgu.CV.UI;
 using Emgu.Util;
 
+//				   Colour Bins
+// Colour		INT			HEX		R	G	B
+//==================================================================================
+//White			16777215		FFFFFF		255	255	255
+//Silver		12632256		C0C0C0		192	192	192
+//Grey			8421504			808080		128	128	128
+//Black			0			000000		0	0	0
+//Blue			255			0000FF		0	0	255
+//Turquoise		4251856			40E0D0		64	224	208
+//Green			32768			008000		0	128	0
+//Yellow		16776960		FFFF00		255	255	0
+//Gold			16766720		FFD700		255	215	0
+//Orange		16753920		FFA500		255	165	0
+//Brown			4796700			49311C		73	49	28
+//Red			16711680		FF0000		255	0	0
+//Maroon		8388608			800000		128	0	0
+//Violet		15631086		EE82EE		238	130	238
+//Beige			16119260		F5F5DC		245	245	220
+//Bronze		13467442		CD7F32		205	127	50
+//Charcoal		3355443			333333		51	51	51
+
 namespace Dot_Slash
 {
     public class ColourDetector : Filter
@@ -21,23 +42,22 @@ namespace Dot_Slash
         public ColourDetector()
         {
             colourBuckets  = new ArrayList();
-            colourBuckets.Add(new ColourBucket("White", 255, 255, 255));
-            colourBuckets.Add(new ColourBucket("Silver", 192, 192, 192));
-            colourBuckets.Add(new ColourBucket("Grey", 128, 128, 128));
-            colourBuckets.Add(new ColourBucket("Black", 0, 0, 0));
-            colourBuckets.Add(new ColourBucket("Blue", 0, 0, 255));
-            colourBuckets.Add(new ColourBucket("Turquoise", 64, 224, 208));
-            colourBuckets.Add(new ColourBucket("Green", 0, 128, 0));
-            colourBuckets.Add(new ColourBucket("Yellow", 255, 255, 0));
-            colourBuckets.Add(new ColourBucket("Gold", 255, 215, 0));
-            colourBuckets.Add(new ColourBucket("Orange", 255, 165, 0));
-            colourBuckets.Add(new ColourBucket("Brown", 73, 49, 28));
-            colourBuckets.Add(new ColourBucket("Red", 255, 0, 0));
-            colourBuckets.Add(new ColourBucket("Maroon", 128, 0, 0));
-            colourBuckets.Add(new ColourBucket("Violet", 238, 130, 238));
-            colourBuckets.Add(new ColourBucket("Bronze", 205, 127, 50));
-            colourBuckets.Add(new ColourBucket("Charcoal", 51, 51, 51));
-            //colourBuckets.Add(new ColourBucket("Beige", 245, 245, 220
+            colourBuckets.Add(new ColourBucket("White", 255, 255, 255, "FFFFFF"));
+            colourBuckets.Add(new ColourBucket("Silver", 192, 192, 192, "C0C0C0"));
+            colourBuckets.Add(new ColourBucket("Grey", 128, 128, 128, "808080"));
+            colourBuckets.Add(new ColourBucket("Black", 0, 0, 0, "000000"));
+            colourBuckets.Add(new ColourBucket("Blue", 0, 0, 255, "0000FF"));
+            colourBuckets.Add(new ColourBucket("Turquoise", 64, 224, 208, "40E0D0"));
+            colourBuckets.Add(new ColourBucket("Green", 0, 128, 0, "008000"));
+	        colourBuckets.Add(new ColourBucket("Yellow", 255, 255, 0, "FFFF00"));
+	        colourBuckets.Add(new ColourBucket("Gold", 255, 215, 0, "FFD700"));
+	        colourBuckets.Add(new ColourBucket("Orange", 255, 165, 0, "FFA500"));
+	        colourBuckets.Add(new ColourBucket("Brown", 73, 49, 28, "49311C"));
+	        colourBuckets.Add(new ColourBucket("Red", 255, 0, 0, "FF0000"));
+	        colourBuckets.Add(new ColourBucket("Maroon", 128, 0, 0, "800000"));
+	        colourBuckets.Add(new ColourBucket("Violet", 238, 130, 238, "EE82EE"));
+	        colourBuckets.Add(new ColourBucket("Bronze", 205, 127, 50, "CD7F32"));
+	        colourBuckets.Add(new ColourBucket("Charcoal", 51, 51, 51, "333333"));
         }
 
         public void pump(ref AdvertDetails _advertDetails)
@@ -159,7 +179,7 @@ namespace Dot_Slash
         /// <returns></returns>
         private String[] getBlockColours(Bitmap _image, ImageBlock _block)
         {
-            int pixelHop = 1;
+            int pixelHop = 2;
             int hueTolerance = 2;		//Should be in the range of 5 - 10
             int saturationTolerance = 80;	//Should be approx 100
             int valueTolerance = 150;	//Should be in the range of 170 - 200
@@ -209,6 +229,7 @@ namespace Dot_Slash
 
             ColourBucket dominantColour = (ColourBucket)colourBuckets[index1];
             String firstMostCommon = dominantColour.colourName;
+            String hex1 = dominantColour.hexValue;
 
             max = -99999;
             int index2 = 0;
@@ -223,6 +244,8 @@ namespace Dot_Slash
 
             dominantColour = (ColourBucket)colourBuckets[index2];
             String secondMostCommon = dominantColour.colourName;
+            String hex2 = dominantColour.hexValue;
+
 
             max = -99999;
             int index3 = 0;
@@ -237,14 +260,16 @@ namespace Dot_Slash
 
             dominantColour = (ColourBucket)colourBuckets[index3];
             String thirdMostCommon = dominantColour.colourName;
-            return (new String[] { firstMostCommon, secondMostCommon, thirdMostCommon });
+            String hex3 = dominantColour.hexValue;
+
+            return (new String[] { firstMostCommon, secondMostCommon, thirdMostCommon, hex1, hex2, hex3 });
         }
 
         private String[] loopThroughPixels(int pixelHop, int numBinsToEliminate, ArrayList colourBuckets, int width, int height, Bitmap img)
         {
             int hueTolerance = 2;		//Should be in the range of 5 - 10
             int saturationTolerance = 80;	//Should be approx 100
-            int valueTolerance = 150;	//Should be in the range of 170 - 200
+            int valueTolerance = 150;		//Should be in the range of 170 - 200
 
             int counter = 0;
             int numColourBuckets = colourBuckets.Count;
@@ -296,6 +321,7 @@ namespace Dot_Slash
 
             ColourBucket dominantColour = (ColourBucket)colourBuckets[index1];
             String firstMostCommon = dominantColour.colourName;
+	        String hex1 = dominantColour.hexValue;
 
             max = -99999;
             int index2 = 0;
@@ -310,6 +336,7 @@ namespace Dot_Slash
 
             dominantColour = (ColourBucket)colourBuckets[index2];
             String secondMostCommon = dominantColour.colourName;
+	    String hex2 = dominantColour.hexValue;
 
             max = -99999;
             int index3 = 0;
@@ -324,7 +351,8 @@ namespace Dot_Slash
 
             dominantColour = (ColourBucket)colourBuckets[index3];
             String thirdMostCommon = dominantColour.colourName;
-            return (new String[] { firstMostCommon, secondMostCommon, thirdMostCommon });
+	        String hex3 = dominantColour.hexValue;
+            return (new String[] { firstMostCommon, secondMostCommon, thirdMostCommon, hex1, hex2, hex3});
         }
 
         private bool inRange(double pixelValue, double binValue, int range)

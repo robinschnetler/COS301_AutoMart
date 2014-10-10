@@ -72,6 +72,7 @@ namespace Dot_Slash
 				image_ID = value;
 			}
 		}
+
 		private Image<Bgr, Int32> image;
 		public Image<Bgr, Int32> Image
 		{
@@ -145,6 +146,46 @@ namespace Dot_Slash
 			colour3 = value;
 		    }
 		}
+
+		string hex1;
+		public string Hex1
+		{
+			get
+			{
+				return hex1;
+			}
+			set
+			{
+				hex1 = value;
+			}
+		}
+
+		string hex2;
+		public string Hex2
+		{
+			get
+			{
+				return hex2;
+			}
+			set
+			{
+				hex2 = value;
+			}
+		}
+
+		string hex3;
+		public string Hex3
+		{
+			get
+			{
+				return hex3;
+			}
+			set
+			{
+				hex3 = value;
+			}
+		}
+
 		private string view;
 		public string View
 		{
@@ -205,6 +246,9 @@ namespace Dot_Slash
 			return jsonString;
 		}
 
-		
+		public byte[] getImage()
+		{
+			return image.ToJpegData();
+		}
 	}
 }

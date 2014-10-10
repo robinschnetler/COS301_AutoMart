@@ -27,6 +27,8 @@ namespace Dot_Slash
         //Charcoal		3355443			333333		51	51	51
 
         public string colourName;
+	    public string hexValue;
+
         public int r;
         public int g;
         public int b;
@@ -35,8 +37,9 @@ namespace Dot_Slash
         public double s;
         public double v;
 
-        public ColourBucket(string name, int red, int green, int blue)
+        public ColourBucket(string name, int red, int green, int blue, string hex)
         {
+	    hexValue = hex;
             colourName = name;
             r = red;
             g = green;
