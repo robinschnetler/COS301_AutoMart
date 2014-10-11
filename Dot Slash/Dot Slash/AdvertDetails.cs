@@ -224,7 +224,7 @@ namespace Dot_Slash
 			colour2 = null;
 			colour3 = null;
 			Error = false;
-			view = "Uknown";
+			view = "";
 			rect = new Rectangle();
 
 		}
@@ -246,9 +246,9 @@ namespace Dot_Slash
 			return jsonString;
 		}
 
-		public byte[] getImage()
+		public Bitmap getImage()
 		{
-			return image.ToJpegData();
+			return image.ToBitmap();
 		}
 	}
 }
