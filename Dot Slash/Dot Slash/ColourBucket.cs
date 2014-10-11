@@ -27,7 +27,7 @@ namespace Dot_Slash
         //Charcoal		3355443			333333		51	51	51
 
         public string colourName;
-	public string hexValue;
+	    public string hexValue;
 
         public int r;
         public int g;

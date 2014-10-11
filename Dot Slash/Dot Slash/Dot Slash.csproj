@@ -70,6 +70,12 @@
     <Compile Include="ColourDetector.cs" />
     <Compile Include="CoverageDetector.cs" />
     <Compile Include="Filter.cs" />
+    <Compile Include="frmTraining.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmTraining.Designer.cs">
+      <DependentUpon>frmTraining.cs</DependentUpon>
+    </Compile>
     <Compile Include="ImageBlock.cs" />
     <Compile Include="ImagePreparation.cs">
       <SubType>Form</SubType>
@@ -100,6 +106,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="frmTraining.resx">
+      <DependentUpon>frmTraining.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ImagePreparation.resx">
       <DependentUpon>ImagePreparation.cs</DependentUpon>
     </EmbeddedResource>

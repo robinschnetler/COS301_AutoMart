@@ -12,52 +12,10 @@ using Emgu.CV.Structure;
 using Emgu.CV.UI;
 using Emgu.Util;
 
-namespace Dot_Slash
+/*namespace Dot_Slash
 {
 	public class Tools
 	{
-		public void createDat(String imgPath, String datName, Boolean positive)
-		{
-			String[] pictures = Tools.getImages(imgPath, Globals.extensions);
-			Image<Gray, Byte> sample = new Image<Gray, Byte>(pictures[0]);
-			int width = sample.Width;
-			int height = sample.Height;
-			StreamWriter writer = new StreamWriter(datName,false);
-			if(positive)
-			{ 
-				for (int i = 0; i < pictures.Length; i++)
-				{
-					writer.WriteLine(pictures[i] + " 1 " + "0 0 " + width + " "  + height);
-					Tools.UpdateProgress(i + 1, pictures.Length, 50, '=');
-				}
-			}
-			else
-			{
-				for (int i = 0; i < pictures.Length; i++)
-				{
-					writer.WriteLine(pictures[i]);
-					Tools.UpdateProgress(i + 1, pictures.Length, 50, '=');
-				}
-			}
-			writer.Close();
-			Console.WriteLine();
-			Console.WriteLine();
-			Console.WriteLine("Generated "+datName+" file for "+pictures.Length + " images.");
-			Console.WriteLine();
-		}
-
-		static public String[] getImages(String imagePath, String[] extension)
-		{
-			ArrayList images = new ArrayList();
-			for (int i = 0; i < extension.Length; i++)
-			{
-				String[] pictures = Directory.GetFiles(imagePath, "*." + extension[i], SearchOption.TopDirectoryOnly);
-				for (int j = 0; j < pictures.Length; j++)
-					images.Add(pictures[j]);
-			}
-			return (string[])images.ToArray(typeof(string));
-		}
-
 		/// <summary>
 		/// allows for easy cropping of photos. Will be used to crop photos for positive samples to cascading classifier
 		/// </summary>
@@ -67,7 +25,7 @@ namespace Dot_Slash
 			Console.WriteLine("please select folder with all images of car");
 			Console.WriteLine("Note: sub directories will not be parsed");
 			String path = "";
-			if (dialog.ShowDialog() == DialogResult.OK)
+			if (dialog.ShowDialog() == DialogResult.OK) 
 			{
 				path = dialog.SelectedPath;
 			}
@@ -194,4 +152,4 @@ namespace Dot_Slash
 			Console.WriteLine();
 		}
 	}
-}
+}*/
