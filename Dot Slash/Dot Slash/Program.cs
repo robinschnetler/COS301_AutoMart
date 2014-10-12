@@ -46,7 +46,7 @@ namespace Dot_Slash
 		[STAThread] //allows for main to open dialogs(something to do with threads)
 		static void Main(string[] args)
 		{
-            Byte[] image = File.ReadAllBytes("pipe/image.jpeg");
+            Byte[] image = File.ReadAllBytes("pipe/image.jpg");
             AdvertDetails advertDetails = new AdvertDetails(image);
             Filter[] filters = { new CarDetector("classifiers/frontClassifier.xml", "classifiers/backClassifier.xml", "classifiers/sideClassifier.xml"), new BlurDetector(0.3), new ColourDetector(), new CoverageDetector() };
             List<Filter> filterList = new List<Filter>(filters);
