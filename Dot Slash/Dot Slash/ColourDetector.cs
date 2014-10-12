@@ -88,7 +88,6 @@ namespace Dot_Slash
             int max_dots = (int)((_advertDetails.Rect.Height * _advertDetails.Rect.Width) * dots_treshold);
 
             Bitmap edgedImage = drawEdge(_advertDetails.Image.ToBitmap().Clone(_advertDetails.Rect, _advertDetails.Image.ToBitmap().PixelFormat));	//Taking the full image, should just take cropped
-            //edgedImage.Save("EdgedImage.jpg");
 
             while(true)
             {
@@ -337,7 +336,7 @@ namespace Dot_Slash
 
             dominantColour = (ColourBucket)colourBuckets[index2];
             String secondMostCommon = dominantColour.colourName;
-	    String hex2 = dominantColour.hexValue;
+			String hex2 = dominantColour.hexValue;
 
             max = -99999;
             int index3 = 0;
