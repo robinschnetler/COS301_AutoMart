@@ -212,6 +212,18 @@ namespace Dot_Slash
 		    }
 		}
 
+		private int rating;
+		public int Rating
+		{
+			get
+			{
+				return rating;
+			}
+			set
+			{
+				rating = value;
+			}
+		}
 		public AdvertDetails(Binary im)
 		{
 			carFound = false;
@@ -223,10 +235,13 @@ namespace Dot_Slash
 			colour1 = null;
 			colour2 = null;
 			colour3 = null;
+			hex1 = null;
+			hex2 = null;
+			hex3 = null;
 			Error = false;
 			view = "";
 			rect = new Rectangle();
-
+			rating = 0;
 		}
 
 		public String retrieveDetails()
