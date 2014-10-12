@@ -1,9 +1,17 @@
 package com.yoco;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,19 +33,48 @@ public class MainActivity extends Activity {
     public void takePicture(View view)
     {
     	Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-    	startActivityForResult(pictureIntent, 0);
+    	if(pictureIntent.resolveActivity(getPackageManager()) != null)
+    	{
+    		File photoFile = null;
+    		try
+    		{
+    			photoFile = createImageFile();
+    		}
+    		catch(IOException e)
+    		{
+    			
+    		}
+    		if(photoFile != null)
+    		{
+    			pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+    			startActivityForResult(pictureIntent, 0);
+    		}
+    	}
     }
     
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
     	super.onActivityResult(requestCode, resultCode, data);
+    	AlertDialog.Builder ab = new AlertDialog.Builder(this);
     	Bitmap b;
     	if(data != null)
     	{
     		b = (Bitmap) data.getExtras().get("data");
     		pictureFrame.setImageBitmap(b);
     	}
+    }
+    
+    String currentPhotoPath;
+    private File createImageFile() throws IOException
+    {
+    	String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+    	String imageFileName = "JPEG_" + timeStamp + "_";
+    	File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+    	File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+    	
+    	currentPhotoPath = "file:"+image.getAbsolutePath();
+    	return image;
     }
     
     @Override

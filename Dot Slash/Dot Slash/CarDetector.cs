@@ -48,7 +48,6 @@ namespace Dot_Slash
 		    {
 			count = rectangleList.Length;
 			view = "Front";
-			rect = rectangleList.Last();
 		    }
 
 		    classifier = new CascadeClassifier(backClassifier);
@@ -57,7 +56,6 @@ namespace Dot_Slash
 		    {
 			    count = rectangleList.Length;
 			    view = "Back";
-			    rect = rectangleList.Last();
 		    }
 
 		    classifier = new CascadeClassifier(sideClassifier);
@@ -66,8 +64,9 @@ namespace Dot_Slash
 		    {
 			    count = rectangleList.Length; 
 			    view = "Side";
-			    rect = rectangleList.Last();
 		    }
+
+		    rect = getLargest(rectangleList);
 
 		    if (count > 0)
 		    {
@@ -81,6 +80,24 @@ namespace Dot_Slash
 			_advertDetails.Error = true;
 			throw new Exception(track);
 		    }
+		}
+
+		private Rectangle getLargest(Rectangle[] list)
+		{
+			if(list.Length == 0)
+				return new Rectangle();
+			Rectangle largest = list[0];
+			int currentArea = largest.Width * largest.Height;
+			for (int i = 0; i < list.Length; i++)
+			{
+				int area = list[i].Width * list[i].Height;
+				if(area > currentArea)
+				{
+					currentArea = area;
+					largest = list[i];
+				}
+			}
+			return largest;
 		}
 	}
 }

@@ -17,7 +17,7 @@ namespace Dot_Slash
 {
     public class BlurDetector : Filter
     {
-        double blurTreshold = 0.5;
+        double blurTreshold;
 
 	public BlurDetector(double t)
 	{
