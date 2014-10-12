@@ -63,8 +63,8 @@ namespace Dot_Slash
         public void pump(ref AdvertDetails _advertDetails)
         {
             List<ImageBlock> imageBlocks = getImageBlocks(_advertDetails);
-            ImageBlock dominantBlock = getDominantBlock(_advertDetails, imageBlocks);
-            String[] colour = dominantBlock.Colours;
+            ImageBlock dominantBlock = getDominantBlock(_advertDetails, imageBlocks);        
+			String[] colour = dominantBlock.Colours;
             _advertDetails.Colour1 = colour[0];
             _advertDetails.Colour2 = colour[1];
             _advertDetails.Colour3 = colour[2];
@@ -74,23 +74,25 @@ namespace Dot_Slash
         {
             int num_rows = 15;
             int num_cols = 15;
-            int step_x = (int)(_advertDetails.Rect.Height / num_rows);
-            int step_y = (int)(_advertDetails.Rect.Width / num_cols);
+            int step_x = (int)(_advertDetails.Rect.Width / num_cols);
+            int step_y = (int)(_advertDetails.Rect.Height / num_rows);
             int current_x = 0, current_y = 0;
+			int new_height = step_y * num_rows;
+			int new_width = step_x * num_cols;
             List<ImageBlock> imageBlocks = new List<ImageBlock>();
 
             double dots_treshold = 0.15;
             int max_dots = (int)((_advertDetails.Rect.Height * _advertDetails.Rect.Width) * dots_treshold);
 
-            Bitmap edgedImage = drawEdge(_advertDetails.Image.ToBitmap());
-            edgedImage.Save("EdgedImage.jpg");
+            Bitmap edgedImage = drawEdge(_advertDetails.Image.ToBitmap().Clone(_advertDetails.Rect, _advertDetails.Image.ToBitmap().PixelFormat));	//Taking the full image, should just take cropped
+            //edgedImage.Save("EdgedImage.jpg");
 
             while(true)
             {
                 int num_dots = 0;
-                for (int x = current_x; x < current_x + step_x; x++)
+				for (int y = current_y; y < current_y + step_y; y++)
                 {
-                    for (int y = current_y; y < current_y + step_y; y++)
+                    for (int x = current_x; x < current_x + step_x; x++)
                     {
                         if (edgedImage.GetPixel(x, y).ToArgb().Equals(Color.White.ToArgb()))
                             num_dots++;
@@ -101,19 +103,18 @@ namespace Dot_Slash
                         }
                     }
                 }
-                imageBlocks.Add(new ImageBlock(current_x, current_y, step_x, step_y));
+                imageBlocks.Add(new ImageBlock(current_x, current_y, step_y, step_x));
 
             Next:
                 {
-                    Console.WriteLine("current_x:" + current_x + " current_y:" + step_y);
-                    if (current_x + step_x < _advertDetails.Rect.Height)
+                    if (current_x + step_x < new_width)
                     {
                         current_x += step_x;
-                        current_y = 0;
                     }
-                    else if (current_y + step_y < _advertDetails.Rect.Width)
+                    else if (current_y + step_y < new_height)
                     {
                         current_y += step_y;
+						current_x = 0;
                     }
                     else
                     {
@@ -144,21 +145,19 @@ namespace Dot_Slash
                 if (!added)
                     groupedBlocks.Add(new List<ImageBlock>() { block });
             }
-
             groupedBlocks.Sort(
                 delegate(List<ImageBlock> b1, List<ImageBlock> b2)
                 {
                     return b1.Count.CompareTo(b2.Count);
                 }
             );
-
             return groupedBlocks.First().First();
         }
 
 
         private bool containsColour(List<ImageBlock> _list, ImageBlock _block)
         {
-            if (_list.First().Colours[1].Equals(_block.Colours[1]))
+            if (_list.First().Colours[0].Equals(_block.Colours[0]))
                 return true;
             else
                 return false;
@@ -196,9 +195,9 @@ namespace Dot_Slash
 
             foreach (ColourBucket currentBucket in colourBuckets)
             {
-                for (int x = _block.X_coord; x < _block.X_coord + _block.Height; x++)
+                for (int x = _block.X_coord; x < _block.X_coord + _block.Width; x++)
                 {
-                    for (int y = _block.Y_coord; y < _block.Y_coord + _block.Width; y += pixelHop)
+                    for (int y = _block.Y_coord; y < _block.Y_coord + _block.Height; y++)
                     {
                         Color clr = _image.GetPixel(x, y);
 

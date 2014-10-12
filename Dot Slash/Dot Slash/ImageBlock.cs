@@ -48,9 +48,7 @@ namespace Dot_Slash
             }
             set
             {
-                colours[1] = value[1];
-                colours[2] = value[2];
-                colours[3] = value[3];
+				colours = new String[] { value[0], value[1], value[2] };
             }
         }
 
@@ -59,7 +57,7 @@ namespace Dot_Slash
             x_coord = _xCoord;
             y_coord = _yCoord;
             height = _height;
-            width = _height;
+            width = _width;
         }
     }
 }
