@@ -26,8 +26,30 @@ namespace Dot_Slash
         //Bronze		13467442		CD7F32		205	127	50
         //Charcoal		3355443			333333		51	51	51
 
-        public string colourName;
-	    public string hexValue;
+        private string colourName;
+        public string ColourName
+        {
+            get
+            {
+                return colourName;
+            }
+            set
+            {
+                colourName = value;
+            }
+        }
+	    private string hexValue;
+        public string HexValue
+        {
+            get
+            {
+                return hexValue;
+            }
+            set
+            {
+                hexValue = value;
+            }
+        }
 
         public int r;
         public int g;
@@ -39,7 +61,7 @@ namespace Dot_Slash
 
         public ColourBucket(string name, int red, int green, int blue, string hex)
         {
-	    hexValue = hex;
+	        hexValue = hex;
             colourName = name;
             r = red;
             g = green;

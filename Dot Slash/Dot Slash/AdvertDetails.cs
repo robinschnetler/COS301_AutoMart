@@ -247,7 +247,7 @@ namespace Dot_Slash
 		public String retrieveDetails()
 		{
 			String output = "";
-			output += "&car_found = " + carFound + "&view=" + view + "&blur_Value=" + blurValue + "&Coverage_value=" + coverageValue + "&colour1=" + colour1 +"&colour2=" + colour2 + "&colour3=" + colour3 + "&error=" +exception;
+			output += "&car_found = " + carFound + "&view=" + view + "&blur_Value=" + blurValue + "&Coverage_value=" + coverageValue + "&colour1=" + colour1 + "&error=" +exception;
 			return output;
 		}
 
