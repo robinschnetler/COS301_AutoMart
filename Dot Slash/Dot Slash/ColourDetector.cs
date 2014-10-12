@@ -64,10 +64,13 @@ namespace Dot_Slash
         {
             List<ImageBlock> imageBlocks = getImageBlocks(_advertDetails);
             ImageBlock dominantBlock = getDominantBlock(_advertDetails, imageBlocks);        
-			String[] colour = dominantBlock.Colours;
+	    String[] colour = dominantBlock.Colours;
             _advertDetails.Colour1 = colour[0];
             _advertDetails.Colour2 = colour[1];
             _advertDetails.Colour3 = colour[2];
+	    _advertDetails.Hex1 = colour[3];
+	    _advertDetails.Hex2 = colour[4];
+	    _advertDetails.Hex3 = colour[5];
         }
 
         private List<ImageBlock> getImageBlocks(AdvertDetails _advertDetails)
@@ -178,7 +181,6 @@ namespace Dot_Slash
         /// <returns></returns>
         private String[] getBlockColours(Bitmap _image, ImageBlock _block)
         {
-            int pixelHop = 2;
             int hueTolerance = 2;		//Should be in the range of 5 - 10
             int saturationTolerance = 80;	//Should be approx 100
             int valueTolerance = 150;	//Should be in the range of 170 - 200
