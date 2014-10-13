@@ -1,41 +1,46 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections;
 using System.Linq;
 using System.Drawing;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization;
-using System.IO;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using Emgu.CV.UI;
-using Emgu.Util;
 using System.Data.Linq;
 
 namespace Dot_Slash
 {
-	public class CarDetector : Filter
-	{
-		const int numNeighbours = 1;
-		const double scaleFac = 1.05;
-		Size side_minSize = new Size(140, 120), fb_minSize = new Size(150, 125);
-		Size maxSize = new Size(480, 320); //width height
-    	String frontClassifier;
-		String backClassifier;
-		String sideClassifier;
+    /// <summary>
+    /// 
+    /// </summary>
+    public class CarDetector : Filter
+    {
+        private String frontClassifier;
+        private String backClassifier;
+        private String sideClassifier;
+	    private const int numNeighbours = 1;
+	    private const double scaleFac = 1.05;
+	    private Size side_minSize = new Size(140, 120), fb_minSize = new Size(150, 125);
+	    private Size maxSize = new Size(480, 320); //width height
 
-	public CarDetector(String front, String back, String side)
-	{
-		frontClassifier = front;
-		backClassifier = back;
-		sideClassifier = side;
-	}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="front"></param>Filename of the front classifier.
+        /// <param name="back"></param>Filename of the back classifier.
+        /// <param name="side"></param>Filename of the side classifier.
+        public CarDetector(String _front, String _back, String _side)
+        {
+		    frontClassifier = _front;
+		    backClassifier = _back;
+		    sideClassifier = _side;
+	    }
+
         //idea combine the views to get angled view
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="_advertDetails"></param>AdvertDetails object containing the information about the advert image.
         public virtual void pump(ref AdvertDetails _advertDetails) 
         {
-		    string track = "";
 		    int count = 0;
 		    Rectangle rect = new Rectangle();
 		    String view = "Unknown";
@@ -46,9 +51,9 @@ namespace Dot_Slash
 		    Rectangle[] rectangleList = classifier.DetectMultiScale(image, scaleFac, numNeighbours, fb_minSize, maxSize);
 		    if(rectangleList.Length > count)
 		    {
-			count = rectangleList.Length;
-			view = "Front";
-			rect = rectangleList.Last();
+			    count = rectangleList.Length;
+			    view = "Front";
+			    rect = rectangleList.Last();
 		    }
 
 		    classifier = new CascadeClassifier(backClassifier);
@@ -71,16 +76,16 @@ namespace Dot_Slash
 
 		    if (count > 0)
 		    {
-			_advertDetails.Rect = rect;
-			_advertDetails.CarFound = true;
-			_advertDetails.View = view;
+			    _advertDetails.Rect = rect;
+			    _advertDetails.CarFound = true;
+			    _advertDetails.View = view;
 		    }
 		    else
 		    { 
-			_advertDetails.CarFound = false;
-			_advertDetails.Error = true;
-			throw new Exception(track);
+			    _advertDetails.CarFound = false;
+                _advertDetails.Error = "No car found.";
+                throw new Exception("No car found.");
 		    }
-		}
+	    }
 	}
 }

@@ -14,8 +14,8 @@ namespace Dot_Slash
         //White			16777215		FFFFFF		255	255	255
         //Silver		12632256		C0C0C0		192	192	192
         //Grey			8421504			808080		128	128	128
-        //Black			0			000000		0	0	0
-        //Blue			255			0000FF		0	0	255
+        //Black			0			    000000		0	0	0
+        //Blue			255			    0000FF		0	0	255
         //Turquoise		4251856			40E0D0		64	224	208
         //Green			32768			008000		0	128	0
         //Yellow		16776960		FFFF00		255	255	0

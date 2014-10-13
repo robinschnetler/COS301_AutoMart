@@ -7,10 +7,16 @@ using Emgu.CV.Structure;
 
 namespace Dot_Slash
 {
+    /// <summary>
+    /// Class used to detemine the colour of the car in the image.
+    /// </summary>
     public class ColourDetector : Filter
     {
         List<ColourBucket> colourBuckets;
 
+        /// <summary>
+        /// Initilises a new instance of the ColourDetector class.
+        /// </summary>
         public ColourDetector()
         {
             createColourBuckets();
@@ -40,13 +46,26 @@ namespace Dot_Slash
             colourBuckets.Add(new ColourBucket("Charcoal", 51, 51, 51, "333333"));
         }
 
+        /// <summary>
+        /// Metod calculates the colour of the car and stores it in the AdvertDetails object.
+        /// </summary>
+        /// <param name="_advertDetails"></param>AdvertDetails object containing the information about the advert image.
         public void pump(ref AdvertDetails _advertDetails)
         {
             List<ImageBlock> imageBlocks = getImageBlocks(_advertDetails.Rect, _advertDetails.Image.ToBitmap());
-            int dominantBucketIndex = getDominantColourBucketIndex(_advertDetails.Image.ToBitmap(), imageBlocks);        
+            int dominantBucketIndex = getCarColourIndex(_advertDetails.Image.ToBitmap(), imageBlocks);        
             _advertDetails.Colour = colourBuckets[dominantBucketIndex].ColourName;
         }
 
+        /// <summary>
+        /// The method converts the image to a edged images. The edged image is then divided into block. Each block is 
+        /// put through a test to determine if the block is situated on the edge or on the solid surface. As the edges are
+        /// represented by white pixels, if the number of white pixels does not exceeds the maximum treshold of allowed 
+        /// pixels the block is added to the list.
+        /// </summary>
+        /// <param name="_rect"></param>The rectangle specifying the location of the car in the image.
+        /// <param name="_image"></param>The advert image.
+        /// <returns>List containing ImageBlock objects.</returns>
         private List<ImageBlock> getImageBlocks(Rectangle _rect, Bitmap _image)
         {
             int num_rows = 10;
@@ -62,10 +81,9 @@ namespace Dot_Slash
             int max_dots = (int)((_rect.Height * _rect.Width) * dots_treshold);
 
             Bitmap edgedImage = drawEdge(_image.Clone(_rect, _image.PixelFormat));
-            edgedImage.Save("edged.jpg");
+            //edgedImage.Save("edged.jpg");
             Bitmap gridedImage = gridImage(new Bitmap(edgedImage), _rect.Width, _rect.Height, num_cols, num_rows, step_x, step_y);
-            gridedImage.Save("grided.jpg");
-
+            //gridedImage.Save("grided.jpg");
 
             while(true)
             {
@@ -104,13 +122,20 @@ namespace Dot_Slash
             }
         }
 
-        private int getDominantColourBucketIndex(Bitmap _image, List<ImageBlock> _imageBlocks)
+        /// <summary>
+        /// The method loops through the list of ImageBlocks and calculates the colour of each block. 
+        /// The most occuring colour is the colour of the car.
+        /// </summary>
+        /// <param name="_image"></param>Image containg the car.
+        /// <param name="_imageBlocks"></param>List of ImageBlock objects.
+        /// <returns>Integer index representing the ColourBucket.</returns>
+        private int getCarColourIndex(Bitmap _image, List<ImageBlock> _imageBlocks)
         {
             int[] colourCounter = new int[16];
 
             foreach (ImageBlock block in _imageBlocks)
             {
-                colourCounter[getBlockColourBucketIndex(_image, block)]++;
+                colourCounter[getBlockColourIndex(_image, block)]++;
             }
 
             int max = colourCounter[0];
@@ -130,22 +155,22 @@ namespace Dot_Slash
         }
 
         /// <summary>
-        /// The function returns the main colour of the the specified block.
+        /// The method loops through the pixel in the block and gets the pixel colour. The most occuring colour index
+        /// is calculated and returned.
         /// </summary>
-        /// <param name="_image"></param>
-        /// <param name="_block"></param>
-        /// <returns></returns>
-        private int getBlockColourBucketIndex(Bitmap _image, ImageBlock _block)
+        /// <param name="_image"></param>Image of the car.
+        /// <param name="_block"></param>ImageBlock containing the coordinates and the size of the block.
+        /// <returns>Integer index representing the most dominant colour bucket in the block.</returns>
+        private int getBlockColourIndex(Bitmap _image, ImageBlock _block)
         {
             int hueTolerance = 2;		//Should be in the range of 5 - 10
             int saturationTolerance = 80;	//Should be approx 100
             int valueTolerance = 150;	//Should be in the range of 170 - 200
-
-            int counter = 0;
+            
             int numColourBuckets = colourBuckets.Count;
 
             int[] colourCounter = new int[numColourBuckets];
-
+            int counter = 0;
 
             foreach (ColourBucket currentBucket in colourBuckets)
             {
@@ -160,15 +185,16 @@ namespace Dot_Slash
                         double bin_saturation = currentBucket.S;
                         double bin_value = currentBucket.V;
                         convertRGBtoHSV(clr, out p_hue, out p_saturation, out p_value);
-                        if (inRange(p_hue, bin_hue, hueTolerance))						//Check if the hue is in range
+                        if (inRange(p_hue, bin_hue, hueTolerance))						    //Check if the hue is in range
                             if (inRange(p_saturation, bin_saturation, saturationTolerance))	//Check if the saturation is in range
-                                if (inRange(p_value, bin_value, valueTolerance))		//Check if the value is in range
+                                if (inRange(p_value, bin_value, valueTolerance))		    //Check if the value is in range
                                     colourCounter[counter] = colourCounter[counter] + 1;
                     }
                 }
                 counter++;
             }
 
+            //find the most occuring colour in the block
             int max = colourCounter[0];
             int index = 0;
             for (int i = 1; i < colourCounter.Length; i++)
@@ -179,17 +205,28 @@ namespace Dot_Slash
                     max = colourCounter[i];
                 }
             }
-
             return index;
         }
 
-        private Bitmap drawEdge(Bitmap img)
+        /// <summary>
+        /// Returns the edged image.
+        /// </summary>
+        /// <param name="_image"></param>Original image to be edged.
+        /// <returns>Edged Bitmap image.</returns>
+        private Bitmap drawEdge(Bitmap _image)
         {
-            Image<Gray, Byte> image = new Image<Gray, Byte>(img);
-            image = image.Canny(39, 60);
-            return image.ToBitmap();
+            Image<Gray, Byte> edgesImage = new Image<Gray, Byte>(_image);
+            edgesImage = edgesImage.Canny(39, 60);
+            return edgesImage.ToBitmap();
         }
 
+        /// <summary>
+        /// Method checks if the specific colour value is in range.
+        /// </summary>
+        /// <param name="pixelValue"></param>Image pixel colour value.
+        /// <param name="binValue"></param>ColourBucket colour value.
+        /// <param name="range"></param>Allowed range.
+        /// <returns>Boolean value stating if the pixel colour is with in the range of the colourBucket.</returns>
         private bool inRange(double pixelValue, double binValue, int range)
         {
             if (pixelValue > (binValue + range) || pixelValue < (binValue - range))
@@ -247,7 +284,7 @@ namespace Dot_Slash
                 return Color.FromArgb(255, v, p, q);
         }
 
-        public Bitmap gridImage(Bitmap image, int width, int height, int cols, int rows, int col_step, int row_step)
+        private Bitmap gridImage(Bitmap image, int width, int height, int cols, int rows, int col_step, int row_step)
         {
             int current = col_step;
             using (Graphics graphics = Graphics.FromImage(image))
