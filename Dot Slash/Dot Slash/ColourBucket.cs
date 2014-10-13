@@ -3,6 +3,9 @@ using System.Drawing;
 
 namespace Dot_Slash
 {
+    /// <summary>
+    /// Class used to represent different colours and their values.
+    /// </summary>
     class ColourBucket
     {
         //				   Colour Bins
@@ -27,18 +30,15 @@ namespace Dot_Slash
         //Charcoal		3355443			333333		51	51	51
 
         private string colourName;
-        public string ColourName
-        {
-            get
-            {
-                return colourName;
-            }
-            set
-            {
-                colourName = value;
-            }
-        }
+        /// <summary>
+        /// Returns the colour name.
+        /// </summary>
+        public string ColourName;
+
 	    private string hexValue;
+        /// <summary>
+        /// Returns the hexadecimal value of the colour.
+        /// </summary>
         public string HexValue
         {
             get
@@ -51,28 +51,126 @@ namespace Dot_Slash
             }
         }
 
-        public int r;
-        public int g;
-        public int b;
+        private int r;
+        /// <summary>
+        /// Returns the R value of the colour.
+        /// </summary>
+        public int R
+        {
+            get
+            {
+                return r;
+            }
+            set
+            {
+                r = value;
+            }
+        }
 
-        public double h;
-        public double s;
-        public double v;
+        private int g;
+        /// <summary>
+        /// Returns the G value of the colour.
+        /// </summary>
+        public  int G
+        {
+            get
+            {
+                return g;
+            }
+            set
+            {
+                g = value;
+            }
+        }
 
+        private int b;
+        /// <summary>
+        /// Returns the B value of the colour.
+        /// </summary>
+        public int B
+        {
+            get
+            {
+                return b;
+            }
+            set
+            {
+                b = value;
+            }
+        }
+
+        private double h;
+        /// <summary>
+        /// Returns the hue value of the colour.
+        /// </summary>
+        public double H
+        {
+            get
+            {
+                return h;
+            }
+            set
+            {
+                h = value;
+            }
+        }
+
+        private double s;
+        /// <summary>
+        /// Returns the saturation value of the colour.
+        /// </summary>
+        public double S
+        {
+            get
+            {
+                return s;
+            }
+            set
+            {
+                s = value;
+            }
+        }
+
+        private double v;
+        /// <summary>
+        /// Returns the value of the colour.
+        /// </summary>
+        public double V
+        {
+            get
+            {
+                return v;
+            }
+            set
+            {
+                v = value;
+            }
+        }
+
+        /// <summary>
+        /// Initialises a new instance of the ColourBucket class with specified colour name, RGB and hexadeicmal values.
+        /// </summary>
+        /// <param name="name"></param>Colour name.
+        /// <param name="red"></param>R value of the colour.
+        /// <param name="green"></param>G value of the colour.
+        /// <param name="blue"></param>B value of the colour.
+        /// <param name="hex"></param>Hexadecimal value of the colour.
         public ColourBucket(string name, int red, int green, int blue, string hex)
         {
-	        hexValue = hex;
             colourName = name;
             r = red;
             g = green;
             b = blue;
+            hexValue = hex;
 
-            int max = Math.Max(r, Math.Max(g, b));
-            int min = Math.Min(r, Math.Min(g, b));
+            //calculate the HSV values of the colour
+            double max = Math.Max(r / 255d, Math.Max(g / 255d, b / 255d));
+            double min = Math.Min(r / 255d, Math.Min(g / 255d, b / 255d));
+            double difference = max - min;
 
             h = Color.FromArgb(r, g, b).GetHue();
-            s = (max == 0) ? 0 : 1d - (1d * min / max);
-            v = max / 255d;
+            s = (max == 0) ? 0 : ((difference / max)*100);
+            v = max*100;
         }
     }
 }

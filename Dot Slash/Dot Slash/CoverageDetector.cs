@@ -1,26 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Linq;
 using System.Drawing;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization;
-using System.IO;
-using Emgu.CV;
-using Emgu.CV.Structure;
-using Emgu.CV.UI;
-using Emgu.Util;
 
 namespace Dot_Slash
 {
+    /// <summary>
+    /// Class used to calculate the car coverage of the image.
+    /// </summary>
     public class CoverageDetector : Filter
     {
+        /// <summary>
+        /// Calculates the area of the image and the percentage that the car covers.
+        /// </summary>
+        /// <param name="_advertDetails"></param>AdvertDetails object contaning information about the image.
         public void pump(ref AdvertDetails _advertDetails)
         {
+            //check if the car exists
 			if(!_advertDetails.CarFound)
 				throw new Exception("Cannot calculate coverage if car not found");
+
 			float totalArea = _advertDetails.Image.Width * _advertDetails.Image.Height;
 			float area = _advertDetails.Rect.Width * _advertDetails.Rect.Height;
 			float coverage = area/totalArea*100;
@@ -28,6 +25,11 @@ namespace Dot_Slash
 			_advertDetails.Rating = calculateCoverageRating(coverage);
         }
 
+        /// <summary>
+        /// Calculates the cars coverage rating.
+        /// </summary>
+        /// <param name="_coverage"></param>The cars coverage of the image in precentage.
+        /// <returns>Returns integer rating of the coverage.</returns>
 		private int calculateCoverageRating(float _coverage)
 		{
 			if (_coverage >= 70.0)

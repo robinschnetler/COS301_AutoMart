@@ -1,47 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections;
 using System.Linq;
 using System.Drawing;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization;
-using System.IO;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using Emgu.CV.UI;
-using Emgu.Util;
-
-//				   Colour Bins
-// Colour		INT			HEX		R	G	B
-//==================================================================================
-//White			16777215		FFFFFF		255	255	255
-//Silver		12632256		C0C0C0		192	192	192
-//Grey			8421504			808080		128	128	128
-//Black			0			000000		0	0	0
-//Blue			255			0000FF		0	0	255
-//Turquoise		4251856			40E0D0		64	224	208
-//Green			32768			008000		0	128	0
-//Yellow		16776960		FFFF00		255	255	0
-//Gold			16766720		FFD700		255	215	0
-//Orange		16753920		FFA500		255	165	0
-//Brown			4796700			49311C		73	49	28
-//Red			16711680		FF0000		255	0	0
-//Maroon		8388608			800000		128	0	0
-//Violet		15631086		EE82EE		238	130	238
-//Beige			16119260		F5F5DC		245	245	220
-//Bronze		13467442		CD7F32		205	127	50
-//Charcoal		3355443			333333		51	51	51
 
 namespace Dot_Slash
 {
     public class ColourDetector : Filter
     {
         List<ColourBucket> colourBuckets;
+
         public ColourDetector()
         {
-            colourBuckets  = new List<ColourBucket>();
+            createColourBuckets();
+        }
+
+        /// <summary>
+        /// Method creates ColourBucket objects representing possible colours that represent the car colour in the image.
+        /// </summary>
+        private void createColourBuckets()
+        {
+            colourBuckets = new List<ColourBucket>();
             colourBuckets.Add(new ColourBucket("White", 255, 255, 255, "FFFFFF"));
             colourBuckets.Add(new ColourBucket("Silver", 192, 192, 192, "C0C0C0"));
             colourBuckets.Add(new ColourBucket("Grey", 128, 128, 128, "808080"));
@@ -49,40 +29,44 @@ namespace Dot_Slash
             colourBuckets.Add(new ColourBucket("Blue", 0, 0, 255, "0000FF"));
             colourBuckets.Add(new ColourBucket("Turquoise", 64, 224, 208, "40E0D0"));
             colourBuckets.Add(new ColourBucket("Green", 0, 128, 0, "008000"));
-	        colourBuckets.Add(new ColourBucket("Yellow", 255, 255, 0, "FFFF00"));
-	        colourBuckets.Add(new ColourBucket("Gold", 255, 215, 0, "FFD700"));
-	        colourBuckets.Add(new ColourBucket("Orange", 255, 165, 0, "FFA500"));
-	        colourBuckets.Add(new ColourBucket("Brown", 73, 49, 28, "49311C"));
-	        colourBuckets.Add(new ColourBucket("Red", 255, 0, 0, "FF0000"));
-	        colourBuckets.Add(new ColourBucket("Maroon", 128, 0, 0, "800000"));
-	        colourBuckets.Add(new ColourBucket("Violet", 238, 130, 238, "EE82EE"));
-	        colourBuckets.Add(new ColourBucket("Bronze", 205, 127, 50, "CD7F32"));
-	        colourBuckets.Add(new ColourBucket("Charcoal", 51, 51, 51, "333333"));
+            colourBuckets.Add(new ColourBucket("Yellow", 255, 255, 0, "FFFF00"));
+            colourBuckets.Add(new ColourBucket("Gold", 255, 215, 0, "FFD700"));
+            colourBuckets.Add(new ColourBucket("Orange", 255, 165, 0, "FFA500"));
+            colourBuckets.Add(new ColourBucket("Brown", 73, 49, 28, "49311C"));
+            colourBuckets.Add(new ColourBucket("Red", 255, 0, 0, "FF0000"));
+            colourBuckets.Add(new ColourBucket("Maroon", 128, 0, 0, "800000"));
+            colourBuckets.Add(new ColourBucket("Violet", 238, 130, 238, "EE82EE"));
+            colourBuckets.Add(new ColourBucket("Bronze", 205, 127, 50, "CD7F32"));
+            colourBuckets.Add(new ColourBucket("Charcoal", 51, 51, 51, "333333"));
         }
 
         public void pump(ref AdvertDetails _advertDetails)
         {
-            List<ImageBlock> imageBlocks = getImageBlocks(_advertDetails);
-            int dominantBucketIndex = getDominantColourBucketIndex(_advertDetails, imageBlocks);        
-            _advertDetails.Colour1 = colourBuckets[dominantBucketIndex].ColourName;
+            List<ImageBlock> imageBlocks = getImageBlocks(_advertDetails.Rect, _advertDetails.Image.ToBitmap());
+            int dominantBucketIndex = getDominantColourBucketIndex(_advertDetails.Image.ToBitmap(), imageBlocks);        
+            _advertDetails.Colour = colourBuckets[dominantBucketIndex].ColourName;
         }
 
-        private List<ImageBlock> getImageBlocks(AdvertDetails _advertDetails)
+        private List<ImageBlock> getImageBlocks(Rectangle _rect, Bitmap _image)
         {
-            int num_rows = 20;
-            int num_cols = 20;
-            int step_x = (int)(_advertDetails.Rect.Width / num_cols);
-            int step_y = (int)(_advertDetails.Rect.Height / num_rows);
+            int num_rows = 10;
+            int num_cols = 10;
+            int step_x = (int)(_rect.Width / num_cols);
+            int step_y = (int)(_rect.Height / num_rows);
             int current_x = 0, current_y = 0;
 			int new_height = step_y * num_rows;
 			int new_width = step_x * num_cols;
             List<ImageBlock> imageBlocks = new List<ImageBlock>();
 
-            double dots_treshold = 0.10;
-            int max_dots = (int)((_advertDetails.Rect.Height * _advertDetails.Rect.Width) * dots_treshold);
+            double dots_treshold = 0.05;
+            int max_dots = (int)((_rect.Height * _rect.Width) * dots_treshold);
 
-            Bitmap edgedImage = drawEdge(_advertDetails.Image.ToBitmap().Clone(_advertDetails.Rect, _advertDetails.Image.ToBitmap().PixelFormat));	//Taking the full image, should just take cropped
+            Bitmap edgedImage = drawEdge(_image.Clone(_rect, _image.PixelFormat));
             edgedImage.Save("edged.jpg");
+            Bitmap gridedImage = gridImage(new Bitmap(edgedImage), _rect.Width, _rect.Height, num_cols, num_rows, step_x, step_y);
+            gridedImage.Save("grided.jpg");
+
+
             while(true)
             {
                 int num_dots = 0;
@@ -120,13 +104,13 @@ namespace Dot_Slash
             }
         }
 
-        private int getDominantColourBucketIndex(AdvertDetails _advertDetails, List<ImageBlock> _imageBlocks)
+        private int getDominantColourBucketIndex(Bitmap _image, List<ImageBlock> _imageBlocks)
         {
             int[] colourCounter = new int[16];
 
             foreach (ImageBlock block in _imageBlocks)
             {
-                colourCounter[getBlockColourBucketIndex(_advertDetails.Image.ToBitmap(), block)]++;
+                colourCounter[getBlockColourBucketIndex(_image, block)]++;
             }
 
             int max = colourCounter[0];
@@ -146,7 +130,7 @@ namespace Dot_Slash
         }
 
         /// <summary>
-        /// The function returns the three main colours of the the specified block.
+        /// The function returns the main colour of the the specified block.
         /// </summary>
         /// <param name="_image"></param>
         /// <param name="_block"></param>
@@ -162,10 +146,6 @@ namespace Dot_Slash
 
             int[] colourCounter = new int[numColourBuckets];
 
-            for (int i = 0; i < numColourBuckets; i++)
-            {
-                colourCounter[i] = 0;
-            }
 
             foreach (ColourBucket currentBucket in colourBuckets)
             {
@@ -176,22 +156,22 @@ namespace Dot_Slash
                         Color clr = _image.GetPixel(x, y);
 
                         double p_hue = 0.0, p_saturation = 0.0, p_value = 0.0;
-                        double bin_hue = currentBucket.h;
-                        double bin_saturation = currentBucket.s;
-                        double bin_value = currentBucket.v;
+                        double bin_hue = currentBucket.H;
+                        double bin_saturation = currentBucket.S;
+                        double bin_value = currentBucket.V;
                         convertRGBtoHSV(clr, out p_hue, out p_saturation, out p_value);
                         if (inRange(p_hue, bin_hue, hueTolerance))						//Check if the hue is in range
-                            if (inRange(p_saturation * 255, bin_saturation * 255, saturationTolerance))	//Check if the saturation is in range
-                                if (inRange(p_value * 255, bin_value * 255, valueTolerance))		//Check if the value is in range
-                                    colourCounter[counter]++;// = colourCounter[counter] + 1;
+                            if (inRange(p_saturation, bin_saturation, saturationTolerance))	//Check if the saturation is in range
+                                if (inRange(p_value, bin_value, valueTolerance))		//Check if the value is in range
+                                    colourCounter[counter] = colourCounter[counter] + 1;
                     }
                 }
                 counter++;
             }
 
-            int max = -99999;
+            int max = colourCounter[0];
             int index = 0;
-            for (int i = 0; i < colourCounter.Length; i++)
+            for (int i = 1; i < colourCounter.Length; i++)
             {
                 if (colourCounter[i] >= max)
                 {
@@ -201,12 +181,6 @@ namespace Dot_Slash
             }
 
             return index;
-
-            //ColourBucket dominantColour = (ColourBucket)colourBuckets[index1];
-            //String firstMostCommon = dominantColour.colourName;
-            //String hex1 = dominantColour.hexValue;
-
-            //return (new String[] { firstMostCommon, hex1 });
         }
 
         private Bitmap drawEdge(Bitmap img)
@@ -232,12 +206,13 @@ namespace Dot_Slash
         /// <param name="value"> An out parameter that returns the Value of the colour in range of 0 - 1</param>
         private void convertRGBtoHSV(Color colour, out double hue, out double saturation, out double value)
         {
-            int max = Math.Max(colour.R, Math.Max(colour.G, colour.B));
-            int min = Math.Min(colour.R, Math.Min(colour.G, colour.B));
+            double max = Math.Max(colour.R / 255d, Math.Max(colour.G / 255d, colour.B / 255d));
+            double min = Math.Min(colour.R / 255d, Math.Min(colour.G / 255d, colour.B / 255d));
+            double difference = max - min;
 
             hue = colour.GetHue();
-            saturation = (max == 0) ? 0 : 1d - (1d * min / max);
-            value = max / 255d;
+            saturation = (max == 0) ? 0 : ((difference / max)*100);
+            value = max*100;
         }
 
         /// <summary>
@@ -270,6 +245,29 @@ namespace Dot_Slash
                 return Color.FromArgb(255, t, p, v);
             else
                 return Color.FromArgb(255, v, p, q);
+        }
+
+        public Bitmap gridImage(Bitmap image, int width, int height, int cols, int rows, int col_step, int row_step)
+        {
+            int current = col_step;
+            using (Graphics graphics = Graphics.FromImage(image))
+            {
+                Pen blackPen = new Pen(Color.LightBlue, 1);
+                for (int i = 0; i < cols; i++)
+                {
+                    graphics.DrawLine(blackPen, current, 0, current, height);
+                    current += col_step;
+                }
+
+                current = row_step;
+                for (int i = 0; i < rows; i++)
+                {
+                    graphics.DrawLine(blackPen, 0, current, width, current);
+                    current += row_step;
+                }
+                graphics.Save();
+                return image;
+            }
         }
     }
 }
