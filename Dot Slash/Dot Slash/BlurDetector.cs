@@ -24,6 +24,63 @@ namespace Dot_Slash
 		blurTreshold = t;
 	}
 
+	public ArrayList getEdgedPixels(Image<Gray, Byte> image)
+	{
+		image = image.SmoothGaussian(3);
+		image = image.Canny(350,20);
+		Bitmap b = image.ToBitmap();
+		ArrayList coordinates = new ArrayList();
+		for (int i = 0; i < image.Width; i++)
+		{
+			for (int j = 0; j < image.Height; j++)
+			{
+				if(b.GetPixel(i, j).R != 0)
+					coordinates.Add(new Coordinate(i, j));
+			}
+		}
+		return coordinates;
+	}
+
+	private class Coordinate
+	{
+		int x, y;
+		public Coordinate(int X, int Y)
+		{
+			x = X;
+			y = Y;
+		}
+		public int getX()
+		{
+			return x;
+		}
+		public int getY()
+		{
+			return y;
+		}
+	}
+
+	public float calculateBlur(Bitmap b, ArrayList coordinates)
+	{
+		float sum = 0;
+		int rad = 56;
+		int totalCoordinates = coordinates.Count;
+		for (int i = 0; i < totalCoordinates; i++)
+		{
+			Coordinate c = (Coordinate)coordinates[i];
+			int currentPixel = b.GetPixel(c.getX(), c.getY()).R;
+			if(c.getX()<b.Width-1 && c.getY()<b.Height-1)
+			{ 
+				if (Math.Abs(currentPixel - b.GetPixel(c.getX()+1, c.getY()).R) > rad
+				|| Math.Abs(currentPixel - b.GetPixel(c.getX(), c.getY()+1).R) > rad)
+				{
+					sum++;
+				}
+			}
+		}
+		float output =  sum / totalCoordinates * 100;
+		return output;
+	}
+
         public void pump(ref AdvertDetails _advertDetails)
         {
 		Image<Gray, Byte> image;
@@ -34,27 +91,24 @@ namespace Dot_Slash
 			image = _advertDetails.Image.GetSubRect(_advertDetails.Rect).Convert<Gray, byte>();
 			image.Resize(480, 320, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
 		}
+		ArrayList coordinates = getEdgedPixels(image);
 		Image<Gray, float> con = image.Laplace(1);
-		Bitmap b = image.ToBitmap();
-		float sum = 0;
-		int rad = 56;
-		for (int j = 0; j < con.Width - 1; j++)
-		{
-
-		for (int k = 0; k < con.Height - 1; k++)
-		{
-			if (Math.Abs(b.GetPixel(j, k).R - b.GetPixel(j + 1, k).R) > rad || Math.Abs(b.GetPixel(j, k).R - b.GetPixel(j, k + 1).R) > rad)
-			{
-				sum++;
-			}
-		}
-		}
-		_advertDetails.BlurValue = sum / (b.Width * b.Height) * 100;
+		Bitmap b = con.ToBitmap();
+		
+		float blurValue = calculateBlur(b, coordinates);
+		_advertDetails.BlurValue = blurValue;
 		if(_advertDetails.BlurValue < blurTreshold)
 		{
 			_advertDetails.Blurry = true;
 			_advertDetails.Error = true;
 			throw new Exception("Image is Blurry");
+		}
+		else
+		{
+			if (blurValue < blurTreshold + 10)
+				_advertDetails.Rating += 1;
+			else
+				_advertDetails.Rating += 2;
 		}
         }
     }
