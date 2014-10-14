@@ -48,7 +48,7 @@ namespace Dot_Slash
             }
             set
             {
-		colours = new String[] { value[0], value[1], value[2], value[3], value[4], value[5] };
+                colour = value;
             }
         }
 
@@ -62,7 +62,6 @@ namespace Dot_Slash
             set
             {
                 hex = value;
->>>>>>> 0bab65f5b2422ef1568b37f3bf9eaacfc0dc8526
             }
         }
 
