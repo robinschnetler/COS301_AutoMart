@@ -39,16 +39,30 @@ namespace Dot_Slash
                 return height;
             }
         }
-        private String[] colours;
-        public String[] Colours
+        private String colour;
+        public String Colour
         {
             get
             {
-                return colours;
+                return colour;
             }
             set
             {
 		colours = new String[] { value[0], value[1], value[2], value[3], value[4], value[5] };
+            }
+        }
+
+        private String hex;
+        public String Hex
+        {
+            get 
+            {
+                return hex;
+            }
+            set
+            {
+                hex = value;
+>>>>>>> 0bab65f5b2422ef1568b37f3bf9eaacfc0dc8526
             }
         }
 

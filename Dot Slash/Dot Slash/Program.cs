@@ -36,6 +36,7 @@ namespace Dot_Slash
 			float f = bd.calculateBlur(image.ToBitmap(), a);
 			Console.WriteLine("value: " + f);
 			Console.ReadLine(); 
+
 		}
 	}
 }
