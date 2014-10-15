@@ -78,11 +78,11 @@ namespace Dot_Slash
             }
         }
 
-        private float blurValue;
+        private double blurValue;
         /// <summary>
         /// Returns the advert image blur value.
         /// </summary>
-        public float BlurValue
+        public double BlurValue
         {
             get
             {
@@ -94,11 +94,11 @@ namespace Dot_Slash
             }
         }
 
-		private float coverageValue;
+		private double coverageValue;
         /// <summary>
         /// Returns the coverage value that represents the cars coverage in the advert image.
         /// </summary>
-		public float CoverageValue
+		public double CoverageValue
 		{
 		    get
 		    {
@@ -157,6 +157,38 @@ namespace Dot_Slash
 			    view = value;
 		    }
 		}
+
+        private int blurRating;
+        /// <summary>
+        /// Returns the blur rating value.
+        /// </summary>
+        public int BlurRating
+        {
+            get
+            {
+                return blurRating;
+            }
+            set
+            {
+                blurRating = value;
+            }
+        }
+
+        private int coverageRating;
+        /// <summary>
+        /// Returns the coverage rating value.
+        /// </summary>
+        public int CoverageRating
+        {
+            get
+            {
+                return coverageRating;
+            }
+            set
+            {
+                coverageRating = value;
+            }
+        }
 
 		private int rating;
         /// <summary>

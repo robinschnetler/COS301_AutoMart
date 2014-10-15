@@ -9,7 +9,7 @@ namespace Dot_Slash
     /// Stores a set of four integers that represent the location and the size of the image block as well as two strings
     /// that represent the name and the hexadecimal value of the most dominant colour in the block.
     /// </summary>
-    class ImageBlock
+    public class ImageBlock
     {
         /// <summary>
         /// Returns the upper-left x-coordinate of the image block.

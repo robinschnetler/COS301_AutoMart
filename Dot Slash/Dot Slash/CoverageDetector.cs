@@ -15,14 +15,25 @@ namespace Dot_Slash
         public void pump(ref AdvertDetails _advertDetails)
         {
             //check if the car exists
-			if(!_advertDetails.CarFound)
-				throw new Exception("Cannot calculate coverage if car not found");
+            if (!_advertDetails.CarFound)
+            {
+                _advertDetails.Error = "Cannot calculate coverage if car not found";
+                return;
+            }
+			_advertDetails.CoverageValue = calculateCoverageValue(_advertDetails.Image.Width, _advertDetails.Image.Height, _advertDetails.Rect.Height, _advertDetails.Rect.Height);
+			_advertDetails.CoverageRating = calculateCoverageRating(_advertDetails.CoverageValue);
+        }
 
-			float totalArea = _advertDetails.Image.Width * _advertDetails.Image.Height;
-			float area = _advertDetails.Rect.Width * _advertDetails.Rect.Height;
-			float coverage = area/totalArea*100;
-			_advertDetails.CoverageValue = coverage;
-			_advertDetails.Rating = calculateCoverageRating(coverage);
+        /// <summary>
+        /// Calculates the percentage that the car covers in the image.
+        /// </summary>
+        /// <param name="_imageWidth"></param>Integer representing the width of the image.
+        /// <param name="_imageHeight"></param>Integer representinh the height of the value.
+        /// <param name="_carRect"></param>Rectangle representing the location and the size of the area covered by the car.
+        /// <returns>Float value representing the percentage of the area covered by the car.</returns>
+        public double calculateCoverageValue(int _imageWidth, int _imageHeight, int _carWidth, int _carHeight)
+        {
+            return (_carWidth * _carHeight) / (_imageWidth * _imageWidth) * 100;
         }
 
         /// <summary>
@@ -30,7 +41,7 @@ namespace Dot_Slash
         /// </summary>
         /// <param name="_coverage"></param>The cars coverage of the image in precentage.
         /// <returns>Returns integer rating of the coverage.</returns>
-		private int calculateCoverageRating(float _coverage)
+		public int calculateCoverageRating(double _coverage)
 		{
 			if (_coverage >= 70.0)
 				return 2;

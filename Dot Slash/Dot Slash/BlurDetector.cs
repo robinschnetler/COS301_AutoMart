@@ -52,9 +52,8 @@ namespace Dot_Slash
 		_advertDetails.BlurValue = sum / (b.Width * b.Height) * 100;
 		if(_advertDetails.BlurValue < blurTreshold)
 		{
-			_advertDetails.Blurry = true;
-			_advertDetails.Error = true;
-			throw new Exception("Image is Blurry");
+			_advertDetails.Error = "Image is Blurry";
+            throw new Exception("Image is Blurry");
 		}
         }
     }
