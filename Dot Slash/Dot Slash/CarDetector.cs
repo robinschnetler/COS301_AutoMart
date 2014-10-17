@@ -51,14 +51,8 @@ namespace Dot_Slash
 		    Rectangle[] rectangleList = classifier.DetectMultiScale(image, scaleFac, numNeighbours, fb_minSize, maxSize);
 		    if(rectangleList.Length > count)
 		    {
-<<<<<<< HEAD
 			    count = rectangleList.Length;
 			    view = "Front";
-			    rect = rectangleList.Last();
-=======
-			count = rectangleList.Length;
-			view = "Front";
->>>>>>> 4fd5ac36a62a6211f1363f10c588f715b33fd367
 		    }
 
 		    classifier = new CascadeClassifier(backClassifier);
@@ -91,9 +85,6 @@ namespace Dot_Slash
                 _advertDetails.Error = "No car found.";
                 throw new Exception("No car found.");
 		    }
-<<<<<<< HEAD
-	    }
-=======
 		}
 
 		private Rectangle getLargest(Rectangle[] list)
@@ -113,6 +104,5 @@ namespace Dot_Slash
 			}
 			return largest;
 		}
->>>>>>> 4fd5ac36a62a6211f1363f10c588f715b33fd367
 	}
 }

@@ -22,20 +22,20 @@ namespace Dot_Slash
 		[STAThread] //allows for main to open dialogs(something to do with threads)
 		static void Main(string[] args)
 		{
-			//Byte[] image = File.ReadAllBytes("pipe/image.jpg");
-			//AdvertDetails advertDetails = new AdvertDetails(image);
-			//Filter[] filters = { new CarDetector("classifiers/frontClassifier.xml", "classifiers/backClassifier.xml", "classifiers/sideClassifier.xml"), new BlurDetector(0.3), new ColourDetector(), new CoverageDetector() };
-			//List<Filter> filterList = new List<Filter>(filters);
-			//Pipe pipe = new Pipe(filterList, advertDetails);
-			//advertDetails = pipe.flow();
-			//Console.WriteLine(advertDetails.retrieveDetails());
-			//String input = Console.ReadLine();
-			BlurDetector bd = new BlurDetector(0.5);
+            Byte[] image = File.ReadAllBytes("pipe/image11.jpg");
+            AdvertDetails advertDetails = new AdvertDetails(image);
+            Filter[] filters = { new CarDetector("classifiers/frontClassifier.xml", "classifiers/backClassifier.xml", "classifiers/sideClassifier.xml"), new BlurDetector(0.3), new ColourDetector(), new CoverageDetector() };
+            List<Filter> filterList = new List<Filter>(filters);
+            Pipe pipe = new Pipe(filterList, advertDetails);
+            advertDetails = pipe.flow();
+            Console.WriteLine(advertDetails.retrieveDetails());
+            String input = Console.ReadLine();
+			/*BlurDetector bd = new BlurDetector(0.5);
 			Image<Gray, Byte> image = new Image<Gray,byte>("EdgeTest/image.jpg");
 			ArrayList a = bd.getEdgedPixels(image);
 			float f = bd.calculateBlur(image.ToBitmap(), a);
 			Console.WriteLine("value: " + f);
-			Console.ReadLine(); 
+			Console.ReadLine(); */
 		}
 	}
 }

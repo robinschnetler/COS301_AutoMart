@@ -213,6 +213,12 @@ namespace Dot_Slash
             g = green;
             b = blue;
 
+            /*int max = Math.Max(r, Math.Max(g, b));
+            int min = Math.Min(r, Math.Min(g, b));
+            h = Color.FromArgb(r, g, b).GetHue();
+            s = (max == 0) ? 0 : 1d - (1d * min / max);
+            v = max / 255d;*/
+
             double max = Math.Max(r / 255d, Math.Max(g / 255d, b / 255d));
             double min = Math.Min(r / 255d, Math.Min(g / 255d, b / 255d));
             double difference = max - min;
@@ -220,12 +226,6 @@ namespace Dot_Slash
             h = Color.FromArgb(r, g, b).GetHue();
             s= Math.Round((max == 0) ? 0 : ((difference / max) * 100), 2);
             v= Math.Round(max * 100, 2);
-
-            /*int max = Math.Max(r, Math.Max(g, b));
-            int min = Math.Min(r, Math.Min(g, b));
-            h = Color.FromArgb(r, g, b).GetHue();
-            s = (max == 0) ? 0 : 1d - (1d * min / max);
-            v = max / 255d;*/
         }
     }
 }
