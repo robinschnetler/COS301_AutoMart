@@ -91,6 +91,16 @@ namespace Dot_Slash
             }
         }
 
+        private bool valid;
+
+        public bool Valid
+        {
+            get
+            {
+                return valid;
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the ImageBlock class with specified location and size.
         /// </summary>
@@ -98,12 +108,13 @@ namespace Dot_Slash
         /// <param name="_yCoord"></param>The y-coordinate of the upper-left corner of the block.
         /// <param name="_height"></param>The height of the block.
         /// <param name="_width"></param>The width of the block.
-        public ImageBlock(int _xCoord, int _yCoord, int _height, int _width)
+        public ImageBlock(int _xCoord, int _yCoord, int _height, int _width, bool _valid)
         {
             x_coord = _xCoord;
             y_coord = _yCoord;
             height = _height;
             width = _width;
+            valid = _valid;
         }
     }
 }

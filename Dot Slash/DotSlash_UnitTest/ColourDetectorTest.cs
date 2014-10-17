@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Dot_Slash;
+using System.Drawing;
 
 namespace DotSlash_UnitTest
 {
@@ -8,15 +9,50 @@ namespace DotSlash_UnitTest
     public class ColourDetectorTest
     {
         [TestMethod]
+        public void getBlockColourIndex_Test()
+        {
+            int expected = 13;
+            int height = 50, width = 50;
+            ColourDetector clrDetector = new ColourDetector();
+            ImageBlock block = new ImageBlock(0, 0, height, width);
+
+            Image image = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+            using (Graphics grp = Graphics.FromImage(image))
+            {
+                grp.FillRectangle(Brushes.Violet, 0, 0, width, height);
+            }
+            Bitmap colouredImage = new Bitmap(image);
+
+            int actual = clrDetector.getBlockColourIndex(colouredImage, block);
+
+            Assert.AreEqual(expected, actual, "Wrong colour index returned.");
+        }
+
+        [TestMethod]
         public void inRange_Test()
         {
+            bool expected = true;
+            double pixelValue = 80, binValue = 73;
+            int range = 10;
+            ColourDetector cd = new ColourDetector();
 
+            bool actual = cd.inRange(pixelValue, binValue, range);
+
+            Assert.AreEqual(expected, actual, "The value should be in range.");
         }
 
         [TestMethod]
         public void convertRGBtoHSV_Test()
         {
+            Color colour = new Color();
+            double expectedHue = 0, expectedSat = 0, expectedVal = 0;
+            double hue, sat, val;
+            ColourDetector cd = new ColourDetector();
+            cd.convertRGBtoHSV(colour, out hue, out sat, out val);
 
+            Assert.AreEqual(expectedHue, hue, "Hue is incorrect.");
+            Assert.AreEqual(expectedSat, sat, "Saturation is incorrect.");
+            Assert.AreEqual(expectedVal, val, "Value is incorrect.");
         }
 
         [TestMethod]

@@ -17,7 +17,7 @@ namespace Dot_Slash
             //check if the car exists
             if (!_advertDetails.CarFound)
             {
-                _advertDetails.Error = "Cannot calculate coverage if car not found";
+                _advertDetails.Error = "Cannot calculate coverage if car not found.";
                 return;
             }
 			_advertDetails.CoverageValue = calculateCoverageValue(_advertDetails.Image.Width, _advertDetails.Image.Height, _advertDetails.Rect.Height, _advertDetails.Rect.Height);
@@ -33,7 +33,7 @@ namespace Dot_Slash
         /// <returns>Float value representing the percentage of the area covered by the car.</returns>
         public double calculateCoverageValue(int _imageWidth, int _imageHeight, int _carWidth, int _carHeight)
         {
-            return (_carWidth * _carHeight) / (_imageWidth * _imageWidth) * 100;
+            return Math.Round((double)(_carWidth * _carHeight) / (_imageWidth * _imageHeight) * 100, 2);
         }
 
         /// <summary>

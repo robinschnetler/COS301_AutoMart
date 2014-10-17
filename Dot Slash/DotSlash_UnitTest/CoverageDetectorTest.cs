@@ -12,9 +12,9 @@ namespace DotSlash_UnitTest
         {
             int width = 480;
             int height = 320;
-            int carWidth = 48;
-            int carHeight = 32;
-            double expectedCoverage = 14.6484375;
+            int carWidth = 136;
+            int carHeight = 112;
+            double expectedCoverage = 9.92;
             CoverageDetector cd = new CoverageDetector();
 
             double actual = cd.calculateCoverageValue(width, height, carWidth, carHeight);

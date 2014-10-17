@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization;
+/*using System.Windows.Forms.DataVisualization;
 using System.IO;
 using Emgu.CV;
 using Emgu.CV.Structure;
