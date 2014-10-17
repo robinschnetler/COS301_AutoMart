@@ -52,7 +52,7 @@ namespace Dot_Slash
         /// <param name="_advertDetails"></param>AdvertDetails object containing the information about the advert image.
         public void pump(ref AdvertDetails _advertDetails)
         {
-            //check if the car exists
+            /*//check if the car exists
             if (!_advertDetails.CarFound)
             {
                 _advertDetails.Error = "Cannot calculate coverage if car not found.";
@@ -61,6 +61,18 @@ namespace Dot_Slash
             List<ImageBlock> imageBlocks = getImageBlocks(_advertDetails.Rect, _advertDetails.Image.ToBitmap());
             int dominantBucketIndex = getCarColourIndex(_advertDetails.Image.ToBitmap(), imageBlocks);        
             _advertDetails.Colour = colourBuckets[dominantBucketIndex].ColourName;
+            List<ImageBlock> imageBlocks = getImageBlocks(_advertDetails);*/
+
+            /*ImageBlock dominantBlock = getDominantBlock(_advertDetails, imageBlocks);        
+	        String[] colour = dominantBlock.Colours;
+            _advertDetails.Colour1 = colour[0];
+            _advertDetails.Colour2 = colour[1];
+            _advertDetails.Colour3 = colour[2];
+	        _advertDetails.Hex1 = colour[3];
+	        _advertDetails.Hex2 = colour[4];
+	        _advertDetails.Hex3 = colour[5];
+            int dominantBucketIndex = getDominantColourBucketIndex(_advertDetails, imageBlocks);        
+            _advertDetails.Colour1 = colourBuckets[dominantBucketIndex].ColourName;*/
         }
 
         /// <summary>

@@ -51,9 +51,14 @@ namespace Dot_Slash
 		    Rectangle[] rectangleList = classifier.DetectMultiScale(image, scaleFac, numNeighbours, fb_minSize, maxSize);
 		    if(rectangleList.Length > count)
 		    {
+<<<<<<< HEAD
 			    count = rectangleList.Length;
 			    view = "Front";
 			    rect = rectangleList.Last();
+=======
+			count = rectangleList.Length;
+			view = "Front";
+>>>>>>> 4fd5ac36a62a6211f1363f10c588f715b33fd367
 		    }
 
 		    classifier = new CascadeClassifier(backClassifier);
@@ -62,7 +67,6 @@ namespace Dot_Slash
 		    {
 			    count = rectangleList.Length;
 			    view = "Back";
-			    rect = rectangleList.Last();
 		    }
 
 		    classifier = new CascadeClassifier(sideClassifier);
@@ -71,8 +75,9 @@ namespace Dot_Slash
 		    {
 			    count = rectangleList.Length; 
 			    view = "Side";
-			    rect = rectangleList.Last();
 		    }
+
+		    rect = getLargest(rectangleList);
 
 		    if (count > 0)
 		    {
@@ -86,6 +91,28 @@ namespace Dot_Slash
                 _advertDetails.Error = "No car found.";
                 throw new Exception("No car found.");
 		    }
+<<<<<<< HEAD
 	    }
+=======
+		}
+
+		private Rectangle getLargest(Rectangle[] list)
+		{
+			if(list.Length == 0)
+				return new Rectangle();
+			Rectangle largest = list[0];
+			int currentArea = largest.Width * largest.Height;
+			for (int i = 0; i < list.Length; i++)
+			{
+				int area = list[i].Width * list[i].Height;
+				if(area > currentArea)
+				{
+					currentArea = area;
+					largest = list[i];
+				}
+			}
+			return largest;
+		}
+>>>>>>> 4fd5ac36a62a6211f1363f10c588f715b33fd367
 	}
 }
