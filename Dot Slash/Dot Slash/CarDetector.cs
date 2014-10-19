@@ -22,7 +22,7 @@ namespace Dot_Slash
 		const double scaleFac = 1.05;
 		Size side_minSize = new Size(140, 120), fb_minSize = new Size(150, 125);
 		Size maxSize = new Size(480, 320); //width height
-    	String frontClassifier;
+    		String frontClassifier;
 		String backClassifier;
 		String sideClassifier;
 
@@ -73,6 +73,7 @@ namespace Dot_Slash
 			_advertDetails.Rect = rect;
 			_advertDetails.CarFound = true;
 			_advertDetails.View = view;
+			_advertDetails.CarRating = 1;
 		    }
 		    else
 		    { 

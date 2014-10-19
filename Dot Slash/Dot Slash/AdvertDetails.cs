@@ -212,23 +212,49 @@ namespace Dot_Slash
 		    }
 		}
 
-		private int rating;
-		public int Rating
+		public int blurRating;
+		public int BlurRating
 		{
 			get
 			{
-				return rating;
+				return blurRating;
 			}
 			set
 			{
-				rating = value;
+				blurRating = value;
+			}
+		}
+
+		public int coverageRating;
+		public int CoverageRating
+		{
+			get
+			{
+				return coverageRating;
+			}
+			set
+			{
+				coverageRating = value;
+			}
+		}
+
+		public int carRating;
+		public int CarRating
+		{
+			get
+			{
+				return carRating;
+			}
+			set
+			{
+				carRating = value;
 			}
 		}
 		public AdvertDetails(Binary im)
 		{
 			carFound = false;
 			MemoryStream ms = new MemoryStream(im.ToArray());
-			image = new Image<Bgr,int>(new Bitmap(ms));
+			image = new Image<Bgr, int>(new Bitmap(ms));
 			blurValue = 0.0f;
 			blurry = false;
 			coverageValue = 0.0f;
@@ -241,7 +267,30 @@ namespace Dot_Slash
 			Error = false;
 			view = "";
 			rect = new Rectangle();
-			rating = 0;
+			carRating = 0;
+			coverageRating = 0;
+			blurRating = 0;
+		}
+
+		public AdvertDetails(Image<Bgr, Int32> im, Boolean b)
+		{
+			carFound = false;
+			image = im;
+			blurValue = 0.0f;
+			blurry = false;
+			coverageValue = 0.0f;
+			colour1 = null;
+			colour2 = null;
+			colour3 = null;
+			hex1 = null;
+			hex2 = null;
+			hex3 = null;
+			Error = false;
+			view = "";
+			rect = new Rectangle();
+			carRating = 0;
+			coverageRating = 0;
+			blurRating = 0;
 		}
 
 		public String retrieveDetails()

@@ -23,9 +23,9 @@ namespace Dot_Slash
 				throw new Exception("Cannot calculate coverage if car not found");
 			float totalArea = _advertDetails.Image.Width * _advertDetails.Image.Height;
 			float area = _advertDetails.Rect.Width * _advertDetails.Rect.Height;
-			float coverage = area/totalArea*100;
+			float coverage = (float)area / (float)totalArea*100;
 			_advertDetails.CoverageValue = coverage;
-			_advertDetails.Rating = calculateCoverageRating(coverage);
+			_advertDetails.coverageRating = calculateCoverageRating(coverage);
         }
 
 		private int calculateCoverageRating(float _coverage)

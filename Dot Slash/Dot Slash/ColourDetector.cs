@@ -63,19 +63,8 @@ namespace Dot_Slash
         public void pump(ref AdvertDetails _advertDetails)
         {
             List<ImageBlock> imageBlocks = getImageBlocks(_advertDetails);
-<<<<<<< HEAD
-            ImageBlock dominantBlock = getDominantBlock(_advertDetails, imageBlocks);        
-	    String[] colour = dominantBlock.Colours;
-            _advertDetails.Colour1 = colour[0];
-            _advertDetails.Colour2 = colour[1];
-            _advertDetails.Colour3 = colour[2];
-	    _advertDetails.Hex1 = colour[3];
-	    _advertDetails.Hex2 = colour[4];
-	    _advertDetails.Hex3 = colour[5];
-=======
             int dominantBucketIndex = getDominantColourBucketIndex(_advertDetails, imageBlocks);        
             _advertDetails.Colour1 = colourBuckets[dominantBucketIndex].ColourName;
->>>>>>> 0bab65f5b2422ef1568b37f3bf9eaacfc0dc8526
         }
 
         private List<ImageBlock> getImageBlocks(AdvertDetails _advertDetails)

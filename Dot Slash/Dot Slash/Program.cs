@@ -30,12 +30,20 @@ namespace Dot_Slash
 			//advertDetails = pipe.flow();
 			//Console.WriteLine(advertDetails.retrieveDetails());
 			//String input = Console.ReadLine();
-			BlurDetector bd = new BlurDetector(0.5);
-			Image<Gray, Byte> image = new Image<Gray,byte>("EdgeTest/image.jpg");
-			ArrayList a = bd.getEdgedPixels(image);
-			float f = bd.calculateBlur(image.ToBitmap(), a);
-			Console.WriteLine("value: " + f);
-			Console.ReadLine(); 
+			BlurDetector bd = new BlurDetector(1.26);
+			while(Console.ReadLine() != "q")
+			{ 
+				Image<Bgr, Int32> image = new Image<Bgr,Int32>("edgeTest/image.jpg");
+				AdvertDetails ad = new AdvertDetails(image, true);
+				bd.pump(ref ad);
+				if(ad.Blurry)
+					Console.WriteLine("blurry: \nrating:" + ad.blurRating + "\nblur value:"  + ad.BlurValue +
+					"\nthreshold: " + (ad.BlurValue + (ad.BlurValue * 0.125)));
+				else
+					Console.WriteLine("not blurry: \nrating:" + ad.blurRating + "\nblur value:" + ad.BlurValue +
+					"\nthreshold: " + (ad.BlurValue + (ad.BlurValue * 0.125)));
+			}
+			
 
 		}
 	}
