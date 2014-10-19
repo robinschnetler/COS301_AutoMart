@@ -152,12 +152,7 @@ namespace Dot_Slash
 							goto Next;
 						}
 					}
-<<<<<<< HEAD
 				}
-
-=======
-				}				
->>>>>>> 9723278b9f8d1fae910357b5e584fac4d0853b7b
 				value = getSum(midCols, midRows, blockXCoord, blockYCoord);
 				rating = value / midSum;
 				//block with pixel count less than the treshold
