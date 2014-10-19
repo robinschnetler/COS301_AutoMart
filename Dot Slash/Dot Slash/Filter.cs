@@ -12,4 +12,3 @@
 		void pump(ref AdvertDetails _advertDetails);
 	}
 }
-

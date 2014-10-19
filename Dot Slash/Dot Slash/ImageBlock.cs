@@ -6,13 +6,12 @@ using System.Text;
 namespace Dot_Slash
 {
 	/// <summary>
-	/// Stores a set of four integers that represent the location and the size of the image block as well as two strings
-	/// that represent the name and the hexadecimal value of the most dominant colour in the block.
+	/// This class is used for colour detection purposes. It holds co-ordinates of pixels within the image as well as the width and height of the block and colour detection is run on these ImageBlocks.
 	/// </summary>
 	public class ImageBlock
 	{
 		/// <summary>
-		/// Returns the upper-left x-coordinate of the image block.
+		/// The x co-ordinate of the left upper pixel of the ImageBlock with a get method
 		/// </summary>
 		private int x_coord;
 		public int X_coord
@@ -74,7 +73,7 @@ namespace Dot_Slash
 		}
 
 		/// <summary>
-		/// Returns the name of the most dominant colour in the image block.
+		/// The most dominant colour in this ImageBlock as well as the relevant get and set methods
 		/// </summary>
 		private String colour;
 		public String Colour
@@ -130,12 +129,12 @@ namespace Dot_Slash
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the ImageBlock class with specified location and size.
+		/// The constructor that creates the ImageBlock object
 		/// </summary>
-		/// <param name="_xCoord"></param>The x-coordinate of the upper-left corner of the block.
-		/// <param name="_yCoord"></param>The y-coordinate of the upper-left corner of the block.
-		/// <param name="_height"></param>The height of the block.
-		/// <param name="_width"></param>The width of the block.
+		/// <param name="_xCoord">The x co-ordinate of the upper right pixel of the ImageBlock</param>
+		/// <param name="_yCoord">The y co-ordinate of the upper right pixel of the ImageBlock</param>
+		/// <param name="_height">The height of the ImageBlock</param>
+		/// <param name="_width">The width of the ImageBlock</param>
 		public ImageBlock(int _xCoord, int _yCoord, int _height, int _width, bool _valid, double b)
 		{
 			x_coord = _xCoord;

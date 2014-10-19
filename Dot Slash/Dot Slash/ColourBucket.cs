@@ -83,13 +83,12 @@ namespace Dot_Slash
 			{
 				colourName = value;
 			}
-
 		}
 
-		private string hexValue;
 		/// <summary>
-		/// Returns the hexadecimal value of the colour.
+		/// The hex value of the colour represented as a string with relevant get and set methods
 		/// </summary>
+		private string hexValue;
 		public string HexValue
 		{
 			get
@@ -102,112 +101,43 @@ namespace Dot_Slash
 			}
 		}
 
-		private int r;
 		/// <summary>
-		/// Returns the R value of the colour.
+		/// The Red value of the colour (according to the RGB colour model) in the range of [0,255]
 		/// </summary>
-		public int R
-		{
-			get
-			{
-				return r;
-			}
-			set
-			{
-				r = value;
-			}
-		}
-
-		private int g;
+		public int r;
 		/// <summary>
-		/// Returns the G value of the colour.
+		/// The Green value of the colour (according to the RGB colour model) in the range of [0,255]
 		/// </summary>
-		public int G
-		{
-			get
-			{
-				return g;
-			}
-			set
-			{
-				g = value;
-			}
-		}
-
-		private int b;
+		public int g;
 		/// <summary>
-		/// Returns the B value of the colour.
+		/// The Blue value of the colour (according to the RGB colour model) in the range of [0,255]
 		/// </summary>
-		public int B
-		{
-			get
-			{
-				return b;
-			}
-			set
-			{
-				b = value;
-			}
-		}
-
-		private double h;
-		/// <summary>
-		/// Returns the hue value of the colour.
-		/// </summary>
-		public double H
-		{
-			get
-			{
-				return h;
-			}
-			set
-			{
-				h = value;
-			}
-		}
-
-		private double s;
-		/// <summary>
-		/// Returns the saturation value of the colour.
-		/// </summary>
-		public double S
-		{
-			get
-			{
-				return s;
-			}
-			set
-			{
-				s = value;
-			}
-		}
-
-		private double v;
-		/// <summary>
-		/// Returns the value of the colour.
-		/// </summary>
-		public double V
-		{
-			get
-			{
-				return v;
-			}
-			set
-			{
-				v = value;
-			}
-		}
+		public int b;
 
 		/// <summary>
-		/// Initialises a new instance of the ColourBucket class with specified colour name, RGB and hexadeicmal values.
+		/// The Hue value of the colour (according to the HSV colour model) that has a range of [0,360)
 		/// </summary>
-		/// <param name="name"></param>Colour name.
-		/// <param name="red"></param>R value of the colour.
-		/// <param name="green"></param>G value of the colour.
-		/// <param name="blue"></param>B value of the colour.
-		/// <param name="hex"></param>Hexadecimal value of the colour.
+		public double h;
+		/// <summary>
+		/// The Saturation value of the colour (according to the HSV colour model) that has a range of [0,1]
+		/// </summary>
+		public double s;
+		/// <summary>
+		/// The Value value of the colour (according to the HSV colour model) that has a range of [0,1]
+		/// </summary>
+		public double v;
+
+		/// <summary>
+		/// The constructor that creates a ColourBucket object
+		/// </summary>
+		/// <param name="name">The name of the colour</param>
+		/// <param name="red">The red value of the colour (RGB)</param>
+		/// <param name="green">The green value of the colour (RGB)</param>
+		/// <param name="blue">The blue value of the colour (RGB)</param>
+		/// <param name="hex">The hex value of the colour represented as a string</param>
 		public ColourBucket(string name, int red, int green, int blue, string hex)
 		{
+			hexValue = hex;
 			colourName = name;
 			r = red;
 			g = green;

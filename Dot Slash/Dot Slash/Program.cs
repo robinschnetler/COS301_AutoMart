@@ -23,9 +23,9 @@ namespace Dot_Slash
 		static void Main(string[] args)
 		{
 			String s;
-			while((s = Console.ReadLine())!= "q")
-			{ 
-				Byte[] image = File.ReadAllBytes("pipe/"+s+".jpg");
+			while ((s = Console.ReadLine()) != "q")
+			{
+				Byte[] image = File.ReadAllBytes("pipe/" + s + ".jpg");
 				AdvertDetails advertDetails = new AdvertDetails(image);
 				Filter[] filters = { new CarDetector("classifiers/frontClassifier.xml", "classifiers/backClassifier.xml", "classifiers/sideClassifier.xml"), new ColourDetector(), new CoverageDetector() };
 				List<Filter> filterList = new List<Filter>(filters);

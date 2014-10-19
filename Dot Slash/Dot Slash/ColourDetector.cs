@@ -11,7 +11,7 @@ namespace Dot_Slash
 	/// </summary>
 	public class ColourDetector : Filter
 	{
-		List<ColourBucket> colourBuckets;
+		private List<ColourBucket> colourBuckets;
 
 		/// <summary>
 		/// Initilises a new instance of the ColourDetector class.
@@ -58,7 +58,7 @@ namespace Dot_Slash
 				ImageBlock[][] imageBlocks = getImageBlocks(_advertDetails.Image.ToBitmap(), new Rectangle(0, 0, _advertDetails.Image.Width, _advertDetails.Image.Height));
 				imageBlocks = calculateImageBlocksColourIndex(_advertDetails.Image.ToBitmap(), imageBlocks);
 				int dominantBucketIndex = getCarColourIndex(imageBlocks);
-				_advertDetails.Colour = colourBuckets[dominantBucketIndex].ColourName;
+				_advertDetails.Colour1 = colourBuckets[dominantBucketIndex].ColourName;
 				return;
 			}
 			else
@@ -66,7 +66,7 @@ namespace Dot_Slash
 				ImageBlock[][] imageBlocks = getImageBlocks(_advertDetails.Image.ToBitmap(), _advertDetails.Rect);
 				imageBlocks = calculateImageBlocksColourIndex(_advertDetails.Image.ToBitmap(), imageBlocks);
 				int dominantBucketIndex = getCarColourIndex(imageBlocks);
-				_advertDetails.Colour = colourBuckets[dominantBucketIndex].ColourName;
+				_advertDetails.Colour1 = colourBuckets[dominantBucketIndex].ColourName;
 			}
 		}
 
@@ -152,8 +152,12 @@ namespace Dot_Slash
 							goto Next;
 						}
 					}
+<<<<<<< HEAD
 				}
 
+=======
+				}				
+>>>>>>> 9723278b9f8d1fae910357b5e584fac4d0853b7b
 				value = getSum(midCols, midRows, blockXCoord, blockYCoord);
 				rating = value / midSum;
 				//block with pixel count less than the treshold
@@ -191,7 +195,6 @@ namespace Dot_Slash
 				}
 			}
 		}
-
 		public int getSum(int _midX, int _midyY, int _blockX, int _blockY)
 		{
 			if (_blockX <= _midX && _blockY <= _midyY)

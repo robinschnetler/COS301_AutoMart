@@ -1,39 +1,40 @@
 \section{Architecture Requirements}
 \subsection{Access Channel Requirements}
-The system dealing with evaluating the advert, images specifically, needs to be implemented in the back end of the website. Therefore there is no graphical user interface that the user will interact with. The user will only get messages back from the system stating the success or failure of the advert to be uploaded. The messages will be displayed in the browser which will be implemented by dot slash. 
-
-The training part for car recognition will have a graphical user interface that will guide the user in training the classifiers with the new data to ensure that the system stays up to date with the latest cars on the market. This part of the system will be accessible through a computer running on Windows OS.
-
+ 
+The system will be deployed as a .dll library that will be linked to a web service hosted by an IIS.NET server. The web service communicates via requests and responses sent between the server and the client. The \#YOCO utility will be accessible from any browser on desktop.
 \subsection{Quality Requirements}
 
 \subsubsection{Performance}
-The system must be used in real time when a user creates and advert for a vehicle that they wish to sell. The system must therefore process and classify the image in a maximum of 2 seconds per feature(car, make, model, colour) and a further 2 seconds to generate a rating for the image.
+The system must be used in real time when a user creates an advert for a vehicle that they wish to sell. The system must therefore process and classify the image in a maximum of 2 seconds per feature (car, image quality, colour, contradictions between images), and a further 2 seconds to generate a rating, based on the above results, for the image.
 
-The detection of one feature, through experience has not taken more than 2 seconds. We have achieved this through OpenCV\'s object recognition framework. All features to be detected will use the exact same framework. hence we can infer this time constraint. 
+The \#YOCO utility makes use of a Pipes and Filters architectural pattern.
+
+The car detection is done through OpenCV's API. The first run of this API is at maximum 10 seconds, after which all libraries are already in cache. Thereafter the classification takes maximally 2 seconds per classifier. There are 3 different classifiers for front, side and back views of a car.
+
+The blur detection algorithm (which is essential in determining the overall quality of the image) is self implemented and works per pixel. With a normalised image size of 480 x 320 pixels, this results in 153 600 pixels to query. We will need to ensure that all pixel information is gathered in a reliable and efficient manner. The algorithm that we use to get all pixel information (such as colour) guarantees a linear representation of the image. The algorithm execution time is maximally 2 seconds.
+
 \subsubsection{Reliability}
 The system will classify the feature at least 8 out of 10 times.
 
-The openCV framework suggests usage of atleast 5000 images when classifying faces. This has worked and historical data proves that this had been effective. Our system will be using 5000 images for each characteristic.
+The OpenCV framework suggests usage of atleast 5000 images when classifying faces. This has worked and historical data proves that this had been effective. Our system will be using 5000 images for each characteristic.
+
 \subsubsection{Flexibility}
-The system needs to be trained for each classification. One classification cannot work for another feature detection use case. But the inability of classification of one feature will not result in a system failure. 
+To allow for classification of other object in the future(make detection for future development), all that is required is an XML file representing the AI knowledge base.
 
-This will be achieved using the rating of an image based on the features that the system was, in fact, able to detect.
 \subsubsection{Maintainability}
-The addition of new feature classifiers will be pluggable at a later stage. 
+We are using SOLID design principles and have implemented the pipes and filters architectural pattern to classify images. If a new feature is required, our system has ensured that it is easy to plug in the new functionality by means of creating a new module that implements the Filter interface into the existing framework with minimal hassle.
 
-We are using SOLID design principles and have implemented a strategy design pattern for each of the feature classifiers. At a later stage, if a new feature is required, it will merely have to be trained and plugged into the current strategy framework.
+It is also essential that the information obtained about the car from the image is accurate.
 
-It is also essential that the information we obtain from the image is accurate since the basis of AutoMart\'s business operations will rely on how well we implement our algorithm and how accurate it is.
+\subsection{Trade-offs}
+In order to achieve processing speeds of 2 seconds per feature in the image as well as a further 2 seconds to generate a rating for the image, a lot of memory will be needed for buffering so that a lot of data is immediately at hand. This requires a large amount of memory as the images used in the system  will require sizeable chunks of RAM. A lot of processing power will be used since there is a lot of processing that happens on the image. Thus, to achieve these speeds, some memory and processing power will have to be sacrificed.
 
-\subsection{Tradeoffs}
-In order to achieve our processing speeds of 2 seconds per feature in the image as well as a further 2 seconds to generate a rating for the image, we will need to use a lot of memory for buffering so that a lot of data is immediately at hand. This requires a large amount of memory as the images we are working with will require sizeable chunks of RAM. We will also use a lot of processing power since there is a lot of processing that happens on the image. Thus to achieve these speeds we will have to sacrifice memory and processing power.
+To ensure that the system correctly classifies features 80\% of the time a lot of training will be needed in order for the system to achieve this level of accuracy. Thus this will take time, hence to achieve accuracy a lot of time will have to be sacrificed to train the program. As mentioned, approximately 2500 images are required for every feature that needs to be trained. The training process is also very memory intensive as the training process has been adapted to use 4GB of memory. Processing power required for the training also needs to be considered.
 
-To ensure our system correctly classifies features 80\% of the time will need a lot of training for the system to achieve this level of accuracy. Thus this will take time, hence to achieve accuracy we will need to sacrifice a lot of time to train our program. As mentioned, we will need approximately 5000 images for every feature that we want to train. Take into consideration how many features we aim to correctly classify, as well as all the man-power it takes to prepare images for this training (cropping and sorting followed by the actual training being the most time consuming). This training process is also very memory intensive as the training process has been adapted to use 4GB of memory. We also need to consider the processing power required for the training.
-
-Lastly, we aimed to achieve flexibility by ensuring our system can be trained for each classification. This again requires a lot of training which, as above, is very time consuming and memory intensive above needing string processing power.
+Lastly, flexibility will be achieved by ensuring the system can be trained for each classification. This again requires a lot of training which, as above, is very time consuming and memory intensive as well as needing string processing power.
 
 \subsection{Integration Requirements}
-The final product needs to integrate with current AutoMart system. This is to be achieved by implementing an API through which AutoMarts website will be able to access the functions needed to determine adverts validity.
+The final product needs to integrate with the current AutoMart web server. To achieve this,an API will be provided documenting all of the system functions as well as a .dll library that will integrate with the web server and be called whenever a user uploads an image.
 
 \subsection{Architecture Constraints}
-The system needs to be implemented in C\#. The system also needs to be able to communicate with the Microsoft SQL Server.
+The \#YOCO utility must be written in C\# using the .NET framework.
