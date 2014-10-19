@@ -23,7 +23,7 @@ namespace Dot_Slash
 			}
 			catch (Exception e)
 			{
-				advertDetails.exception += "; "+ e.Message;
+				advertDetails.Error += "; "+ e.Message;
 			}
 		}
 		return advertDetails;
