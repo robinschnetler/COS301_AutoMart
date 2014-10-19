@@ -153,6 +153,10 @@ namespace Dot_Slash
 						}
 					}
 				}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 702ac1f6ccce09cf1aaa9578baafff9ff5ccb6f2
 				value = getSum(midCols, midRows, blockXCoord, blockYCoord);
 				rating = value / midSum;
 				//block with pixel count less than the treshold
@@ -271,9 +275,9 @@ namespace Dot_Slash
 		{
 			double p_hue = 0.0, p_saturation = 0.0, p_value = 0.0;
 			convertRGBtoHSV(currentPixel, out p_hue, out p_saturation, out p_value);
-			double hueDifference = Math.Min(Math.Abs((int)bucket.H - (int)p_hue), 360 - Math.Abs(bucket.H - (int)p_hue));
-			double satDifference = Math.Abs(((int)bucket.S - (int)p_saturation));
-			double valDifference = Math.Abs((int)bucket.V - (int)p_value);
+			double hueDifference = Math.Min(Math.Abs((int)bucket.h - (int)p_hue), 360 - Math.Abs(bucket.h - (int)p_hue));
+			double satDifference = Math.Abs(((int)bucket.s - (int)p_saturation));
+			double valDifference = Math.Abs((int)bucket.v - (int)p_value);
 			int distance = (int)Math.Sqrt(Math.Pow(hueDifference, 2.0) + Math.Pow(satDifference, 2.0) + Math.Pow(valDifference, 2.0));
 			return distance;
 		}
