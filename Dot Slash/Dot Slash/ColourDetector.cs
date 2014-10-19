@@ -27,42 +27,42 @@ namespace Dot_Slash
 		public void createColourBuckets()
 		{
 			colourBuckets = new List<ColourBucket>();
-			colourBuckets.Add(new ColourBucket("Violet", 238, 130, 238, "EE82EE"));     //13 violet
-			colourBuckets.Add(new ColourBucket("Blue", 0, 0, 255, "0000FF"));           //4 blue
-			colourBuckets.Add(new ColourBucket("Turquoise", 64, 224, 208, "40E0D0"));   //5 turqioise
-			colourBuckets.Add(new ColourBucket("Green", 0, 128, 0, "008000"));          //6 green
-			colourBuckets.Add(new ColourBucket("Yellow", 255, 255, 0, "FFFF00"));       //7 yellow
-			colourBuckets.Add(new ColourBucket("Gold", 255, 215, 0, "FFD700"));         //8 gold
-			colourBuckets.Add(new ColourBucket("Orange", 255, 165, 0, "FFA500"));       //9 orange
-			colourBuckets.Add(new ColourBucket("Bronze", 205, 127, 50, "CD7F32"));      //14 bronze
-			colourBuckets.Add(new ColourBucket("Brown", 73, 49, 28, "49311C"));         //10 brown
-			colourBuckets.Add(new ColourBucket("Red", 255, 0, 0, "FF0000"));            //11 red
-			colourBuckets.Add(new ColourBucket("Maroon", 128, 0, 0, "800000"));         //12 maroon
-			colourBuckets.Add(new ColourBucket("White", 255, 255, 255, "FFFFFF"));      //0 white
-			colourBuckets.Add(new ColourBucket("Silver", 192, 192, 192, "C0C0C0"));     //1 silver
-			colourBuckets.Add(new ColourBucket("Grey", 128, 128, 128, "808080"));       //2 grey
-			colourBuckets.Add(new ColourBucket("Charcoal", 51, 51, 51, "333333"));      //15 charcoal
-			colourBuckets.Add(new ColourBucket("Black", 0, 0, 0, "000000"));            //3 black
+			colourBuckets.Add(new ColourBucket("Violet", 238, 130, 238, "EE82EE"));     //0 violet
+			colourBuckets.Add(new ColourBucket("Blue", 0, 0, 255, "0000FF"));           //1 blue
+			colourBuckets.Add(new ColourBucket("Turquoise", 64, 224, 208, "40E0D0"));   //2 turqioise
+			colourBuckets.Add(new ColourBucket("Green", 0, 128, 0, "008000"));          //3 green
+			colourBuckets.Add(new ColourBucket("Yellow", 255, 255, 0, "FFFF00"));       //4 yellow
+			colourBuckets.Add(new ColourBucket("Gold", 255, 215, 0, "FFD700"));         //5 gold
+			colourBuckets.Add(new ColourBucket("Orange", 255, 165, 0, "FFA500"));       //6 orange
+			colourBuckets.Add(new ColourBucket("Bronze", 205, 127, 50, "CD7F32"));      //7 bronze
+			colourBuckets.Add(new ColourBucket("Brown", 73, 49, 28, "49311C"));         //8 brown
+			colourBuckets.Add(new ColourBucket("Red", 255, 0, 0, "FF0000"));            //9 red
+			colourBuckets.Add(new ColourBucket("Maroon", 128, 0, 0, "800000"));         //10 maroon
+			colourBuckets.Add(new ColourBucket("White", 255, 255, 255, "FFFFFF"));      //11 white
+			colourBuckets.Add(new ColourBucket("Silver", 192, 192, 192, "C0C0C0"));     //12 silver
+			colourBuckets.Add(new ColourBucket("Grey", 128, 128, 128, "808080"));       //13 grey
+			colourBuckets.Add(new ColourBucket("Charcoal", 51, 51, 51, "333333"));      //14 charcoal
+			colourBuckets.Add(new ColourBucket("Black", 0, 0, 0, "000000"));            //15 black
 		}
 
 		/// <summary>
 		/// Metod calculates the colour of the car and stores it in the AdvertDetails object.
 		/// </summary>
-		/// <param name="_advertDetails"></param>AdvertDetails object containing the information about the advert image.
+		/// <param name="_advertDetails">AdvertDetails object containing the information about the advert image</param>
 		public void pump(ref AdvertDetails _advertDetails)
 		{
 			//check if the car exists
 			if (!_advertDetails.CarFound)
 			{
 				_advertDetails.Error = "Cannot calculate coverage if car not found.";
-				ImageBlock[][] imageBlocks = getImageBlocks(_advertDetails.Image.ToBitmap(), new Rectangle(0,0,_advertDetails.Image.Width, _advertDetails.Image.Height));
+				ImageBlock[][] imageBlocks = getImageBlocks(_advertDetails.Image.ToBitmap(), new Rectangle(0, 0, _advertDetails.Image.Width, _advertDetails.Image.Height));
 				imageBlocks = calculateImageBlocksColourIndex(_advertDetails.Image.ToBitmap(), imageBlocks);
 				int dominantBucketIndex = getCarColourIndex(imageBlocks);
 				_advertDetails.Colour = colourBuckets[dominantBucketIndex].ColourName;
 				return;
 			}
 			else
-			{ 
+			{
 				ImageBlock[][] imageBlocks = getImageBlocks(_advertDetails.Image.ToBitmap(), _advertDetails.Rect);
 				imageBlocks = calculateImageBlocksColourIndex(_advertDetails.Image.ToBitmap(), imageBlocks);
 				int dominantBucketIndex = getCarColourIndex(imageBlocks);
@@ -147,19 +147,19 @@ namespace Dot_Slash
 							colourImage = drawX(colourImage, current_x, current_y, current_width, current_height);
 
 							value = getSum(midCols, midRows, blockXCoord, blockYCoord);
-							rating = value/midSum;
+							rating = value / midSum;
 							blocks[blockXCoord][blockYCoord] = new ImageBlock(current_x, current_y, current_width, current_height, false, rating);
 							goto Next;
 						}
 					}
 				}
-				
+
 				value = getSum(midCols, midRows, blockXCoord, blockYCoord);
 				rating = value / midSum;
 				//block with pixel count less than the treshold
 				blocks[blockXCoord][blockYCoord] = new ImageBlock(current_x, current_y, current_width, current_height, true, rating);
 
-			Next:
+				Next:
 				{
 					//check if you can right
 					if (blockXCoord < num_cols - 1)
@@ -194,15 +194,15 @@ namespace Dot_Slash
 
 		public int getSum(int _midX, int _midyY, int _blockX, int _blockY)
 		{
-			if(_blockX <= _midX && _blockY <= _midyY)
+			if (_blockX <= _midX && _blockY <= _midyY)
 			{
 				return _blockX + _blockY;
 			}
-			else if(_blockX <= _midX)
+			else if (_blockX <= _midX)
 			{
 				return _blockX + (_blockY - (_blockY - _midyY));
 			}
-			else if(_blockY <= _midyY)
+			else if (_blockY <= _midyY)
 			{
 				return _blockY + (_blockX - (_blockX - _midX));
 			}
@@ -214,13 +214,13 @@ namespace Dot_Slash
 			int count = 0;
 			for (int j = 0; j < _blocks.Length; j++)
 			{
-				for(int i = 0; i < _blocks[0].Length; i++)
+				for (int i = 0; i < _blocks[0].Length; i++)
 				{
-					if(_blocks[i][j].Valid)
+					if (_blocks[i][j].Valid)
 					{
 						_blocks[i][j].ColourIndex = getBlockColourIndex(_image, _blocks[i][j]);
-						Console.WriteLine("X: " + i + " Y: " + j +  " " + colourBuckets[_blocks[i][j].ColourIndex].ColourName);
-						count ++;
+						Console.WriteLine("X: " + i + " Y: " + j + " " + colourBuckets[_blocks[i][j].ColourIndex].ColourName);
+						count++;
 					}
 				}
 			}
@@ -239,23 +239,22 @@ namespace Dot_Slash
 		{
 			//counter to determine the most dominant colour
 			int[] colourCounter = new int[colourBuckets.Count];
-			for (int x = _block.X_coord; x < _block.X_coord + _block.Width-1; x++)
+			for (int x = _block.X_coord; x < _block.X_coord + _block.Width - 1; x++)
 			{
-				for (int y = _block.Y_coord; y < _block.Y_coord + _block.Height-1; y++)
+				for (int y = _block.Y_coord; y < _block.Y_coord + _block.Height - 1; y++)
 				{
 					Color clr = _image.GetPixel(x, y);
-					
-					
+
 					//Console.WriteLine("HSV: " + p_hue%360 +","+p_saturation*100 +","+p_value*100);
 					double min = double.MaxValue;
 					int ind = 0;
 					for (int i = 0; i < colourBuckets.Count; i++)
 					{
-						double bin_hue = colourBuckets[i].H;
-						double bin_saturation = colourBuckets[i].S;
-						double bin_value = colourBuckets[i].V;
+						//double bin_hue = colourBuckets[i].H;
+						//double bin_saturation = colourBuckets[i].S;
+						//double bin_value = colourBuckets[i].V;
 						double distance = getDistance(clr, colourBuckets[i]);
-						if(distance<min)
+						if (distance < min)
 						{
 							ind = i;
 							min = distance;
