@@ -11,7 +11,7 @@ namespace Dot_Slash
 	/// </summary>
 	public class ColourDetector : Filter
 	{
-		List<ColourBucket> colourBuckets;
+		private List<ColourBucket> colourBuckets;
 
 		/// <summary>
 		/// Initilises a new instance of the ColourDetector class.

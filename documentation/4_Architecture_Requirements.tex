@@ -1,17 +1,13 @@
 \section{Architecture Requirements}
 \subsection{Access Channel Requirements}
  
-The system will be deployed as a .dll library that is linked to a web service hosted by an IIS.NET server. The web service communicates via requests and responses sent to/from the server and client.
-
-Due to the nature of the Yoco utility, training is required for it to be intelligent enough to extrapolate information from a static image (such as whether there is a car in the image). Also, since the domain of the problem is continuously growing, a training interface is essential for keeping the classifier up-to-date. This interface will be available as a stand-alone console application. This training utility will for the duration of this document be referred to as the Yoco-Training utility.
-
-
+The system will be deployed as a .dll library that will be linked to a web service hosted by an IIS.NET server. The web service communicates via requests and responses sent between the server and the client. The \#YOCO utility will be accessible from any browser on desktop.
 \subsection{Quality Requirements}
 
 \subsubsection{Performance}
 The system must be used in real time when a user creates an advert for a vehicle that they wish to sell. The system must therefore process and classify the image in a maximum of 2 seconds per feature (car, image quality, colour, contradictions between images), and a further 2 seconds to generate a rating, based on the above results, for the image.
 
-The Yoco utility makes use of a Pipes and Filters architectural pattern. Using the power of multi-threading, each filter in the pipe will be extended as a thread and pull and push inputs and outputs from a buffered queue. This will allow for multiple users of the site to post ads at will while the system concurrently runs the threads as required.
+The \#YOCO utility makes use of a Pipes and Filters architectural pattern.
 
 The car detection is done through OpenCV's API. The first run of this API is at maximum 10 seconds, after which all libraries are already in cache. Thereafter the classification takes maximally 2 seconds per classifier. There are 3 different classifiers for front, side and back views of a car.
 
@@ -23,26 +19,22 @@ The system will classify the feature at least 8 out of 10 times.
 The OpenCV framework suggests usage of atleast 5000 images when classifying faces. This has worked and historical data proves that this had been effective. Our system will be using 5000 images for each characteristic.
 
 \subsubsection{Flexibility}
-In order to make any changes to the system, all that is necessary is to update the classifier XML file that holds the information for the artificial intelligence to to its work.
-
-In the case of adding a new feature to be detected, the Yoco-Training utility can be used to train the system and generate a new feature XML file.
+To allow for classification of other object in the future(make detection for future development), all that is required is an XML file representing the AI knowledge base.
 
 \subsubsection{Maintainability}
-We are using SOLID design principles and have implemented the pipes and filters architectural pattern to classifying images. If a new filter is required, our system has ensured that it is easy to plug in a new filter into the existing framework with minimal hassle.
+We are using SOLID design principles and have implemented the pipes and filters architectural pattern to classify images. If a new feature is required, our system has ensured that it is easy to plug in the new functionality by means of creating a new module that implements the Filter interface into the existing framework with minimal hassle.
 
-The addition of new feature classifiers will be pluggable at a later stage. This will be achieved by making the new classification object extend the Filter interface
-
-It is also essential that the information we obtain from the image is accurate since the basis of AutoMart's business operations will rely on how well we implement our algorithm and how accurate it is. %Why is this in maintainability?
+It is also essential that the information obtained about the car from the image is accurate.
 
 \subsection{Trade-offs}
-In order to achieve our processing speeds of 2 seconds per feature in the image as well as a further 2 seconds to generate a rating for the image, we will need to use a lot of memory for buffering so that a lot of data is immediately at hand. This requires a large amount of memory as the images we are working with will require sizeable chunks of RAM. We will also use a lot of processing power since there is a lot of processing that happens on the image. Thus, to achieve these speeds, we will have to sacrifice memory and processing power.
+In order to achieve processing speeds of 2 seconds per feature in the image as well as a further 2 seconds to generate a rating for the image, a lot of memory will be needed for buffering so that a lot of data is immediately at hand. This requires a large amount of memory as the images used in the system  will require sizeable chunks of RAM. A lot of processing power will be used since there is a lot of processing that happens on the image. Thus, to achieve these speeds, some memory and processing power will have to be sacrificed.
 
-To ensure our system correctly classifies features 80\% of the time will need a lot of training for the system to achieve this level of accuracy. Thus this will take time, hence to achieve accuracy we will need to sacrifice a lot of time to train our program. As mentioned, we will need approximately 5000 images for every feature that we want to train. Take into consideration how many features we aim to correctly classify, as well as all the man-power it takes to prepare images for this training (cropping and sorting followed by the actual training being the most time consuming). This training process is also very memory intensive as the training process has been adapted to use 4GB of memory. We also need to consider the processing power required for the training.
+To ensure that the system correctly classifies features 80\% of the time a lot of training will be needed in order for the system to achieve this level of accuracy. Thus this will take time, hence to achieve accuracy a lot of time will have to be sacrificed to train the program. As mentioned, approximately 2500 images are required for every feature that needs to be trained. The training process is also very memory intensive as the training process has been adapted to use 4GB of memory. Processing power required for the training also needs to be considered.
 
-Lastly, we aimed to achieve flexibility by ensuring our system can be trained for each classification. This again requires a lot of training which, as above, is very time consuming and memory intensive as well as needing string processing power.
+Lastly, flexibility will be achieved by ensuring the system can be trained for each classification. This again requires a lot of training which, as above, is very time consuming and memory intensive as well as needing string processing power.
 
 \subsection{Integration Requirements}
-The final product needs to integrate with the current AutoMart web server. To achieve this, we will need to provide an API documenting all of our functions as well as a .dll library that will integrate with the web server and be called whenever a user uploads an image.
+The final product needs to integrate with the current AutoMart web server. To achieve this,an API will be provided documenting all of the system functions as well as a .dll library that will integrate with the web server and be called whenever a user uploads an image.
 
 \subsection{Architecture Constraints}
-The Yoco Utility must be written in C\# using the .NET framework. 
+The \#YOCO utility must be written in C\# using the .NET framework.
