@@ -15,19 +15,31 @@ using Emgu.Util;
 
 namespace Dot_Slash
 {
-    public class CoverageDetector : Filter
-    {
-        public void pump(ref AdvertDetails _advertDetails)
-        {
+	/// <summary>
+	/// A class that implements the Filter interface 
+	/// </summary>
+	public class CoverageDetector : Filter
+	{
+		/// <summary>
+		/// Implements the coverage detector filter and adds the details to the advertDetails object
+		/// </summary>
+		/// <param name="_advertDetails">The advertDetails object where information about coverage is stored</param>
+		public void pump(ref AdvertDetails _advertDetails)
+		{
 			if(!_advertDetails.CarFound)
 				throw new Exception("Cannot calculate coverage if car not found");
 			float totalArea = _advertDetails.Image.Width * _advertDetails.Image.Height;
 			float area = _advertDetails.Rect.Width * _advertDetails.Rect.Height;
-			float coverage = area/totalArea*100;
+			float coverage = area/totalArea * 100;
 			_advertDetails.CoverageValue = coverage;
 			_advertDetails.Rating = calculateCoverageRating(coverage);
-        }
+		}
 
+		/// <summary>
+		/// A function for calculating how many stars this image gets based on its coverage value (max 2 stars for coverage)
+		/// </summary>
+		/// <param name="_coverage">The coverage value of the image</param>
+		/// <returns>The number of stars (out of 2) based on the coverage value</returns>
 		private int calculateCoverageRating(float _coverage)
 		{
 			if (_coverage >= 70.0)
@@ -37,5 +49,5 @@ namespace Dot_Slash
 			else
 				return 0;
 		}
-    }
+	}
 }

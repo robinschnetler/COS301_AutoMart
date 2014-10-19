@@ -35,8 +35,7 @@ namespace Dot_Slash
 			ArrayList a = bd.getEdgedPixels(image);
 			float f = bd.calculateBlur(image.ToBitmap(), a);
 			Console.WriteLine("value: " + f);
-			Console.ReadLine(); 
-
+			Console.ReadLine();
 		}
 	}
 }

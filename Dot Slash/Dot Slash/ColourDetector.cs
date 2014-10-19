@@ -36,251 +36,251 @@ using Emgu.Util;
 
 namespace Dot_Slash
 {
-    public class ColourDetector : Filter
-    {
-        List<ColourBucket> colourBuckets;
-        public ColourDetector()
-        {
-            colourBuckets  = new List<ColourBucket>();
-            colourBuckets.Add(new ColourBucket("White", 255, 255, 255, "FFFFFF"));
-            colourBuckets.Add(new ColourBucket("Silver", 192, 192, 192, "C0C0C0"));
-            colourBuckets.Add(new ColourBucket("Grey", 128, 128, 128, "808080"));
-            colourBuckets.Add(new ColourBucket("Black", 0, 0, 0, "000000"));
-            colourBuckets.Add(new ColourBucket("Blue", 0, 0, 255, "0000FF"));
-            colourBuckets.Add(new ColourBucket("Turquoise", 64, 224, 208, "40E0D0"));
-            colourBuckets.Add(new ColourBucket("Green", 0, 128, 0, "008000"));
-	        colourBuckets.Add(new ColourBucket("Yellow", 255, 255, 0, "FFFF00"));
-	        colourBuckets.Add(new ColourBucket("Gold", 255, 215, 0, "FFD700"));
-	        colourBuckets.Add(new ColourBucket("Orange", 255, 165, 0, "FFA500"));
-	        colourBuckets.Add(new ColourBucket("Brown", 73, 49, 28, "49311C"));
-	        colourBuckets.Add(new ColourBucket("Red", 255, 0, 0, "FF0000"));
-	        colourBuckets.Add(new ColourBucket("Maroon", 128, 0, 0, "800000"));
-	        colourBuckets.Add(new ColourBucket("Violet", 238, 130, 238, "EE82EE"));
-	        colourBuckets.Add(new ColourBucket("Bronze", 205, 127, 50, "CD7F32"));
-	        colourBuckets.Add(new ColourBucket("Charcoal", 51, 51, 51, "333333"));
-        }
+	public class ColourDetector : Filter
+	{
+		List<ColourBucket> colourBuckets;
+		public ColourDetector()
+		{
+			colourBuckets  = new List<ColourBucket>();
+			colourBuckets.Add(new ColourBucket("White", 255, 255, 255, "FFFFFF"));
+			colourBuckets.Add(new ColourBucket("Silver", 192, 192, 192, "C0C0C0"));
+			colourBuckets.Add(new ColourBucket("Grey", 128, 128, 128, "808080"));
+			colourBuckets.Add(new ColourBucket("Black", 0, 0, 0, "000000"));
+			colourBuckets.Add(new ColourBucket("Blue", 0, 0, 255, "0000FF"));
+			colourBuckets.Add(new ColourBucket("Turquoise", 64, 224, 208, "40E0D0"));
+			colourBuckets.Add(new ColourBucket("Green", 0, 128, 0, "008000"));
+			colourBuckets.Add(new ColourBucket("Yellow", 255, 255, 0, "FFFF00"));
+			colourBuckets.Add(new ColourBucket("Gold", 255, 215, 0, "FFD700"));
+			colourBuckets.Add(new ColourBucket("Orange", 255, 165, 0, "FFA500"));
+			colourBuckets.Add(new ColourBucket("Brown", 73, 49, 28, "49311C"));
+			colourBuckets.Add(new ColourBucket("Red", 255, 0, 0, "FF0000"));
+			colourBuckets.Add(new ColourBucket("Maroon", 128, 0, 0, "800000"));
+			colourBuckets.Add(new ColourBucket("Violet", 238, 130, 238, "EE82EE"));
+			colourBuckets.Add(new ColourBucket("Bronze", 205, 127, 50, "CD7F32"));
+			colourBuckets.Add(new ColourBucket("Charcoal", 51, 51, 51, "333333"));
+		}
 
-        public void pump(ref AdvertDetails _advertDetails)
-        {
-            List<ImageBlock> imageBlocks = getImageBlocks(_advertDetails);
-<<<<<<< HEAD
-            ImageBlock dominantBlock = getDominantBlock(_advertDetails, imageBlocks);        
-	    String[] colour = dominantBlock.Colours;
-            _advertDetails.Colour1 = colour[0];
-            _advertDetails.Colour2 = colour[1];
-            _advertDetails.Colour3 = colour[2];
-	    _advertDetails.Hex1 = colour[3];
-	    _advertDetails.Hex2 = colour[4];
-	    _advertDetails.Hex3 = colour[5];
-=======
-            int dominantBucketIndex = getDominantColourBucketIndex(_advertDetails, imageBlocks);        
-            _advertDetails.Colour1 = colourBuckets[dominantBucketIndex].ColourName;
->>>>>>> 0bab65f5b2422ef1568b37f3bf9eaacfc0dc8526
-        }
+		public void pump(ref AdvertDetails _advertDetails)
+		{
+			List<ImageBlock> imageBlocks = getImageBlocks(_advertDetails);
+	<<<<<<< HEAD
+			ImageBlock dominantBlock = getDominantBlock(_advertDetails, imageBlocks);        
+			String[] colour = dominantBlock.Colours;
+			_advertDetails.Colour1 = colour[0];
+			_advertDetails.Colour2 = colour[1];
+			_advertDetails.Colour3 = colour[2];
+			_advertDetails.Hex1 = colour[3];
+			_advertDetails.Hex2 = colour[4];
+			_advertDetails.Hex3 = colour[5];
+	=======
+			int dominantBucketIndex = getDominantColourBucketIndex(_advertDetails, imageBlocks);        
+			_advertDetails.Colour1 = colourBuckets[dominantBucketIndex].ColourName;
+	>>>>>>> 0bab65f5b2422ef1568b37f3bf9eaacfc0dc8526
+		}
 
-        private List<ImageBlock> getImageBlocks(AdvertDetails _advertDetails)
-        {
-            int num_rows = 20;
-            int num_cols = 20;
-            int step_x = (int)(_advertDetails.Rect.Width / num_cols);
-            int step_y = (int)(_advertDetails.Rect.Height / num_rows);
-            int current_x = 0, current_y = 0;
+		private List<ImageBlock> getImageBlocks(AdvertDetails _advertDetails)
+		{
+			int num_rows = 20;
+			int num_cols = 20;
+			int step_x = (int)(_advertDetails.Rect.Width / num_cols);
+			int step_y = (int)(_advertDetails.Rect.Height / num_rows);
+			int current_x = 0, current_y = 0;
 			int new_height = step_y * num_rows;
 			int new_width = step_x * num_cols;
-            List<ImageBlock> imageBlocks = new List<ImageBlock>();
+			List<ImageBlock> imageBlocks = new List<ImageBlock>();
 
-            double dots_treshold = 0.10;
-            int max_dots = (int)((_advertDetails.Rect.Height * _advertDetails.Rect.Width) * dots_treshold);
+			double dots_treshold = 0.10;
+			int max_dots = (int)((_advertDetails.Rect.Height * _advertDetails.Rect.Width) * dots_treshold);
 
-            Bitmap edgedImage = drawEdge(_advertDetails.Image.ToBitmap().Clone(_advertDetails.Rect, _advertDetails.Image.ToBitmap().PixelFormat));	//Taking the full image, should just take cropped
-            edgedImage.Save("edged.jpg");
-            while(true)
-            {
-                int num_dots = 0;
+			Bitmap edgedImage = drawEdge(_advertDetails.Image.ToBitmap().Clone(_advertDetails.Rect, _advertDetails.Image.ToBitmap().PixelFormat));	//Taking the full image, should just take cropped
+			edgedImage.Save("edged.jpg");
+			while(true)
+			{
+				int num_dots = 0;
 				for (int y = current_y; y < current_y + step_y; y++)
-                {
-                    for (int x = current_x; x < current_x + step_x; x++)
-                    {
-                        if (edgedImage.GetPixel(x, y).ToArgb().Equals(Color.White.ToArgb()))
-                            num_dots++;
+				{
+					for (int x = current_x; x < current_x + step_x; x++)
+					{
+						if (edgedImage.GetPixel(x, y).ToArgb().Equals(Color.White.ToArgb()))
+							num_dots++;
 
-                        if (num_dots > max_dots)
-                        {
-                            goto Next;
-                        }
-                    }
-                }
-                imageBlocks.Add(new ImageBlock(current_x, current_y, step_y, step_x));
+						if (num_dots > max_dots)
+						{
+							goto Next;
+						}
+					}
+				}
+				imageBlocks.Add(new ImageBlock(current_x, current_y, step_y, step_x));
 
-            Next:
-                {
-                    if (current_x + step_x < new_width)
-                    {
-                        current_x += step_x;
-                    }
-                    else if (current_y + step_y < new_height)
-                    {
-                        current_y += step_y;
+				Next:
+				{
+					if (current_x + step_x < new_width)
+					{
+						current_x += step_x;
+					}
+					else if (current_y + step_y < new_height)
+					{
+						current_y += step_y;
 						current_x = 0;
-                    }
-                    else
-                    {
-                        return imageBlocks;
-                    }
-                }
-            }
-        }
+					}
+					else
+					{
+						return imageBlocks;
+					}
+				}
+			}
+		}
 
-        private int getDominantColourBucketIndex(AdvertDetails _advertDetails, List<ImageBlock> _imageBlocks)
-        {
-            int[] colourCounter = new int[16];
+		private int getDominantColourBucketIndex(AdvertDetails _advertDetails, List<ImageBlock> _imageBlocks)
+		{
+			int[] colourCounter = new int[16];
 
-            foreach (ImageBlock block in _imageBlocks)
-            {
-                colourCounter[getBlockColourBucketIndex(_advertDetails.Image.ToBitmap(), block)]++;
-            }
+			foreach (ImageBlock block in _imageBlocks)
+			{
+				colourCounter[getBlockColourBucketIndex(_advertDetails.Image.ToBitmap(), block)]++;
+			}
 
-            int max = colourCounter[0];
-            int index = 0;
-            for (int i = 1; i < colourCounter.Length; i++)
-            {
-                if (colourCounter[i] >= max)
-                {
-                    index = i;
-                    max = colourCounter[i];
-                }
-            }
-            foreach (int a in colourCounter)
-                Console.WriteLine(a);
-            return index;
-            
-        }
+			int max = colourCounter[0];
+			int index = 0;
+			for (int i = 1; i < colourCounter.Length; i++)
+			{
+				if (colourCounter[i] >= max)
+				{
+					index = i;
+					max = colourCounter[i];
+				}
+			}
+			foreach (int a in colourCounter)
+				Console.WriteLine(a);
+			return index;
+		}
 
-        /// <summary>
-        /// The function returns the three main colours of the the specified block.
-        /// </summary>
-        /// <param name="_image"></param>
-        /// <param name="_block"></param>
-        /// <returns></returns>
-        private int getBlockColourBucketIndex(Bitmap _image, ImageBlock _block)
-        {
-            int hueTolerance = 2;		//Should be in the range of 5 - 10
-            int saturationTolerance = 80;	//Should be approx 100
-            int valueTolerance = 150;	//Should be in the range of 170 - 200
+		/// <summary>
+		/// The function returns the three main colours of the the specified block.
+		/// </summary>
+		/// <param name="_image"></param>
+		/// <param name="_block"></param>
+		/// <returns></returns>
+		private int getBlockColourBucketIndex(Bitmap _image, ImageBlock _block)
+		{
+			int hueTolerance = 2;		//Should be in the range of 5 - 10
+			int saturationTolerance = 80;	//Should be approx 100
+			int valueTolerance = 150;	//Should be in the range of 170 - 200
 
-            int counter = 0;
-            int numColourBuckets = colourBuckets.Count;
+			int counter = 0;
+			int numColourBuckets = colourBuckets.Count;
 
-            int[] colourCounter = new int[numColourBuckets];
+			int[] colourCounter = new int[numColourBuckets];
 
-            for (int i = 0; i < numColourBuckets; i++)
-            {
-                colourCounter[i] = 0;
-            }
+			for (int i = 0; i < numColourBuckets; i++)
+			{
+				colourCounter[i] = 0;
+			}
 
-            foreach (ColourBucket currentBucket in colourBuckets)
-            {
-                for (int x = _block.X_coord; x < _block.X_coord + _block.Width; x++)
-                {
-                    for (int y = _block.Y_coord; y < _block.Y_coord + _block.Height; y++)
-                    {
-                        Color clr = _image.GetPixel(x, y);
+			foreach (ColourBucket currentBucket in colourBuckets)
+			{
+				for (int x = _block.X_coord; x < _block.X_coord + _block.Width; x++)
+				{
+					for (int y = _block.Y_coord; y < _block.Y_coord + _block.Height; y++)
+					{
+						Color clr = _image.GetPixel(x, y);
 
-                        double p_hue = 0.0, p_saturation = 0.0, p_value = 0.0;
-                        double bin_hue = currentBucket.h;
-                        double bin_saturation = currentBucket.s;
-                        double bin_value = currentBucket.v;
-                        convertRGBtoHSV(clr, out p_hue, out p_saturation, out p_value);
-                        if (inRange(p_hue, bin_hue, hueTolerance))						//Check if the hue is in range
-                            if (inRange(p_saturation * 255, bin_saturation * 255, saturationTolerance))	//Check if the saturation is in range
-                                if (inRange(p_value * 255, bin_value * 255, valueTolerance))		//Check if the value is in range
-                                    colourCounter[counter]++;// = colourCounter[counter] + 1;
-                    }
-                }
-                counter++;
-            }
+						double p_hue = 0.0, p_saturation = 0.0, p_value = 0.0;
+						double bin_hue = currentBucket.h;
+						double bin_saturation = currentBucket.s;
+						double bin_value = currentBucket.v;
+						convertRGBtoHSV(clr, out p_hue, out p_saturation, out p_value);
+						if (inRange(p_hue, bin_hue, hueTolerance))						//Check if the hue is in range
+							if (inRange(p_saturation * 255, bin_saturation * 255, saturationTolerance))	//Check if the saturation is in range
+								if (inRange(p_value * 255, bin_value * 255, valueTolerance))		//Check if the value is in range
+									colourCounter[counter]++;					// = colourCounter[counter] + 1;
+					}
+				}
+				counter++;
+			}
 
-            int max = -99999;
-            int index = 0;
-            for (int i = 0; i < colourCounter.Length; i++)
-            {
-                if (colourCounter[i] >= max)
-                {
-                    index = i;
-                    max = colourCounter[i];
-                }
-            }
+			int max = -99999;
+			int index = 0;
+			for (int i = 0; i < colourCounter.Length; i++)
+			{
+				if (colourCounter[i] >= max)
+				{
+					index = i;
+					max = colourCounter[i];
+				}
+			}
 
-            return index;
+			return index;
 
-            //ColourBucket dominantColour = (ColourBucket)colourBuckets[index1];
-            //String firstMostCommon = dominantColour.colourName;
-            //String hex1 = dominantColour.hexValue;
+			//ColourBucket dominantColour = (ColourBucket)colourBuckets[index1];
+			//String firstMostCommon = dominantColour.colourName;
+			//String hex1 = dominantColour.hexValue;
 
-            //return (new String[] { firstMostCommon, hex1 });
-        }
+			//return (new String[] { firstMostCommon, hex1 });
+		}
 
-        private Bitmap drawEdge(Bitmap img)
-        {
-            Image<Gray, Byte> image = new Image<Gray, Byte>(img);
-            image = image.Canny(39, 60);
-            return image.ToBitmap();
-        }
+		private Bitmap drawEdge(Bitmap img)
+		{
+			Image<Gray, Byte> image = new Image<Gray, Byte>(img);
+			image = image.Canny(39, 60);
+			return image.ToBitmap();
+		}
 
-        private bool inRange(double pixelValue, double binValue, int range)
-        {
-            if (pixelValue > (binValue + range) || pixelValue < (binValue - range))
-                return false;
-            else
-                return true;
-        }
-        /// <summary>
-        /// A function that will convert a colour from RGB colour space to HSV colour space (as seen on stackoverflow.com/questions/359612/how-to-change-rgb-color-to-hsv)
-        /// </summary>
-        /// <param name="colour"> The RGB colour to convert </param>
-        /// <param name="hue"> An out parameter that returns the Hue of the colour in range of 0 - 360</param>
-        /// <param name="saturation"> An out parameter that returns the Saturation of the colour in range of 0 - 1</param>
-        /// <param name="value"> An out parameter that returns the Value of the colour in range of 0 - 1</param>
-        private void convertRGBtoHSV(Color colour, out double hue, out double saturation, out double value)
-        {
-            int max = Math.Max(colour.R, Math.Max(colour.G, colour.B));
-            int min = Math.Min(colour.R, Math.Min(colour.G, colour.B));
+		private bool inRange(double pixelValue, double binValue, int range)
+		{
+			if (pixelValue > (binValue + range) || pixelValue < (binValue - range))
+				return false;
+			else
+				return true;
+		}
 
-            hue = colour.GetHue();
-            saturation = (max == 0) ? 0 : 1d - (1d * min / max);
-            value = max / 255d;
-        }
+		/// <summary>
+		/// A function that will convert a colour from RGB colour space to HSV colour space (as seen on stackoverflow.com/questions/359612/how-to-change-rgb-color-to-hsv)
+		/// </summary>
+		/// <param name="colour"> The RGB colour to convert </param>
+		/// <param name="hue"> An out parameter that returns the Hue of the colour in range of 0 - 360</param>
+		/// <param name="saturation"> An out parameter that returns the Saturation of the colour in range of 0 - 1</param>
+		/// <param name="value"> An out parameter that returns the Value of the colour in range of 0 - 1</param>
+		private void convertRGBtoHSV(Color colour, out double hue, out double saturation, out double value)
+		{
+			int max = Math.Max(colour.R, Math.Max(colour.G, colour.B));
+			int min = Math.Min(colour.R, Math.Min(colour.G, colour.B));
 
-        /// <summary>
-        /// A function that converts a colour from HSV colour space to RGB colour space (as seen on stackoverflow.com/questions/359612/how-to-change-rgb-color-to-hsv)
-        /// </summary>
-        /// <param name="hue"> The hue of the colour </param>
-        /// <param name="saturation"> The saturation of the colour </param>
-        /// <param name="value"> The value of the colour </param>
-        /// <returns> A colour object of the HSV colour in RGB colour space </returns>
-        private Color convertHSVtoRGB(double hue, double saturation, double value)
-        {
-            int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
-            double f = hue / 60 - Math.Floor(hue / 60);
+			hue = colour.GetHue();
+			saturation = (max == 0) ? 0 : 1d - (1d * min / max);
+			value = max / 255d;
+		}
 
-            value = value * 255;
-            int v = Convert.ToInt32(value);
-            int p = Convert.ToInt32(value * (1 - saturation));
-            int q = Convert.ToInt32(value * (1 - f * saturation));
-            int t = Convert.ToInt32(value * (1 - (1 - f) * saturation));
+		/// <summary>
+		/// A function that converts a colour from HSV colour space to RGB colour space (as seen on stackoverflow.com/questions/359612/how-to-change-rgb-color-to-hsv)
+		/// </summary>
+		/// <param name="hue"> The hue of the colour </param>
+		/// <param name="saturation"> The saturation of the colour </param>
+		/// <param name="value"> The value of the colour </param>
+		/// <returns> A colour object of the HSV colour in RGB colour space </returns>
+		private Color convertHSVtoRGB(double hue, double saturation, double value)
+		{
+			int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
+			double f = hue / 60 - Math.Floor(hue / 60);
 
-            if (hi == 0)
-                return Color.FromArgb(255, v, t, p);
-            else if (hi == 1)
-                return Color.FromArgb(255, q, v, p);
-            else if (hi == 2)
-                return Color.FromArgb(255, p, v, t);
-            else if (hi == 3)
-                return Color.FromArgb(255, p, q, v);
-            else if (hi == 4)
-                return Color.FromArgb(255, t, p, v);
-            else
-                return Color.FromArgb(255, v, p, q);
-        }
-    }
+			value = value * 255;
+			int v = Convert.ToInt32(value);
+			int p = Convert.ToInt32(value * (1 - saturation));
+			int q = Convert.ToInt32(value * (1 - f * saturation));
+			int t = Convert.ToInt32(value * (1 - (1 - f) * saturation));
+
+			if (hi == 0)
+				return Color.FromArgb(255, v, t, p);
+			else if (hi == 1)
+				return Color.FromArgb(255, q, v, p);
+			else if (hi == 2)
+				return Color.FromArgb(255, p, v, t);
+			else if (hi == 3)
+				return Color.FromArgb(255, p, q, v);
+			else if (hi == 4)
+				return Color.FromArgb(255, t, p, v);
+			else
+				return Color.FromArgb(255, v, p, q);
+		}
+	}
 }
