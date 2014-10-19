@@ -28,7 +28,6 @@ namespace DotSlash_UnitTest
 			double coverage = 46.88;
 			int expectedRating = 1;
 			CoverageDetector cd = new CoverageDetector();
-
 			int actual = cd.calculateCoverageRating(coverage);
 
 			Assert.AreEqual(expectedRating, actual);

@@ -23,20 +23,25 @@ namespace Dot_Slash
 		{
 			blurTreshold = t;
 		}
-
-		public float calculateBlur(Image<Gray, float> image)
+		
+		/// <summary>
+		/// calculates the blur of the image by means of calculating the difference between the current pixel and
+		/// the pixel directly to the right and bottom of the current pixel
+		/// </summary>
+		/// <param name="image">image to perform blur detection on</param>
+		/// <returns>float value representing the average blur on the </returns>
+		public float calculateBlur(Bitmap image)
 		{
-			Bitmap b = image.ToBitmap();
+			Bitmap b = image;
 			float sum = 0;
 			int rad = 56;
 
-			for (int j = 0; j < b.Width - 1; j++)
+			for (int j = 0; j < b.Width -1; j++)
 			{
 
-				for (int k = 0; k < b.Height - 1; k++)
+				for (int k = 0; k < b.Height-1; k++)
 				{
 					int currentPixel = b.GetPixel(j, k).R;
-					if(currentPixel != 0)
 						if (Math.Abs(currentPixel - b.GetPixel(j + 1, k).R) > rad || Math.Abs(currentPixel - b.GetPixel(j, k + 1).R) > rad)
 							sum++;
 				}
@@ -55,8 +60,8 @@ namespace Dot_Slash
 				image.Resize(480, 320, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
 			}
 			Image<Gray, float> con = image.Laplace(1);
-			float sum = calculateBlur(con);
-			_advertDetails.BlurValue = sum / (image.Width * image.Height) * 100;
+			float sum = calculateBlur(con.ToBitmap());
+			_advertDetails.BlurValue = sum / ((image.Width-1) * (image.Height-1)) * 100;
 			if (_advertDetails.BlurValue < blurTreshold)
 			{
 				_advertDetails.Blurry = true;
