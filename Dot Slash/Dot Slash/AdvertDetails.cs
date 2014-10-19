@@ -9,74 +9,59 @@ using System.Runtime.Serialization.Json;
 
 namespace Dot_Slash
 {
-    /// <summary>
-    /// Class used to store advert image details.
-    /// </summary>
-    public class AdvertDetails
+	/// <summary>
+	/// Class used to store advert image details.
+	/// </summary>
+	public class AdvertDetails
 	{
-        private int image_ID;
-        /// <summary>
-        /// Returns the advert image ID.
-        /// </summary>
-        public int Image_ID
-        {
-            get
-            {
-                return image_ID;
-            }
-            set
-            {
-                image_ID = value;
-            }
-        }
+		private int image_ID;
+		/// <summary>
+		/// Returns the advert image ID.
+		/// </summary>
+		public int Image_ID
+		{
+			get
+			{
+				return image_ID;
+			}
+			set
+			{
+				image_ID = value;
+			}
+		}
 
-        private Image<Bgr, Int32> image;
-        /// <summary>
-        /// Returns the advert image.
-        /// </summary>
-        public Image<Bgr, Int32> Image
-        {
-            get
-            {
-                return image;
-            }
-            set
-            {
-                image = value;
-            }
-        }
 
-        private bool carFound;
-        /// <summary>
-        /// Returns car existance status in the advert image.
-        /// </summary>
-        public bool CarFound
-        {
-            get
-            {
-                return carFound;
-            }
-            set
-            {
-                carFound = value;
-            }
-        }
+		private bool carFound;
+		/// <summary>
+		/// Returns car existance status in the advert image.
+		/// </summary>
+		public bool CarFound
+		{
+			get
+			{
+				return carFound;
+			}
+			set
+			{
+				carFound = value;
+			}
+		}
 
-        private Rectangle rect;
-        /// <summary>
-        /// Returns the rectangle representing the location of the car in the advert image.
-        /// </summary>
-        public Rectangle Rect
-        {
-            get
-            {
-                return rect;
-            }
-            set
-            {
-                rect = value;
-            }
-        }
+		private Rectangle rect;
+		/// <summary>
+		/// Returns the rectangle representing the location of the car in the advert image.
+		/// </summary>
+		public Rectangle Rect
+		{
+			get
+			{
+				return rect;
+			}
+			set
+			{
+				rect = value;
+			}
+		}
 
 		private double blurValue;
 		/// <summary>
@@ -84,14 +69,14 @@ namespace Dot_Slash
 		/// </summary>
 		public double BlurValue
 		{
-		    get
-		    {
-			return blurValue;
-		    }
-		    set
-		    {
-			blurValue = value;
-		    }
+			get
+			{
+				return blurValue;
+			}
+			set
+			{
+				blurValue = value;
+			}
 		}
 
 		public Boolean blurry;
@@ -113,14 +98,14 @@ namespace Dot_Slash
 		/// </summary>
 		public double CoverageValue
 		{
-		    get
-		    {
-			return coverageValue;
-		    }
-		    set
-		    {
-			coverageValue = value;
-		    }
+			get
+			{
+				return coverageValue;
+			}
+			set
+			{
+				coverageValue = value;
+			}
 		}
 
 		private string colour1;
@@ -171,11 +156,27 @@ namespace Dot_Slash
 			}
 		}
 
-		private string hex1;
 		/// <summary>
-		/// Returns the hexadecimal value of the cars colour. 
+		/// The image itself (stored as an OpenCV Image object)
 		/// </summary>
-		public string Hex
+		private Image<Bgr, Int32> image;
+		public Image<Bgr, Int32> Image
+		{
+			get
+			{
+				return image;
+			}
+			set
+			{
+				image = value;
+			}
+		}
+
+		/// <summary>
+		/// A string storing the hex value of the most dominant colour in the image with relevant get and set methods
+		/// </summary>
+		string hex1;
+		public string Hex1
 		{
 			get
 			{
@@ -187,10 +188,10 @@ namespace Dot_Slash
 			}
 		}
 
-		private string hex2;
 		/// <summary>
-		/// Returns the hexadecimal value of the cars colour. 
+		/// A string storing the hex value of the second most dominant colour in the image with relevant get and set methods
 		/// </summary>
+		string hex2;
 		public string Hex2
 		{
 			get
@@ -203,10 +204,10 @@ namespace Dot_Slash
 			}
 		}
 
-		private string hex3;
 		/// <summary>
-		/// Returns the hexadecimal value of the cars colour. 
+		/// A string storing the hex value of the third most dominant colour in the image with relevant get and set methods
 		/// </summary>
+		string hex3;
 		public string Hex3
 		{
 			get
@@ -219,76 +220,78 @@ namespace Dot_Slash
 			}
 		}
 
+		/// <summary>
+		/// A string that stores which classifier found a car in the image (Front, Side or Back) with relevant get and set methods
+		/// </summary>
 		private string view;
-        /// <summary>
-        /// Returns the view of the car in the image.
-        /// </summary>
+		/// <summary>
+		/// Returns the view of the car in the image.
+		/// </summary>
 		public string View
 		{
-		    get
-		    {
-			    return view;
-		    }
-		    set
-		    {
-			    view = value;
-		    }
+			get
+			{
+				return view;
+			}
+			set
+			{
+				view = value;
+			}
 		}
 
-        public int blurRating;
-        /// <summary>
-        /// Returns the blur rating value.
-        /// </summary>
-        public int BlurRating
-        {
-            get
-            {
-                return blurRating;
-            }
-            set
-            {
-                blurRating = value;
-            }
-        }
-
-        private int coverageRating;
-        /// <summary>
-        /// Returns the coverage rating value.
-        /// </summary>
-        public int CoverageRating
-        {
-            get
-            {
-                return coverageRating;
-            }
-            set
-            {
-                coverageRating = value;
-            }
-        }
-
-        /// <summary>
-        /// Returns the rating of the advert image.
-        /// </summary>
-
-	public int carRating;
-	public int CarRating
-	{
-		get
+		public int blurRating;
+		/// <summary>
+		/// Returns the blur rating value.
+		/// </summary>
+		public int BlurRating
 		{
-			return carRating;
+			get
+			{
+				return blurRating;
+			}
+			set
+			{
+				blurRating = value;
+			}
 		}
-		set
-		{
-			carRating = value;
-		}
-	}
 
-        private string error;
+		private int coverageRating;
+		/// <summary>
+		/// Returns the coverage rating value.
+		/// </summary>
+		public int CoverageRating
+		{
+			get
+			{
+				return coverageRating;
+			}
+			set
+			{
+				coverageRating = value;
+			}
+		}
+
+		/// <summary>
+		/// Returns the rating of the advert image.
+		/// </summary>
+
+		public int carRating;
+		public int CarRating
+		{
+			get
+			{
+				return carRating;
+			}
+			set
+			{
+				carRating = value;
+			}
+		}
+		private String error;
         /// <summary>
         /// Returns any errors encountered.
         /// </summary>
-        public string Error
+        public String Error
         {
             get
             {
@@ -325,32 +328,11 @@ namespace Dot_Slash
 			coverageRating = 0;
 			blurRating = 0;
 		}
-
-		public AdvertDetails(Image<Bgr, Int32> im, Boolean b)
-		{
-			carFound = false;
-			image = im;
-			blurValue = 0.0f;
-			blurry = false;
-			coverageValue = 0.0f;
-			colour1 = null;
-			colour2 = null;
-			colour3 = null;
-			hex1 = null;
-			hex2 = null;
-			hex3 = null;
-			view = "";
-			rect = new Rectangle();
-			carRating = 0;
-			coverageRating = 0;
-			blurRating = 0;
-		}
-
-        /// <summary>
-        /// Returns string containg all AdvertDetail object information.
-        /// </summary>
-        /// <returns>String contains all the AdvertDetails information separated by '&' symbol.</returns>
-        /// <remarks>
+		/// <summary>
+		/// Returns string containg all AdvertDetail object information.
+		/// </summary>
+		/// <returns>String contains all the AdvertDetails information separated by '&' symbol.</returns>
+		/// <remarks>
 		public String retrieveDetails()
 		{
 			String output = "";
@@ -360,12 +342,12 @@ namespace Dot_Slash
 			return output;
 		}
 
-        /// <summary>
-        /// Returns the json string with all the AdvertDetails information.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="t"></param>
-        /// <returns>Returns a json string contains all the AdvertDetails information.</returns>
+		/// <summary>
+		/// Returns the json string with all the AdvertDetails information.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="t"></param>
+		/// <returns>Returns a json string contains all the AdvertDetails information.</returns>
 		public string JsonSerializer<T> (T t)
 		{
 			DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(T));
@@ -376,6 +358,15 @@ namespace Dot_Slash
 				jsonString = Encoding.UTF8.GetString(ms.ToArray());
 			}
 			return jsonString;
+		}
+
+		/// <summary>
+		/// A function that converts the image to a Bitmap object and returns it
+		/// </summary>
+		/// <returns>The image as a Bitmap object</returns>
+		public Bitmap getImage()
+		{
+			return image.ToBitmap();
 		}
 	}
 }

@@ -152,8 +152,7 @@ namespace Dot_Slash
 							goto Next;
 						}
 					}
-				}
-				
+				}				
 				value = getSum(midCols, midRows, blockXCoord, blockYCoord);
 				rating = value / midSum;
 				//block with pixel count less than the treshold
@@ -191,7 +190,6 @@ namespace Dot_Slash
 				}
 			}
 		}
-
 		public int getSum(int _midX, int _midyY, int _blockX, int _blockY)
 		{
 			if(_blockX <= _midX && _blockY <= _midyY)
