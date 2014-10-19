@@ -1,28 +1,101 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Linq;
 using System.Drawing;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization;
 using System.IO;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using Emgu.CV.UI;
-using Emgu.Util;
 using System.Data.Linq;
 using System.Runtime.Serialization.Json;
 
 namespace Dot_Slash
 {
-	public class AdvertDetails
+    /// <summary>
+    /// Class used to store advert image details.
+    /// </summary>
+    public class AdvertDetails
 	{
-		//public List<String> ExceptionList = new List<string>();
-		public string exception;
-		public bool blurry;
-		public bool Blurry
+        private int image_ID;
+        /// <summary>
+        /// Returns the advert image ID.
+        /// </summary>
+        public int Image_ID
+        {
+            get
+            {
+                return image_ID;
+            }
+            set
+            {
+                image_ID = value;
+            }
+        }
+
+        private Image<Bgr, Int32> image;
+        /// <summary>
+        /// Returns the advert image.
+        /// </summary>
+        public Image<Bgr, Int32> Image
+        {
+            get
+            {
+                return image;
+            }
+            set
+            {
+                image = value;
+            }
+        }
+
+        private bool carFound;
+        /// <summary>
+        /// Returns car existance status in the advert image.
+        /// </summary>
+        public bool CarFound
+        {
+            get
+            {
+                return carFound;
+            }
+            set
+            {
+                carFound = value;
+            }
+        }
+
+        private Rectangle rect;
+        /// <summary>
+        /// Returns the rectangle representing the location of the car in the advert image.
+        /// </summary>
+        public Rectangle Rect
+        {
+            get
+            {
+                return rect;
+            }
+            set
+            {
+                rect = value;
+            }
+        }
+
+		private double blurValue;
+		/// <summary>
+		/// Returns the advert image blur value.
+		/// </summary>
+		public double BlurValue
+		{
+		    get
+		    {
+			return blurValue;
+		    }
+		    set
+		    {
+			blurValue = value;
+		    }
+		}
+
+		public Boolean blurry;
+		public Boolean Blurry
 		{
 			get
 			{
@@ -34,71 +107,11 @@ namespace Dot_Slash
 			}
 		}
 
-		public bool error;
-		public bool Error
-		{
-			get
-			{
-				return error;
-			}
-			set
-			{
-				error = value;
-			}
-		}
-
-		private bool carFound;
-		public bool CarFound
-		{
-			get
-			{
-				return carFound;
-			}
-			set
-			{
-				carFound = value;
-			}
-		}
-
-		public int image_ID;
-		public int Image_ID
-		{
-			get
-			{
-				return image_ID;
-			}
-			set
-			{
-				image_ID = value;
-			}
-		}
-
-		private Image<Bgr, Int32> image;
-		public Image<Bgr, Int32> Image
-		{
-		    get
-		    {
-			return image;
-		    }
-		    set
-		    {
-			image = value;
-		    }
-		}
-		float blurValue;
-		public float BlurValue
-		{
-		    get
-		    {
-			return blurValue;
-		    }
-		    set
-		    {
-			blurValue = value;
-		    }
-		}
-		float coverageValue;
-		public float CoverageValue
+		private double coverageValue;
+		/// <summary>
+		/// Returns the coverage value that represents the cars coverage in the advert image.
+		/// </summary>
+		public double CoverageValue
 		{
 		    get
 		    {
@@ -109,46 +122,60 @@ namespace Dot_Slash
 			coverageValue = value;
 		    }
 		}
-		string colour1;
+
+		private string colour1;
+		/// <summary>
+		/// Returns the colour of the car in the advert image.
+		/// </summary>
 		public String Colour1
 		{
-		    get
-		    {
-			return colour1;
-		    }
-		    set
-		    {
-			colour1 = value;
-		    }
+			get
+			{
+				return colour1;
+			}
+			set
+			{
+				colour1 = value;
+			}
 		}
 
-		string colour2;
-		public string Colour2
+		private string colour2;
+		/// <summary>
+		/// Returns the colour of the car in the advert image.
+		/// </summary>
+		public String Colour2
 		{
-		    get
-		    {
-			return colour2;
-		    }
-		    set
-		    {
-			colour2 = value;
-		    }
-		}
-		string colour3;
-		public string Colour3
-		{
-		    get
-		    {
-			return colour3;
-		    }
-		    set
-		    {
-			colour3 = value;
-		    }
+			get
+			{
+				return colour2;
+			}
+			set
+			{
+				colour2 = value;
+			}
 		}
 
-		string hex1;
-		public string Hex1
+		private string colour3;
+		/// <summary>
+		/// Returns the colour of the car in the advert image.
+		/// </summary>
+		public String Colour3
+		{
+			get
+			{
+				return colour3;
+			}
+			set
+			{
+				colour3 = value;
+			}
+		}
+
+		private string hex1;
+		/// <summary>
+		/// Returns the hexadecimal value of the cars colour. 
+		/// </summary>
+		public string Hex
 		{
 			get
 			{
@@ -160,7 +187,10 @@ namespace Dot_Slash
 			}
 		}
 
-		string hex2;
+		private string hex2;
+		/// <summary>
+		/// Returns the hexadecimal value of the cars colour. 
+		/// </summary>
 		public string Hex2
 		{
 			get
@@ -173,7 +203,10 @@ namespace Dot_Slash
 			}
 		}
 
-		string hex3;
+		private string hex3;
+		/// <summary>
+		/// Returns the hexadecimal value of the cars colour. 
+		/// </summary>
 		public string Hex3
 		{
 			get
@@ -187,73 +220,95 @@ namespace Dot_Slash
 		}
 
 		private string view;
+        /// <summary>
+        /// Returns the view of the car in the image.
+        /// </summary>
 		public string View
 		{
 		    get
 		    {
-			return view;
+			    return view;
 		    }
 		    set
 		    {
-			view = value;
+			    view = value;
 		    }
 		}
 
-		private Rectangle rect;
-		public Rectangle Rect
-		{
-		    get
-		    {
-			return rect;
-		    }
-		    set
-		    {
-			rect = value;
-		    }
-		}
+        public int blurRating;
+        /// <summary>
+        /// Returns the blur rating value.
+        /// </summary>
+        public int BlurRating
+        {
+            get
+            {
+                return blurRating;
+            }
+            set
+            {
+                blurRating = value;
+            }
+        }
 
-		public int blurRating;
-		public int BlurRating
-		{
-			get
-			{
-				return blurRating;
-			}
-			set
-			{
-				blurRating = value;
-			}
-		}
+        private int coverageRating;
+        /// <summary>
+        /// Returns the coverage rating value.
+        /// </summary>
+        public int CoverageRating
+        {
+            get
+            {
+                return coverageRating;
+            }
+            set
+            {
+                coverageRating = value;
+            }
+        }
 
-		public int coverageRating;
-		public int CoverageRating
-		{
-			get
-			{
-				return coverageRating;
-			}
-			set
-			{
-				coverageRating = value;
-			}
-		}
+        /// <summary>
+        /// Returns the rating of the advert image.
+        /// </summary>
 
-		public int carRating;
-		public int CarRating
+	public int carRating;
+	public int CarRating
+	{
+		get
 		{
-			get
-			{
-				return carRating;
-			}
-			set
-			{
-				carRating = value;
-			}
+			return carRating;
 		}
-		public AdvertDetails(Binary im)
+		set
 		{
+			carRating = value;
+		}
+	}
+
+        private string error;
+        /// <summary>
+        /// Returns any errors encountered.
+        /// </summary>
+        public string Error
+        {
+            get
+            {
+                return error;
+            }
+            set
+            {
+                error = value;
+            }
+        }
+
+        /// <summary>
+        /// Initialises a new instance of the AdevertDetails class with specified image in binary format.
+        /// </summary>
+        /// <param name="_binary"></param>The binary representation of a image.
+		public AdvertDetails(Binary _binary)
+		{
+			MemoryStream ms = new MemoryStream(_binary.ToArray());
+			image = new Image<Bgr, int>(new Bitmap(ms));
 			carFound = false;
-			MemoryStream ms = new MemoryStream(im.ToArray());
 			image = new Image<Bgr, int>(new Bitmap(ms));
 			blurValue = 0.0f;
 			blurry = false;
@@ -264,7 +319,6 @@ namespace Dot_Slash
 			hex1 = null;
 			hex2 = null;
 			hex3 = null;
-			Error = false;
 			view = "";
 			rect = new Rectangle();
 			carRating = 0;
@@ -285,7 +339,6 @@ namespace Dot_Slash
 			hex1 = null;
 			hex2 = null;
 			hex3 = null;
-			Error = false;
 			view = "";
 			rect = new Rectangle();
 			carRating = 0;
@@ -293,26 +346,36 @@ namespace Dot_Slash
 			blurRating = 0;
 		}
 
+        /// <summary>
+        /// Returns string containg all AdvertDetail object information.
+        /// </summary>
+        /// <returns>String contains all the AdvertDetails information separated by '&' symbol.</returns>
+        /// <remarks>
 		public String retrieveDetails()
 		{
 			String output = "";
-			output += "&car_found = " + carFound + "&view=" + view + "&blur_Value=" + blurValue + "&Coverage_value=" + coverageValue + "&colour1=" + colour1 + "&error=" +exception;
+			output += "&car_found = " + carFound + "&blur_value=" + blurValue + "&coverage_value="
+			+ coverageValue + "&colour1=" + colour1 + "&colour2=" + colour2 + "&colour3=" + colour3 +
+			"&hex3=" + hex1 + "&hex3=" + hex2 + "&hex3=" + hex3 + "&view=" + view + "&error=" + error;
 			return output;
 		}
 
+        /// <summary>
+        /// Returns the json string with all the AdvertDetails information.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="t"></param>
+        /// <returns>Returns a json string contains all the AdvertDetails information.</returns>
 		public string JsonSerializer<T> (T t)
 		{
 			DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(T));
-			MemoryStream ms = new MemoryStream();
-			ser.WriteObject(ms, t);
-			string jsonString = Encoding.UTF8.GetString(ms.ToArray());
-			ms.Close();
+			string jsonString;
+			using (MemoryStream ms = new MemoryStream())
+			{
+				ser.WriteObject(ms, t);
+				jsonString = Encoding.UTF8.GetString(ms.ToArray());
+			}
 			return jsonString;
-		}
-
-		public Bitmap getImage()
-		{
-			return image.ToBitmap();
 		}
 	}
 }

@@ -60,8 +60,7 @@ namespace Dot_Slash
 			if (_advertDetails.BlurValue < blurTreshold)
 			{
 				_advertDetails.Blurry = true;
-				_advertDetails.Error = true;
-				_advertDetails.exception += "; image is blury";
+				_advertDetails.Error += "; image is blury";
 			}
 			else
 			{
