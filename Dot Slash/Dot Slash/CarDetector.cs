@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections;
 using System.Linq;
 using System.Drawing;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization;
-using System.IO;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using Emgu.CV.UI;
-using Emgu.Util;
 using System.Data.Linq;
 
 namespace Dot_Slash
@@ -83,18 +74,17 @@ namespace Dot_Slash
 			}
 
 			rect = getLargest(rectangleList);
-
 			if (count > 0)
 			{
 				_advertDetails.Rect = rect;
 				_advertDetails.CarFound = true;
 				_advertDetails.View = view;
+				_advertDetails.CarRating = 1;
 			}
 			else
-			{ 
+			{
 				_advertDetails.CarFound = false;
-				_advertDetails.Error = true;
-				throw new Exception(track);
+				_advertDetails.Error = "No car found.";
 			}
 		}
 
@@ -105,14 +95,14 @@ namespace Dot_Slash
 		/// <returns></returns>
 		private Rectangle getLargest(Rectangle[] list)
 		{
-			if(list.Length == 0)
+			if (list.Length == 0)
 				return new Rectangle();
 			Rectangle largest = list[0];
 			int currentArea = largest.Width * largest.Height;
 			for (int i = 0; i < list.Length; i++)
 			{
 				int area = list[i].Width * list[i].Height;
-				if(area > currentArea)
+				if (area > currentArea)
 				{
 					currentArea = area;
 					largest = list[i];

@@ -2,17 +2,20 @@
 \subsection{Introduction}
 
 \subsubsection{Scope}
-The subsystem should be implemented with in the currents AutoMart system and should not replace it. The subsystem needs to provide features that will help AutoMart reduce the number of poor and irrelevant advertisements on their website.
+The Yoco utility should be implemented within the current AutoMart system and should not replace it. The subsystem needs to provide features that will help AutoMart reduce the number of poor and irrelevant advertisements on their website.
 
-The subsystem is to be implemented in the front end of the system. When the user submits the their advert on the website, the subsystem needs to take the adverts images and evaluate them in order to decide whether the advert wished to be uploaded by the user should be allowed to be entered into the systems database.
+In this regard, the utility acts as a firewall that blocks bad quality images from entering the database while also validating that images that do pass as good quality, are well represented in the advertisement.
 
-The subsystem performs four sequential tests on the adverts images. For each image uploaded a image object will be created and used to store image information. The first test checks if the image uploaded contains a car. If the system detects a car in the image, the test is seen as successful and goes on to the next test. If the system does not detect a car in the image, further image tests come to a halt. A relevant message will be stored in the image object and the system proceeds onto the next image. The second test determines the colour of the car. AutoMart currently has seventeen colour buckets that used to describe the colour of the car. The system needs to calculate which colour bucket is the closest to the cars colour. After the colour bucket has been determined, it stores the colour  into the image object. Further testing can proceed even if the system was unable to determine the colour. Third test tries to determine the make of the car. The system uses textual data to help it determine the make, as determining the make blindly will be to time consuming. The detected make is stored in the image object and proceeds onto the final test. If the system was unable to detect a make of the car, the testing comes to a halt. Final test tries to determine the model of the car. It uses previous test information to help it determine the model of the car. If the model is determined the information is stored into the image object and proceeds onto the next image.
+The first test checks if the image uploaded contains a car. If the system detects a car in the image, the test is seen as successful and goes on to the next test. If the system does not detect a car in the image, further image tests come to a halt and the user is notified that a car could not be detected in the image. The system proceeds onto the next image that the user uploaded (if any).
+The second test determines the colour of the car. AutoMart currently has sixteen colour buckets that the user can select from when entering the colour of the car. The system needs to calculate which colour bucket is the closest to the car's colour. The three most dominant colour buckets are then stored in the image bucket (since we need to take into account shading, lighting and other variations of colour shades on the car). Further testing can proceed even if the system was unable to determine the colour. 
+The third test tries to determine the make of the car. The system uses textual data to help it determine the make, as determining the make blindly will be too time consuming. The detected make is stored in the image object and proceeds onto the final test. If the system was unable to detect a make of the car, the testing comes to a halt. 
+The fourth test is the image quality test where factors such as coverage (i.e. how much of the image is actually of the car) and resolution (making use of a blur detection algortihm) are considered. These factors will help determine the rating of the image and ultimately whether the image is of sufficient quality or not.
 
-After all the images have been put through the tests, the image objects representing the images are  put through a final set of tests to ensure that there is no information conflict. The system first checks if all the objects have the same colour. If  there is conflict it tries to resolve it by checking how many object have the same colour and how many don't. The information is also compared against the textual data. If the colour differs between the objects or it differs from the textual data the system will conclude that the images are representing different cars. This would mean that the advertisement is invalid and further testing will halt, and the advert will not be allowed to be uploaded to the system. The second test compares all the make information. If conflict is encountered the same principles as with in the colour conflict will be applied. Finally, the last test compares all the model information. The model testing will be more lenient than the first two tests. If the models differ in most of the objects and also differ from textual data, the textual data will be used to state the model of the car.
+A viable option to make sure that the car detection does not get called for a poor quality image, an additional blur detection stage could be performed as the first stage with a lenient threshold for passing the test.
 
-After all the test have been passed or halted unexpectedly, the system will provide relevant error messages or informative messages that were encountered during the image testing. The user will have a chance to fix any of the errors a system encountered. If the test were successful  initially or after the user has fixed the errors the advert will be allowed to be uploaded to the system.
+After all the images have been put through the above tests, the image objects representing the images are  put through a final set of tests to ensure that there is no information conflict. The system first checks if all the objects have the same colour. If the colour differs between the objects, the system will conclude that the images represent different cars. This would mean that the advertisement is invalid, and the advert will not be allowed to be uploaded to the system until all conflicts are resolved. The second test compares all the make information. If a conflict is encountered the same principles as hold as with colour conflicts. Finally, the last test compares all the model information. The model testing will be more lenient than the first two tests. If the models differ in most of the objects and also differ from textual data, the textual data will be used to state the model of the car. 
 
-Because the system is working with ever changing product, the system needs to accommodate for learning new cars. This way the system will never become unusable at a later stage as it will be able to stay updated with new cars.
+The user will have to resolve any of the contradictions or exceptions the utility may raise before being able to submit the advertisement.
 \pagebreak
 \begin{figure}[h!]
   \caption{High Level System Use Case Diagram.}
@@ -24,7 +27,7 @@ Because the system is working with ever changing product, the system needs to ac
 The system may be limited on model recognition, as sometimes it is not possible to distinguish the model of the car by only face value properties that are given by an image. Therefore the system may not be able to determine the model of the car correctly every time.
 
 \subsubsection{Exclusions}
-The system should only be implemented to work with cars and should not consider for the existence of any other motor vehicles such as motorcycles and trucks.
+The system should only be implemented to work with cars and should not cater for the existence of any other vehicles such as motorcycles and trucks.
 
 \subsection{Required Functionality}
 \begin{figure}[h!]
@@ -67,13 +70,13 @@ The system should only be implemented to work with cars and should not consider 
 	\hline
   	\multicolumn{2}{| c |}{\textbf{Determine Colour}} \\
   	\hline
-  	\multicolumn{2}{| c |}{Determines the colour of the car and finds the closest colour bucket.}\\
+  	\multicolumn{2}{| c |}{Determines the colour of the car and finds the closest 3 colour buckets.}\\
 	\hline
 	Priority & Important \\	
   	\hline
   	Pre-Conditions & A car needs to exist in the bounding box.\\
   	\hline
- 	Post-Conditions & Colour of the car is determined.\\
+ 	Post-Conditions & Colour(s) of the car determined.\\
   	\hline
 \end{tabular}\\
 \\
@@ -173,7 +176,7 @@ The system should only be implemented to work with cars and should not consider 
 	\hline
   	\multicolumn{2}{| c |}{\textbf{Calculate Position}} \\
   	\hline
-  	\multicolumn{2}{| c |}{Determines where in the photo the car placed, and returns the value based on the position.}\\
+  	\multicolumn{2}{| c |}{Determines where in the photo the car is placed, and returns the value based on the position.}\\
 	\hline
 	Priority & Important \\	
   	\hline

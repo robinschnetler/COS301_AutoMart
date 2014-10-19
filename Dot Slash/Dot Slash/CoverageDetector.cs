@@ -1,22 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Linq;
 using System.Drawing;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization;
-using System.IO;
-using Emgu.CV;
-using Emgu.CV.Structure;
-using Emgu.CV.UI;
-using Emgu.Util;
 
 namespace Dot_Slash
 {
 	/// <summary>
-	/// A class that implements the Filter interface 
+	/// Class used to calculate the car coverage of the image.
 	/// </summary>
 	public class CoverageDetector : Filter
 	{

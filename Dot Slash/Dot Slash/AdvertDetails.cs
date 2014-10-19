@@ -1,69 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Linq;
 using System.Drawing;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Forms.DataVisualization;
 using System.IO;
 using Emgu.CV;
 using Emgu.CV.Structure;
-using Emgu.CV.UI;
-using Emgu.Util;
 using System.Data.Linq;
 using System.Runtime.Serialization.Json;
 
 namespace Dot_Slash
 {
 	/// <summary>
-	/// This object stores all details of the advert that are picked up from the various filters/classifiers
+	/// Class used to store advert image details.
 	/// </summary>
 	public class AdvertDetails
 	{
-		//public List<String> ExceptionList = new List<string>();
+		private int image_ID;
 		/// <summary>
-		/// A string that stores any errors picked up in the image (such as if the image was too blurry or a car wasn't detected in the image)
+		/// Returns the advert image ID.
 		/// </summary>
-		public string exception;
-
-		/// <summary>
-		/// A boolean that stores whether the image was detected as a blurry image or not with relevant get and set methods
-		/// </summary>
-		public bool blurry;
-		public bool Blurry
+		public int Image_ID
 		{
 			get
 			{
-				return blurry;
+				return image_ID;
 			}
 			set
 			{
-				blurry = value;
+				image_ID = value;
 			}
 		}
 
-		/// <summary>
-		/// A boolean that stores whether there was an error with the image with relevant get and set methods
-		/// </summary>
-		public bool error;
-		public bool Error
-		{
-			get
-			{
-				return error;
-			}
-			set
-			{
-				error = value;
-			}
-		}
 
-		/// <summary>
-		/// A boolean that stores whether a car was detected in the image or not as well as the relevant get and set methods
-		/// </summary>
 		private bool carFound;
+		/// <summary>
+		/// Returns car existance status in the advert image.
+		/// </summary>
 		public bool CarFound
 		{
 			get
@@ -76,19 +47,112 @@ namespace Dot_Slash
 			}
 		}
 
+		private Rectangle rect;
 		/// <summary>
-		/// The ID of the image that is being processed with relevant get and set methods
+		/// Returns the rectangle representing the location of the car in the advert image.
 		/// </summary>
-		public int image_ID;
-		public int Image_ID
+		public Rectangle Rect
 		{
 			get
 			{
-				return image_ID;
+				return rect;
 			}
 			set
 			{
-				image_ID = value;
+				rect = value;
+			}
+		}
+
+		private double blurValue;
+		/// <summary>
+		/// Returns the advert image blur value.
+		/// </summary>
+		public double BlurValue
+		{
+			get
+			{
+				return blurValue;
+			}
+			set
+			{
+				blurValue = value;
+			}
+		}
+
+		public Boolean blurry;
+		public Boolean Blurry
+		{
+			get
+			{
+				return blurry;
+			}
+			set
+			{
+				blurry = value;
+			}
+		}
+
+		private double coverageValue;
+		/// <summary>
+		/// Returns the coverage value that represents the cars coverage in the advert image.
+		/// </summary>
+		public double CoverageValue
+		{
+			get
+			{
+				return coverageValue;
+			}
+			set
+			{
+				coverageValue = value;
+			}
+		}
+
+		private string colour1;
+		/// <summary>
+		/// Returns the colour of the car in the advert image.
+		/// </summary>
+		public String Colour1
+		{
+			get
+			{
+				return colour1;
+			}
+			set
+			{
+				colour1 = value;
+			}
+		}
+
+		private string colour2;
+		/// <summary>
+		/// Returns the colour of the car in the advert image.
+		/// </summary>
+		public String Colour2
+		{
+			get
+			{
+				return colour2;
+			}
+			set
+			{
+				colour2 = value;
+			}
+		}
+
+		private string colour3;
+		/// <summary>
+		/// Returns the colour of the car in the advert image.
+		/// </summary>
+		public String Colour3
+		{
+			get
+			{
+				return colour3;
+			}
+			set
+			{
+				colour3 = value;
 			}
 		}
 
@@ -105,86 +169,6 @@ namespace Dot_Slash
 			set
 			{
 				image = value;
-			}
-		}
-		
-		/// <summary>
-		/// A float which stores how much blur was detected in the image with relevant get and set methods
-		/// </summary>
-		float blurValue;
-		public float BlurValue
-		{
-			get
-			{
-				return blurValue;
-			}
-			set
-			{
-				blurValue = value;
-			}
-		}
-		
-		/// <summary>
-		/// A float that stores how much of the image contains the detected car with relevant get and set methods
-		/// </summary>
-		float coverageValue;
-		public float CoverageValue
-		{
-			get
-			{
-				return coverageValue;
-			}
-			set
-			{
-				coverageValue = value;
-			}
-		}
-		
-		/// <summary>
-		/// A string storing the name of the most dominant colour in the image with relevant get and set methods
-		/// </summary>
-		string colour1;
-		public String Colour1
-		{
-			get
-			{
-				return colour1;
-			}
-			set
-			{
-				colour1 = value;
-			}
-		}
-
-		/// <summary>
-		/// A string storing the name of the second most dominant colour in the image with relevant get and set methods
-		/// </summary>
-		string colour2;
-		public string Colour2
-		{
-			get
-			{
-				return colour2;
-			}
-			set
-			{
-				colour2 = value;
-			}
-		}
-
-		/// <summary>
-		/// A string storing the name of the third most dominant colour in the image with relevant get and set methods
-		/// </summary>
-		string colour3;
-		public string Colour3
-		{
-			get
-			{
-				return colour3;
-			}
-			set
-			{
-				colour3 = value;
 			}
 		}
 
@@ -240,6 +224,9 @@ namespace Dot_Slash
 		/// A string that stores which classifier found a car in the image (Front, Side or Back) with relevant get and set methods
 		/// </summary>
 		private string view;
+		/// <summary>
+		/// Returns the view of the car in the image.
+		/// </summary>
 		public string View
 		{
 			get
@@ -252,47 +239,80 @@ namespace Dot_Slash
 			}
 		}
 
+		public int blurRating;
 		/// <summary>
-		/// A rectangle which stores the co-ordinates of the detected car in the image with relevant get and set methods
+		/// Returns the blur rating value.
 		/// </summary>
-		private Rectangle rect;
-		public Rectangle Rect
+		public int BlurRating
 		{
 			get
 			{
-				return rect;
+				return blurRating;
 			}
 			set
 			{
-				rect = value;
+				blurRating = value;
+			}
+		}
+
+		private int coverageRating;
+		/// <summary>
+		/// Returns the coverage rating value.
+		/// </summary>
+		public int CoverageRating
+		{
+			get
+			{
+				return coverageRating;
+			}
+			set
+			{
+				coverageRating = value;
 			}
 		}
 
 		/// <summary>
-		/// A rating out of five which stores the overall quality/rating of the image based on whether a car was detected, the blur value of the image and the coverage of the car in the image
+		/// Returns the rating of the advert image.
 		/// </summary>
-		private int rating;
-		public int Rating
+
+		public int carRating;
+		public int CarRating
 		{
 			get
 			{
-				return rating;
+				return carRating;
 			}
 			set
 			{
-				rating = value;
+				carRating = value;
 			}
 		}
+		private String error;
+        /// <summary>
+        /// Returns any errors encountered.
+        /// </summary>
+        public String Error
+        {
+            get
+            {
+                return error;
+            }
+            set
+            {
+                error = value;
+            }
+        }
 
-		/// <summary>
-		/// The constructor which creates an advertDetails object
-		/// </summary>
-		/// <param name="im">A binary stream of the image uploaded by the user</param>
-		public AdvertDetails(Binary im)
+        /// <summary>
+        /// Initialises a new instance of the AdevertDetails class with specified image in binary format.
+        /// </summary>
+        /// <param name="_binary"></param>The binary representation of a image.
+		public AdvertDetails(Binary _binary)
 		{
+			MemoryStream ms = new MemoryStream(_binary.ToArray());
+			image = new Image<Bgr, int>(new Bitmap(ms));
 			carFound = false;
-			MemoryStream ms = new MemoryStream(im.ToArray());
-			image = new Image<Bgr,int>(new Bitmap(ms));
+			image = new Image<Bgr, int>(new Bitmap(ms));
 			blurValue = 0.0f;
 			blurry = false;
 			coverageValue = 0.0f;
@@ -302,36 +322,41 @@ namespace Dot_Slash
 			hex1 = null;
 			hex2 = null;
 			hex3 = null;
-			Error = false;
 			view = "";
 			rect = new Rectangle();
-			rating = 0;
+			carRating = 0;
+			coverageRating = 0;
+			blurRating = 0;
 		}
-
 		/// <summary>
-		/// A function which returns all the details of the advert as a &-separated string
+		/// Returns string containg all AdvertDetail object information.
 		/// </summary>
-		/// <returns>The string detailing all the image details</returns>
+		/// <returns>String contains all the AdvertDetails information separated by '&' symbol.</returns>
+		/// <remarks>
 		public String retrieveDetails()
 		{
 			String output = "";
-			output += "&car_found = " + carFound + "&view=" + view + "&blur_Value=" + blurValue + "&coverage_value=" + coverageValue + "&colour1=" + colour1 + "&error=" +exception;
+			output += "&car_found = " + carFound + "&blur_value=" + blurValue + "&coverage_value="
+			+ coverageValue + "&colour1=" + colour1 + "&colour2=" + colour2 + "&colour3=" + colour3 +
+			"&hex3=" + hex1 + "&hex3=" + hex2 + "&hex3=" + hex3 + "&view=" + view + "&error=" + error;
 			return output;
 		}
 
 		/// <summary>
-		/// 
+		/// Returns the json string with all the AdvertDetails information.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <param name="t"></param>
-		/// <returns></returns>
+		/// <returns>Returns a json string contains all the AdvertDetails information.</returns>
 		public string JsonSerializer<T> (T t)
 		{
 			DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(T));
-			MemoryStream ms = new MemoryStream();
-			ser.WriteObject(ms, t);
-			string jsonString = Encoding.UTF8.GetString(ms.ToArray());
-			ms.Close();
+			string jsonString;
+			using (MemoryStream ms = new MemoryStream())
+			{
+				ser.WriteObject(ms, t);
+				jsonString = Encoding.UTF8.GetString(ms.ToArray());
+			}
 			return jsonString;
 		}
 
