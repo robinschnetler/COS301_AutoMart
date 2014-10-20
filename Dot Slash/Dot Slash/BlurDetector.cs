@@ -53,10 +53,10 @@ namespace Dot_Slash
 		{
 			Image<Gray, Byte> image;
 			if (!_advertDetails.CarFound)
-				image = _advertDetails.Image.Convert<Gray, byte>();
+				image = _advertDetails.Image.Convert<Gray, Byte>();
 			else
 			{
-				image = _advertDetails.Image.GetSubRect(_advertDetails.Rect).Convert<Gray, byte>();
+				image = _advertDetails.Image.GetSubRect(_advertDetails.Rect).Convert<Gray, Byte>();
 				image.Resize(480, 320, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
 			}
 			Image<Gray, float> con = image.Laplace(1);

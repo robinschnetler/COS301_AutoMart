@@ -36,16 +36,16 @@ namespace Dot_Slash
 		{
 			foreach(Filter filter in filtersList)
 			{
-				filter.pump(ref advertDetails);
-				//try
-				//{ 
-				//	filter.pump(ref advertDetails);
-				//}
-				//catch(Exception e)
-				//{
-				//	advertDetails.exception = e.Message;
-				//	break;
-				//}
+				//filter.pump(ref advertDetails);
+				try
+				{
+					filter.pump(ref advertDetails);
+				}
+				catch (Exception e)
+				{
+					advertDetails.Error += ";"+e.Message;
+					break;
+				}
 			}
 			return advertDetails;
 		}

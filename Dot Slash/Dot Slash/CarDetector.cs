@@ -42,40 +42,44 @@ namespace Dot_Slash
 		/// <param name="_advertDetails">The advertDetails object where information about the advert is stored</param>
 		public virtual void pump(ref AdvertDetails _advertDetails) 
 		{
-			string track = "";
-			int count = 0;
 			Rectangle rect = new Rectangle();
 			String view = "Unknown";
 
 			Image<Gray, Byte> image = _advertDetails.Image.Convert<Gray, byte>();
             
 			CascadeClassifier classifier = new CascadeClassifier(frontClassifier);
-			Rectangle[] rectangleList = classifier.DetectMultiScale(image, scaleFac, numNeighbours, fb_minSize, maxSize);
-			if(rectangleList.Length > count)
-			{
-				count = rectangleList.Length;
-				view = "Front";
-			}
-
-			classifier = new CascadeClassifier(backClassifier);
-			rectangleList = classifier.DetectMultiScale(image, scaleFac, numNeighbours, fb_minSize, maxSize);
-			if (rectangleList.Length > count)
-			{
-				count = rectangleList.Length;
-				view = "Back";
-			}
+			Rectangle[] rectangleList = new Rectangle[0];
 
 			classifier = new CascadeClassifier(sideClassifier);
-			rectangleList = classifier.DetectMultiScale(image, scaleFac, numNeighbours, side_minSize, maxSize);
-			if (rectangleList.Length > count)
+			Rectangle[] temp = classifier.DetectMultiScale(image, scaleFac, numNeighbours, side_minSize, maxSize);
+			if (temp.Length > rectangleList.Length)
 			{
-				count = rectangleList.Length; 
+				rectangleList = temp;
 				view = "Side";
 			}
 
-			rect = getLargest(rectangleList);
-			if (count > 0)
+			if(view != "Side")
+			{ 
+				 temp = classifier.DetectMultiScale(image, scaleFac, numNeighbours, fb_minSize, maxSize);;
+				if(temp.Length > rectangleList.Length)
+				{
+					rectangleList = temp;
+					view = "Front";
+				}
+
+				classifier = new CascadeClassifier(backClassifier);
+				temp = classifier.DetectMultiScale(image, scaleFac, numNeighbours, fb_minSize, maxSize);
+				if (temp.Length > rectangleList.Length)
+				{
+					rectangleList = temp;
+					view = "Back";
+				}
+			}
+
+
+			if (rectangleList.Length > 0)
 			{
+				rect = getLargest(rectangleList);
 				_advertDetails.Rect = rect;
 				_advertDetails.CarFound = true;
 				_advertDetails.View = view;
@@ -95,8 +99,6 @@ namespace Dot_Slash
 		/// <returns></returns>
 		private Rectangle getLargest(Rectangle[] list)
 		{
-			if (list.Length == 0)
-				return new Rectangle();
 			Rectangle largest = list[0];
 			int currentArea = largest.Width * largest.Height;
 			for (int i = 0; i < list.Length; i++)

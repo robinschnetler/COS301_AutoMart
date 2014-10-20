@@ -47,6 +47,38 @@ namespace Dot_Slash
 			}
 		}
 
+		/// <summary>
+		/// boolean field to know if a make of car was found
+		/// </summary>
+		public bool makeFound;
+		public bool MakeFound
+		{
+			get
+			{
+				return makeFound;
+			}
+			set
+			{
+				makeFound = value;
+			}
+		}
+
+		/// <summary>
+		/// Rectablge object specifying the area of the image that makes up of the make detected
+		/// </summary>
+		public Rectangle makeRectangle;
+		public Rectangle MakeRectangle
+		{
+			get
+			{
+				return makeRectangle;
+			}
+			set
+			{
+				makeRectangle = value;
+			}
+		}
+
 		private Rectangle rect;
 		/// <summary>
 		/// Returns the rectangle representing the location of the car in the advert image.
@@ -108,7 +140,7 @@ namespace Dot_Slash
 			}
 		}
 
-		private string colour1;
+		public string colour1;
 		/// <summary>
 		/// Returns the colour of the car in the advert image.
 		/// </summary>
@@ -124,7 +156,7 @@ namespace Dot_Slash
 			}
 		}
 
-		private string colour2;
+		public string colour2;
 		/// <summary>
 		/// Returns the colour of the car in the advert image.
 		/// </summary>
@@ -140,7 +172,7 @@ namespace Dot_Slash
 			}
 		}
 
-		private string colour3;
+		public string colour3;
 		/// <summary>
 		/// Returns the colour of the car in the advert image.
 		/// </summary>
@@ -175,7 +207,7 @@ namespace Dot_Slash
 		/// <summary>
 		/// A string storing the hex value of the most dominant colour in the image with relevant get and set methods
 		/// </summary>
-		string hex1;
+		public string hex1;
 		public string Hex1
 		{
 			get
@@ -191,7 +223,7 @@ namespace Dot_Slash
 		/// <summary>
 		/// A string storing the hex value of the second most dominant colour in the image with relevant get and set methods
 		/// </summary>
-		string hex2;
+		public string hex2;
 		public string Hex2
 		{
 			get
@@ -207,7 +239,7 @@ namespace Dot_Slash
 		/// <summary>
 		/// A string storing the hex value of the third most dominant colour in the image with relevant get and set methods
 		/// </summary>
-		string hex3;
+		public string hex3;
 		public string Hex3
 		{
 			get

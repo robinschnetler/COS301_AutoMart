@@ -70,6 +70,7 @@
     <Compile Include="CoverageDetector.cs" />
     <Compile Include="Filter.cs" />
     <Compile Include="ImageBlock.cs" />
+    <Compile Include="MakeDetector.cs" />
     <Compile Include="Pipe.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
