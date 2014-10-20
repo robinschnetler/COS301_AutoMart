@@ -131,7 +131,7 @@ namespace Dot_Slash
 			dominantColour = (ColourBucket)colourBuckets[index3];
 			String thirdMostCommon = dominantColour.ColourName;
 			String hex3 = dominantColour.HexValue;
-			return (new String[] { firstMostCommon, secondMostCommon, thirdMostCommon, hex1, hex2, hex3 });
+			return new String[] { firstMostCommon, secondMostCommon, thirdMostCommon, hex1, hex2, hex3 };
 		}
 		private bool inRange(double pixelValue, double binValue, int range)
 		{
